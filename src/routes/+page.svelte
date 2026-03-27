@@ -30,7 +30,7 @@
 			A curated space for writing about technology, engineering, and the ideas worth exploring.
 		</p>
 		<div class="hero-cta">
-			<a href="/blog" class="btn btn-primary" id="hero-read-btn">Read the blog</a>
+			<a href="/blog" class="btn btn-primary" id="hero-read-btn">Read the article</a>
 			<a href="/about" class="btn btn-ghost" id="hero-about-btn">About</a>
 		</div>
 	</div>
