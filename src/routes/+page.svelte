@@ -7,10 +7,7 @@
 
 <svelte:head>
 	<title>Blueprint — Ideas & Articles</title>
-	<meta
-		name="description"
-		content="Blueprint is a modern blog featuring ideas, insights, and articles."
-	/>
+	<meta name="description" content="Blueprint is an FTC guide made easy" />
 </svelte:head>
 
 <!-- Hero -->

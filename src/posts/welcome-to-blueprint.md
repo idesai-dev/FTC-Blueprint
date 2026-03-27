@@ -2,7 +2,7 @@
 title: Welcome to Blueprint
 date: 2026-03-26
 description: An introduction to this blog — what it is, why it exists, and where it's heading.
-tags: [meta, intro]
+tags: [auto, hardware, complex]
 author: Blueprint
 published: true
 ---

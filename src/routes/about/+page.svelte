@@ -1,6 +1,9 @@
 <svelte:head>
 	<title>About — Blueprint</title>
-	<meta name="description" content="Learn more about Blueprint, the writer, and the ideas behind the blog." />
+	<meta
+		name="description"
+		content="Learn more about Blueprint, the writer, and the ideas behind the blog."
+	/>
 </svelte:head>
 
 <section class="about-header">
@@ -18,13 +21,14 @@
 			<div class="about-main prose-like">
 				<h2>Hello there 👋</h2>
 				<p>
-					Welcome to <strong>Blueprint</strong> — a personal blog and digital notebook for ideas worth writing down.
-					This site is built with <a href="https://kit.svelte.dev" target="_blank" rel="noopener">SvelteKit</a> and
-					powered by markdown files, making it fast, minimal, and easy to maintain.
+					Welcome to <strong>Blueprint</strong> — a personal blog and digital notebook for ideas
+					worth writing down. This site is built with
+					<a href="https://kit.svelte.dev" target="_blank" rel="noopener">SvelteKit</a> and powered by
+					markdown files, making it fast, minimal, and easy to maintain.
 				</p>
 				<p>
-					Here you'll find articles on engineering, technology, robotics, and anything else that catches my attention
-					long enough to write about.
+					Here you'll find articles on engineering, technology, robotics, and anything else that
+					catches my attention long enough to write about.
 				</p>
 				<h3>Built with</h3>
 				<ul>
@@ -36,10 +40,12 @@
 
 				<h3>Writing markdown posts</h3>
 				<p>
-					Drop a <code>.md</code> file into the <code>/src/posts/</code> directory with the following frontmatter:
+					Drop a <code>.md</code> file into the <code>/src/posts/</code> directory with the following
+					frontmatter:
 				</p>
 
-				<pre class="code-block"><code>---
+				<pre class="code-block"><code
+						>---
 title: My Post Title
 date: 2026-03-26
 description: A short summary of the post.
@@ -52,7 +58,8 @@ Your content here...
 </code></pre>
 
 				<p>
-					The slug is derived automatically from the filename — <code>my-post.md</code> becomes <code>/blog/my-post</code>.
+					The slug is derived automatically from the filename — <code>my-post.md</code> becomes
+					<code>/blog/my-post</code>.
 				</p>
 			</div>
 
@@ -63,8 +70,21 @@ Your content here...
 					<p>A modern blog built with SvelteKit and markdown.</p>
 					<div class="sidebar-links">
 						<a href="/blog" class="sidebar-link">
-							<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-							Read the blog
+							<svg
+								width="14"
+								height="14"
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="2"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								aria-hidden="true"
+								><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline
+									points="14 2 14 8 20 8"
+								/></svg
+							>
+							Read the blog Arnav Saraf
 						</a>
 					</div>
 				</div>
@@ -139,9 +159,13 @@ Your content here...
 		text-underline-offset: 3px;
 	}
 
-	.prose-like a:hover { color: var(--accent-green); }
+	.prose-like a:hover {
+		color: var(--accent-green);
+	}
 
-	.prose-like strong { color: var(--text-primary); }
+	.prose-like strong {
+		color: var(--text-primary);
+	}
 
 	.prose-like ul {
 		padding-left: 1.5rem;
@@ -156,7 +180,9 @@ Your content here...
 		line-height: 1.6;
 	}
 
-	.prose-like li::marker { color: var(--accent-green); }
+	.prose-like li::marker {
+		color: var(--accent-green);
+	}
 
 	.prose-like code {
 		font-family: var(--font-mono);
@@ -207,9 +233,13 @@ Your content here...
 		transition: border-color var(--transition-base);
 	}
 
-	.sidebar-card:hover { border-color: var(--text-primary); }
+	.sidebar-card:hover {
+		border-color: var(--text-primary);
+	}
 
-	.sidebar-card--muted { background: var(--bg-card); }
+	.sidebar-card--muted {
+		background: var(--bg-card);
+	}
 
 	.sidebar-icon {
 		font-size: 2rem;
@@ -250,7 +280,9 @@ Your content here...
 		transition: color var(--transition-fast);
 	}
 
-	.sidebar-link:hover { color: var(--accent-green); }
+	.sidebar-link:hover {
+		color: var(--accent-green);
+	}
 
 	.stack-list {
 		list-style: none;
