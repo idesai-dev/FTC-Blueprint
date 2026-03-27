@@ -7,7 +7,10 @@
 
 <svelte:head>
 	<title>Blueprint — Ideas & Articles</title>
-	<meta name="description" content="Blueprint is a modern blog featuring ideas, insights, and articles." />
+	<meta
+		name="description"
+		content="Blueprint is a modern blog featuring ideas, insights, and articles."
+	/>
 </svelte:head>
 
 <!-- Hero -->
@@ -23,8 +26,8 @@
 			<span class="tag tag--cyan">Est. 2026</span>
 		</div>
 		<h1>
-			Where ideas<br />
-			<span class="gradient-text">take shape.</span>
+			FTC<br />
+			<span class="gradient-text">made simple.</span>
 		</h1>
 		<p class="hero-desc">
 			A curated space for writing about technology, engineering, and the ideas worth exploring.
@@ -38,28 +41,28 @@
 
 <!-- Recent Posts -->
 {#if data.recentPosts.length > 0}
-<section class="recent section">
-	<div class="container">
-		<div class="section-header stagger">
-			<div class="section-label animate-fade-up">
-				<span class="tag tag--green">Recent</span>
+	<section class="recent section">
+		<div class="container">
+			<div class="section-header stagger">
+				<div class="section-label animate-fade-up">
+					<span class="tag tag--green">Recent</span>
+				</div>
+				<h2 class="animate-fade-up">Latest articles</h2>
 			</div>
-			<h2 class="animate-fade-up">Latest articles</h2>
-		</div>
 
-		<div class="post-grid stagger">
-			{#each data.recentPosts as post}
-				<BlogCard {post} />
-			{/each}
-		</div>
-
-		{#if data.recentPosts.length >= 3}
-			<div class="view-all animate-fade-up">
-				<a href="/blog" class="btn btn-ghost" id="home-view-all-btn">View all posts →</a>
+			<div class="post-grid stagger">
+				{#each data.recentPosts as post}
+					<BlogCard {post} />
+				{/each}
 			</div>
-		{/if}
-	</div>
-</section>
+
+			{#if data.recentPosts.length >= 3}
+				<div class="view-all animate-fade-up">
+					<a href="/blog" class="btn btn-ghost" id="home-view-all-btn">View all posts →</a>
+				</div>
+			{/if}
+		</div>
+	</section>
 {/if}
 
 <style>
@@ -112,8 +115,8 @@
 		mask-image: linear-gradient(
 			to bottom,
 			transparent 0%,
-			rgba(0,0,0,0.5) 20%,
-			rgba(0,0,0,0.5) 80%,
+			rgba(0, 0, 0, 0.5) 20%,
+			rgba(0, 0, 0, 0.5) 80%,
 			transparent 100%
 		);
 	}
@@ -172,8 +175,12 @@
 			transform var(--transition-fast);
 	}
 
-	.btn:hover { transform: translateY(-1px); }
-	.btn:active { transform: translateY(0); }
+	.btn:hover {
+		transform: translateY(-1px);
+	}
+	.btn:active {
+		transform: translateY(0);
+	}
 
 	.btn-primary {
 		background: var(--text-primary);
@@ -212,7 +219,8 @@
 		margin-bottom: 2.5rem;
 	}
 
-	.section-label { }
+	.section-label {
+	}
 
 	.post-grid {
 		display: grid;
