@@ -1,11 +1,12 @@
 <script lang="ts">
 	import BlogCard from '$lib/components/BlogCard.svelte';
 	import type { Post } from '$lib/utils/posts';
+	import { tagColor } from '$lib/utils/posts';
 
 	let { data }: { data: { posts: Post[] } } = $props();
 
 	let searchQuery = $state('');
-	let activeTag = $state<string | null>(null);
+	let activeTags = $state<string[]>([]);
 
 	// Collect all unique tags
 	const allTags = $derived(
@@ -20,7 +21,7 @@
 				p.meta.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
 				(p.meta.description || '').toLowerCase().includes(searchQuery.toLowerCase());
 
-			const matchTag = !activeTag || (p.meta.tags || []).includes(activeTag);
+			const matchTag = activeTags.length === 0 || activeTags.every((t) => (p.meta.tags || []).includes(t));
 
 			return matchSearch && matchTag;
 		})
@@ -66,16 +67,22 @@
 				<div class="tag-filters">
 					<button
 						class="tag-btn"
-						class:active={!activeTag}
-						onclick={() => (activeTag = null)}
-						aria-pressed={!activeTag}
+						class:active={activeTags.length === 0}
+						onclick={() => (activeTags = [])}
+						aria-pressed={activeTags.length === 0}
 					>All</button>
-					{#each allTags as tag, i}
+					{#each allTags as tag}
 						<button
-							class="tag-btn tag-btn--{i % 3 === 0 ? 'cyan' : i % 3 === 1 ? 'green' : 'yellow'}"
-							class:active={activeTag === tag}
-							onclick={() => (activeTag = activeTag === tag ? null : tag)}
-							aria-pressed={activeTag === tag}
+							class="tag-btn {tagColor(tag).replace('tag--', 'tag-btn--')}"
+							class:active={activeTags.includes(tag)}
+							onclick={() => {
+								if (activeTags.includes(tag)) {
+									activeTags = activeTags.filter((t) => t !== tag);
+								} else {
+									activeTags = [...activeTags, tag];
+								}
+							}}
+							aria-pressed={activeTags.includes(tag)}
 						>{tag}</button>
 					{/each}
 				</div>
@@ -96,7 +103,7 @@
 		{:else}
 			<div class="empty animate-fade-up">
 				<p>No posts match your search.</p>
-				<button class="btn-reset" onclick={() => { searchQuery = ''; activeTag = null; }}>
+				<button class="btn-reset" onclick={() => { searchQuery = ''; activeTags = []; }}>
 					Clear filters
 				</button>
 			</div>

@@ -47,9 +47,16 @@ export function formatDate(dateStr: string): string {
 }
 
 /**
- * Returns a tag color class based on position.
+ * Returns a tag color class based on tag name, so it is consistent.
  */
 const tagColors = ['tag--cyan', 'tag--green', 'tag--yellow'];
-export function tagColor(index: number): string {
-	return tagColors[index % tagColors.length];
+export function tagColor(tag: string): string {
+	let hash = 0;
+	if (tag.length === 0) return tagColors[0];
+	for (let i = 0; i < tag.length; i++) {
+		hash = tag.charCodeAt(i) + ((hash << 5) - hash);
+		hash = hash & hash; // Convert to 32bit integer
+	}
+	const index = Math.abs(hash) % tagColors.length;
+	return tagColors[index];
 }

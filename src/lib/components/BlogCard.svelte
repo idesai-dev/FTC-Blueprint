@@ -23,8 +23,8 @@
 
 		{#if post.meta.tags && post.meta.tags.length > 0}
 			<div class="tags">
-				{#each post.meta.tags as tag, i}
-					<span class="tag {tagColor(i)}">{tag}</span>
+				{#each post.meta.tags as tag}
+					<span class="tag {tagColor(tag)}">{tag}</span>
 				{/each}
 			</div>
 		{/if}
@@ -108,6 +108,7 @@
 		line-height: 1.6;
 		display: -webkit-box;
 		-webkit-line-clamp: 2;
+		line-clamp: 2;
 		-webkit-box-orient: vertical;
 		overflow: hidden;
 	}
