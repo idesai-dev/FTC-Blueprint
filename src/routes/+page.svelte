@@ -6,7 +6,7 @@
 </script>
 
 <svelte:head>
-	<title>Blueprint — Ideas & Articles</title>
+	<title>Blueprint — FTC Made Easy</title>
 	<meta name="description" content="Blueprint is an FTC guide made easy" />
 </svelte:head>
 
@@ -30,7 +30,7 @@
 			A curated space for writing about technology, engineering, and the ideas worth exploring.
 		</p>
 		<div class="hero-cta">
-			<a href="/blog" class="btn btn-primary" id="hero-read-btn">Read the article</a>
+			<a href="/articles" class="btn btn-primary" id="hero-read-btn">Read the articles</a>
 			<a href="/about" class="btn btn-ghost" id="hero-about-btn">About</a>
 		</div>
 	</div>
@@ -55,7 +55,7 @@
 
 			{#if data.recentPosts.length >= 3}
 				<div class="view-all animate-fade-up">
-					<a href="/blog" class="btn btn-ghost" id="home-view-all-btn">View all posts →</a>
+					<a href="/articles" class="btn btn-ghost" id="home-view-all-btn">View all articles →</a>
 				</div>
 			{/if}
 		</div>

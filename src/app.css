@@ -19,7 +19,7 @@
 
 	--accent-green: #7effa0;
 	--accent-green-dim: #3a7a50;
-	--accent-yellow: #f5e642;
+	--accent-yellow: #fff58a;
 	--accent-yellow-dim: #7a720e;
 	--accent-cyan: #74d7ed;
 	--accent-cyan-dim: #1a4d5c;
@@ -128,7 +128,7 @@ a {
 	text-decoration: none;
 	transition: color var(--transition-fast);
 }
-a:hover { color: var(--accent-green); }
+a:hover { color: var(--accent-yellow); }
 
 code, kbd, pre {
 	font-family: var(--font-mono);

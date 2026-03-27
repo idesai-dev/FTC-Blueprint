@@ -58,7 +58,8 @@
 	</header>
 
 	<!-- Content -->
-	<div class="post-body animate-fade-up" style="animation-delay:360ms">
+	<div class="post-body animate-fade-up" style="animation-delay:360ms; display: flex;">
+
 		<div class="container">
 			<div class="prose">
 				<data.content />
