@@ -29,16 +29,16 @@
 </script>
 
 <svelte:head>
-	<title>Blog — Blueprint</title>
+	<title>Articles — Blueprint</title>
 	<meta name="description" content="All articles and posts published on Blueprint." />
 </svelte:head>
 
-<section class="blog-header">
+<section class="articles-header">
 	<div class="container">
 		<div class="animate-fade-up">
 			<span class="tag tag--cyan">All posts</span>
 		</div>
-		<h1 class="animate-fade-up" style="animation-delay:60ms">The Blog</h1>
+		<h1 class="animate-fade-up" style="animation-delay:60ms">The Blueprint</h1>
 		<p class="sub animate-fade-up" style="animation-delay:120ms">
 			{data.posts.length} article{data.posts.length !== 1 ? 's' : ''}
 		</p>
@@ -112,13 +112,13 @@
 </section>
 
 <style>
-	.blog-header {
+	.articles-header {
 		padding: 4rem 0 1.5rem;
 		background: var(--gradient-hero);
 		border-bottom: 1px solid var(--border-subtle);
 	}
 
-	.blog-header .container {
+	.articles-header .container {
 		display: flex;
 		flex-direction: column;
 		gap: 0.6rem;

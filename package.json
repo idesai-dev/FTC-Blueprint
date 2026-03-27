@@ -5,7 +5,7 @@
 	"type": "module",
 	"scripts": {
 		"dev": "vite dev",
-		"build": "vite build",
+		"build": "vite build && echo 'blueprint.theftc.app' > build/CNAME",
 		"preview": "vite preview",
 		"deploy": "gh-pages -d build",
 		"prepare": "svelte-kit sync || echo ''",

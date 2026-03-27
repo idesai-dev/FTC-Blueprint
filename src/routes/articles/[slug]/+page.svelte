@@ -20,11 +20,11 @@
 			<div class="header-orb"></div>
 		</div>
 		<div class="container">
-			<a href="/blog" class="back-link animate-fade-up">
+			<a href="/articles" class="back-link animate-fade-up">
 				<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
 					<path d="M19 12H5M12 5l-7 7 7 7"/>
 				</svg>
-				Back to blog
+				Back to articles
 			</a>
 
 			<div class="post-meta animate-fade-up" style="animation-delay:60ms">
@@ -48,7 +48,7 @@
 			{#if data.meta.tags && data.meta.tags.length > 0}
 				<div class="post-tags animate-fade-up" style="animation-delay:240ms">
 					{#each data.meta.tags as tag, i}
-						<span class="tag {tagColor(i)}">{tag}</span>
+						<span class="tag {tagColor(tag)}">{tag}</span>
 					{/each}
 				</div>
 			{/if}
@@ -69,7 +69,7 @@
 	<!-- Footer nav -->
 	<div class="post-footer animate-fade-up">
 		<div class="container">
-			<a href="/blog" class="back-link">
+			<a href="/articles" class="back-link">
 				<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
 					<path d="M19 12H5M12 5l-7 7 7 7"/>
 				</svg>

@@ -1,12 +1,54 @@
 <script lang="ts">
 	import BlogCard from '$lib/components/BlogCard.svelte';
 	import type { Post } from '$lib/utils/posts';
+	import { onMount } from 'svelte';
 
 	let { data }: { data: { recentPosts: Post[] } } = $props();
+
+	let typedText = $state('');
+	let showCursor = $state(true);
+
+	onMount(() => {
+		const typeSequence = async () => {
+			const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+			const str1 = 'made simple.';
+			const str2 = 'the right way.';
+
+			await sleep(500);
+
+			// Type str1
+			for (let i = 0; i <= str1.length; i++) {
+				typedText = str1.substring(0, i);
+				await sleep(Math.random() * 50 + 50);
+			}
+
+			// Pause before deleting
+			await sleep(1500);
+
+			// Delete str1
+			for (let i = str1.length; i >= 0; i--) {
+				typedText = str1.substring(0, i);
+				await sleep(40);
+			}
+
+			await sleep(500);
+
+			// Type str2
+			for (let i = 0; i <= str2.length; i++) {
+				typedText = str2.substring(0, i);
+				await sleep(Math.random() * 50 + 50);
+			}
+
+			await sleep(1500); // Wait briefly before removing cursor completely
+			showCursor = false;
+		};
+
+		typeSequence();
+	});
 </script>
 
 <svelte:head>
-	<title>Blueprint — Ideas & Articles</title>
+	<title>The Complete Blueprint</title>
 	<meta name="description" content="Blueprint is an FTC guide made easy" />
 </svelte:head>
 
@@ -24,14 +66,14 @@
 		</div>
 		<h1>
 			FTC<br />
-			<span class="gradient-text">made simple.</span>
+			<span class="gradient-text">{typedText}</span>{#if showCursor}<span class="cursor">|</span>{/if}
 		</h1>
 		<p class="hero-desc">
-			A curated space for writing about technology, engineering, and the ideas worth exploring.
+			The complete blueprint for FTC — coding, hardware, and strategy, all made simple.
 		</p>
 		<div class="hero-cta">
-			<a href="/blog" class="btn btn-primary" id="hero-read-btn">Read the article</a>
-			<a href="/about" class="btn btn-ghost" id="hero-about-btn">About</a>
+			<a href="/articles" class="btn btn-primary" id="hero-read-btn">Read the articles</a>
+			<a href="/about" class="btn btn-ghost" id="hero-about-btn">The Chuds</a>
 		</div>
 	</div>
 </section>
@@ -55,7 +97,7 @@
 
 			{#if data.recentPosts.length >= 3}
 				<div class="view-all animate-fade-up">
-					<a href="/blog" class="btn btn-ghost" id="home-view-all-btn">View all posts →</a>
+					<a href="/articles" class="btn btn-ghost" id="home-view-all-btn">View all posts →</a>
 				</div>
 			{/if}
 		</div>
@@ -135,6 +177,24 @@
 
 	h1 {
 		max-width: 600px;
+	}
+
+	.cursor {
+		font-weight: 300;
+		color: var(--text-primary);
+		animation: blink 1s step-end infinite;
+		display: inline-block;
+		margin-left: 4px;
+	}
+
+	@keyframes blink {
+		0%,
+		100% {
+			opacity: 1;
+		}
+		50% {
+			opacity: 0;
+		}
 	}
 
 	.hero-desc {
