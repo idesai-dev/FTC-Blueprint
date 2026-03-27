@@ -1,1 +1,0 @@
-import{j as y,b as o,k as u,l as _,h as t,C as p,o as i,f as l,e as d,i as g,p as m}from"./D7a__486.js";function C(n,r){let s=null,f=t;var a;if(t){s=g;for(var e=m(document.head);e!==null&&(e.nodeType!==p||e.data!==n);)e=i(e);if(e===null)l(!1);else{var E=i(e);e.remove(),d(E)}}t||(a=document.head.appendChild(y()));try{o(()=>r(a),u|_)}finally{f&&(l(!0),d(s))}}export{C as h};
