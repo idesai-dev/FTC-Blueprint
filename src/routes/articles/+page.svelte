@@ -2,7 +2,10 @@
 	import BlogCard from '$lib/components/BlogCard.svelte';
 	import type { Post } from '$lib/utils/posts';
 	import { tagColor } from '$lib/utils/posts';
+<<<<<<< HEAD
 	import Collapsible from '$lib/components/Collapsible.svelte';
+=======
+>>>>>>> 4f10d48ee04e585d7215284933b71c616c5b4df2
 
 	let { data }: { data: { posts: Post[] } } = $props();
 
@@ -30,6 +33,7 @@
 </script>
 
 <svelte:head>
+<<<<<<< HEAD
 	<title>Blog — Blueprint</title>
 	<meta name="description" content="All articles and posts published on Blueprint." />
 </svelte:head>
@@ -174,12 +178,102 @@
 </div>
 <style>
 	.blog-header {
+=======
+	<title>Articles — Blueprint</title>
+	<meta name="description" content="All articles and posts published on Blueprint." />
+</svelte:head>
+
+<section class="articles-header">
+	<div class="container">
+		<div class="animate-fade-up">
+			<span class="tag tag--cyan">All posts</span>
+		</div>
+		<h1 class="animate-fade-up" style="animation-delay:60ms">The Blueprint</h1>
+		<p class="sub animate-fade-up" style="animation-delay:120ms">
+			{data.posts.length} article{data.posts.length !== 1 ? 's' : ''}
+		</p>
+	</div>
+</section>
+
+<!-- Filters -->
+<section class="filters-section">
+	<div class="container">
+		<div class="filters animate-fade-up" style="animation-delay:160ms">
+			<div class="search-wrap">
+				<svg class="search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+					<circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+				</svg>
+				<input
+					id="blog-search"
+					type="search"
+					placeholder="Search posts…"
+					bind:value={searchQuery}
+					aria-label="Search posts"
+					class="search-input"
+				/>
+			</div>
+
+			{#if allTags.length > 0}
+				<div class="tag-filters">
+					<button
+						class="tag-btn"
+						class:active={activeTags.length === 0}
+						onclick={() => (activeTags = [])}
+						aria-pressed={activeTags.length === 0}
+					>All</button>
+					{#each allTags as tag}
+						<button
+							class="tag-btn {tagColor(tag).replace('tag--', 'tag-btn--')}"
+							class:active={activeTags.includes(tag)}
+							onclick={() => {
+								if (activeTags.includes(tag)) {
+									activeTags = activeTags.filter((t) => t !== tag);
+								} else {
+									activeTags = [...activeTags, tag];
+								}
+							}}
+							aria-pressed={activeTags.includes(tag)}
+						>{tag}</button>
+					{/each}
+				</div>
+			{/if}
+		</div>
+	</div>
+</section>
+
+<!-- Post list -->
+<section class="posts-section">
+	<div class="container">
+		{#if filteredPosts.length > 0}
+			<div class="post-grid stagger">
+				{#each filteredPosts as post}
+					<BlogCard {post} />
+				{/each}
+			</div>
+		{:else}
+			<div class="empty animate-fade-up">
+				<p>No posts match your search.</p>
+				<button class="btn-reset" onclick={() => { searchQuery = ''; activeTags = []; }}>
+					Clear filters
+				</button>
+			</div>
+		{/if}
+	</div>
+</section>
+
+<style>
+	.articles-header {
+>>>>>>> 4f10d48ee04e585d7215284933b71c616c5b4df2
 		padding: 4rem 0 1.5rem;
 		background: var(--gradient-hero);
 		border-bottom: 1px solid var(--border-subtle);
 	}
 
+<<<<<<< HEAD
 	.blog-header .container {
+=======
+	.articles-header .container {
+>>>>>>> 4f10d48ee04e585d7215284933b71c616c5b4df2
 		display: flex;
 		flex-direction: column;
 		gap: 0.6rem;

@@ -11,7 +11,7 @@
 		<div class="animate-fade-up" style="display:inline-block">
 			<span class="tag tag--green">About</span>
 		</div>
-		<h1 class="animate-fade-up" style="animation-delay:60ms">The person behind the words.</h1>
+		<h1 class="animate-fade-up" style="animation-delay:60ms">Meet the Chuds.</h1>
 	</div>
 </section>
 
@@ -21,27 +21,11 @@
 			<div class="about-main prose-like">
 				<h2>Hello there 👋</h2>
 				<p>
-					Welcome to <strong>Blueprint</strong> — a personal blog and digital notebook for ideas
-					worth writing down. This site is built with
-					<a href="https://kit.svelte.dev" target="_blank" rel="noopener">SvelteKit</a> and powered by
-					markdown files, making it fast, minimal, and easy to maintain.
+					Welcome to <strong>Blueprint</strong> — a digital notebook for FTC, engineering, and more!
 				</p>
-				<p>
-					Here you'll find articles on engineering, technology, robotics, and anything else that
-					catches my attention long enough to write about.
-				</p>
-				<h3>Built with</h3>
-				<ul>
-					<li><strong>SvelteKit</strong> — full-stack Svelte framework</li>
-					<li><strong>MDsveX</strong> — markdown processing with Svelte support</li>
-					<li><strong>Vercel</strong> — deployment & hosting</li>
-					<li><strong>Custom CSS</strong> — no frameworks, just design tokens</li>
-				</ul>
 
-				<h3>Writing markdown posts</h3>
 				<p>
-					Drop a <code>.md</code> file into the <code>/src/posts/</code> directory with the following
-					frontmatter:
+					Check out our <a href="https://youtube.com" target="_blank" rel="noopener noreferrer">YouTube channel!</a>
 				</p>
 
 				<pre class="code-block"><code
@@ -57,19 +41,15 @@ published: true
 Your content here...
 </code></pre>
 
-				<p>
-					The slug is derived automatically from the filename — <code>my-post.md</code> becomes
-					<code>/blog/my-post</code>.
-				</p>
 			</div>
 
 			<aside class="about-sidebar">
 				<div class="sidebar-card">
 					<div class="sidebar-icon">⬡</div>
-					<h4>Blueprint</h4>
-					<p>A modern blog built with SvelteKit and markdown.</p>
+					<h4>The Chuds <br> (FTC Team 12345)</h4>
+					<p> Based in Austin, Texas</p>
 					<div class="sidebar-links">
-						<a href="/blog" class="sidebar-link">
+						<a href="/articles" class="sidebar-link">
 							<svg
 								width="14"
 								height="14"
@@ -84,17 +64,17 @@ Your content here...
 									points="14 2 14 8 20 8"
 								/></svg
 							>
-							Read the blog Arnav Saraf
+							Read the articles
 						</a>
 					</div>
 				</div>
 
 				<div class="sidebar-card sidebar-card--muted">
-					<h4>Stack</h4>
+					<h4>The Idea</h4>
 					<ul class="stack-list">
-						<li><span class="tag tag--cyan">SvelteKit</span></li>
-						<li><span class="tag tag--green">MDsveX</span></li>
-						<li><span class="tag tag--yellow">Vercel</span></li>
+						<li><span class="tag tag--cyan">Clairity</span></li>
+						<li><span class="tag tag--green">Simplicity</span></li>
+						<li><span class="tag tag--yellow">Results</span></li>
 					</ul>
 				</div>
 			</aside>

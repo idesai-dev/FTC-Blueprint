@@ -27,7 +27,7 @@
 				<a
 					{href}
 					class="nav-link"
-					class:active={$page.url.pathname === href || ($page.url.pathname.startsWith('/blog') && href === '/blog')}
+					class:active={$page.url.pathname === href || ($page.url.pathname.startsWith('/articles') && href === '/articles')}
 					onclick={closeMenu}
 				>
 					{label}

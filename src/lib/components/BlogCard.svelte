@@ -5,7 +5,7 @@
 	let { post }: { post: Post } = $props();
 </script>
 
-<a href="/blog/{post.slug}" class="card animate-fade-up" aria-label="Read {post.meta.title}">
+<a href="/articles/{post.slug}" class="card animate-fade-up" aria-label="Read {post.meta.title}">
 	<div class="card-inner">
 		<div class="card-meta">
 			<time class="date" datetime={post.meta.date}>{formatDate(post.meta.date)}</time>

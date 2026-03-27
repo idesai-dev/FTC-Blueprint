@@ -51,7 +51,7 @@ published: true
 ---
 ```
 
-The route `/blog/my-post-title` will be live automatically.
+The route `/articles/my-post-title` will be live automatically.
 
 ---
 

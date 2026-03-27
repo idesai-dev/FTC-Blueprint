@@ -9,12 +9,12 @@
 				<span class="logo-mark">⬡</span>
 				<span>Blueprint</span>
 			</a>
-			<p class="tagline">Documenting ideas, one post at a time.</p>
+			<p class="tagline">FTC the right way</p>
 		</div>
 
 		<nav class="footer-nav" aria-label="Footer navigation">
 			<a href="/">Home</a>
-			<a href="/blog">Blog</a>
+			<a href="/articles">Articles</a>
 			<a href="/about">About</a>
 		</nav>
 
