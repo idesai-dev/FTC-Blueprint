@@ -9,6 +9,7 @@
 		{ href: '/software', label: 'Software' },
 		{ href: '/hardware', label: 'Hardware' },
 		{ href: '/outreach', label: 'Outreach' },
+		{ href: '/suggest', label: 'Suggest' },
 		{ href: '/about', label: 'About' }
 	];
 

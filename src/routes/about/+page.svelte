@@ -1,5 +1,4 @@
 <script lang="ts">
-	import SuggestionForm from '$lib/components/SuggestionForm.svelte';
 </script>
 
 <svelte:head>
@@ -84,7 +83,6 @@ Your content here...
 			</aside>
 		</div>
 
-		<SuggestionForm />
 	</div>
 </section>
 
