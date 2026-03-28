@@ -14,23 +14,22 @@ export interface Post {
 	meta: PostMeta;
 }
 
-/**
- * Loads all markdown posts from src/posts/*.md
- * Returns sorted array (newest first), filtered to published only.
- */
 export async function getAllPosts(): Promise<Post[]> {
 	const modules = import.meta.glob<{ metadata: PostMeta; default: any }>('/src/posts/*.md');
+	const rawModules = import.meta.glob<string>('/src/posts/*.md', { query: '?raw', import: 'default' });
 
 	const posts: (Post | null)[] = await Promise.all(
 		Object.entries(modules).map(async ([path, resolver]) => {
-			const { metadata, default: content } = await resolver();
+			const { metadata } = await resolver();
 			if (!metadata) return null;
-			// Extract slug from file path: /src/posts/my-post.md → my-post
+
+			// Get raw content for word count
+			const rawContent = await rawModules[path]();
 			const slug = path.replace('/src/posts/', '').replace('.md', '');
-			
-			// Basic word count calculation for reading time
-			const text = metadata.description + ' ' + (content.render?.().html || '');
-			const wordCount = text.split(/\s+/).length;
+
+			// Remove frontmatter and extra whitespace for accurate count
+			const body = rawContent.replace(/^---[\s\S]*?---/, '');
+			const wordCount = body.split(/\s+/).filter(Boolean).length;
 			
 			return { slug, meta: { ...metadata, wordCount } };
 		})

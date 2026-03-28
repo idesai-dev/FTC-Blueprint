@@ -7,7 +7,17 @@ author: Ishaan Desai
 published: true
 ---
 
+<script>
+    import PIDVisualizer from '$lib/components/PIDVisualizer.svelte';
+</script>
+
 PID (Proportional, Integral, Derivative) control is the most common control algorithm used in FTC for precise movements, whether it's for a drivetrain, an arm, or a slide.
+
+<div class="tuner-callout">
+    <p>🚀 <strong>Try our new full-page <a href="/pid">PID Tuner Tool</a></strong> for a bigger, easier tuning experience!</p>
+</div>
+
+<PIDVisualizer />
 
 ## The Three Components
 
