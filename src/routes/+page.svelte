@@ -16,16 +16,13 @@
 
 			await sleep(500);
 
-			// Type str1
 			for (let i = 0; i <= str1.length; i++) {
 				typedText = str1.substring(0, i);
 				await sleep(Math.random() * 50 + 50);
 			}
 
-			// Pause before deleting
 			await sleep(1500);
 
-			// Delete str1
 			for (let i = str1.length; i >= 0; i--) {
 				typedText = str1.substring(0, i);
 				await sleep(40);
@@ -33,13 +30,12 @@
 
 			await sleep(500);
 
-			// Type str2
 			for (let i = 0; i <= str2.length; i++) {
 				typedText = str2.substring(0, i);
 				await sleep(Math.random() * 50 + 50);
 			}
 
-			await sleep(1500); // Wait briefly before removing cursor completely
+			await sleep(1500); 
 			showCursor = false;
 		};
 
@@ -48,11 +44,7 @@
 </script>
 
 <svelte:head>
-<<<<<<< HEAD
 	<title>Blueprint — FTC Made Easy</title>
-=======
-	<title>The Complete Blueprint</title>
->>>>>>> 4f10d48ee04e585d7215284933b71c616c5b4df2
 	<meta name="description" content="Blueprint is an FTC guide made easy" />
 </svelte:head>
 
@@ -77,11 +69,7 @@
 		</p>
 		<div class="hero-cta">
 			<a href="/articles" class="btn btn-primary" id="hero-read-btn">Read the articles</a>
-<<<<<<< HEAD
 			<a href="/about" class="btn btn-ghost" id="hero-about-btn">About</a>
-=======
-			<a href="/about" class="btn btn-ghost" id="hero-about-btn">The Chuds</a>
->>>>>>> 4f10d48ee04e585d7215284933b71c616c5b4df2
 		</div>
 	</div>
 </section>
@@ -105,11 +93,7 @@
 
 			{#if data.recentPosts.length >= 3}
 				<div class="view-all animate-fade-up">
-<<<<<<< HEAD
 					<a href="/articles" class="btn btn-ghost" id="home-view-all-btn">View all articles →</a>
-=======
-					<a href="/articles" class="btn btn-ghost" id="home-view-all-btn">View all posts →</a>
->>>>>>> 4f10d48ee04e585d7215284933b71c616c5b4df2
 				</div>
 			{/if}
 		</div>

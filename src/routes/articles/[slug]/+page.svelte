@@ -2,9 +2,14 @@
 	import { formatDate, tagColor } from '$lib/utils/posts';
 	import type { PostMeta } from '$lib/utils/posts';
 	import type { Component } from 'svelte';
-
+	import { setupCopyButtons } from '$lib/utils/codeCopyButton';
 	let { data }: { data: { content: Component; meta: PostMeta } } = $props();
+
+	$effect(() => {
+		setupCopyButtons();
+	});
 </script>
+
 
 <svelte:head>
 	<title>{data.meta.title} — Blueprint</title>
