@@ -1,0 +1,1 @@
+import{b as f,h as o,d as v,E as y,f as l,s as m,g as p,i,H as T,j as g}from"./QtSQGayY.js";import{B as A}from"./-ybAnFEM.js";function b(d,_,s){var e;o&&(e=g,v());var r=new A(d);f(()=>{var a=_()??null;if(o){var h=l(e),c=h===T,u=a!==null;if(c!==u){var t=m();p(t),r.anchor=t,i(!1),r.ensure(a,a&&(n=>s(n,a))),i(!0);return}}r.ensure(a,a&&(n=>s(n,a)))},y)}export{b as c};
