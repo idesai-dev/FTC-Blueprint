@@ -1,61 +1,59 @@
 <script lang="ts">
-	import PIDVisualizer from '$lib/components/PIDVisualizer.svelte';
-	
+	import MotionProfileVisualizer from '$lib/components/MotionProfileVisualizer.svelte';
 	import { fade, fly } from 'svelte/transition';
 </script>
 
 <svelte:head>
-	<title>PID Tuner — Blueprint</title>
-	<meta name="description" content="An interactive tool for tuning PID control algorithms for FTC robots." />
+	<title>Motion Profiling — Blueprint</title>
+	<meta name="description" content="An interactive tool for understanding and tuning trapezoidal motion profiles for FTC robots." />
 </svelte:head>
 
-<section class="pid-page">
+<section class="page">
 	<div class="container container--narrow">
-		<header class="pid-header text-center animate-fade-up">
+		<header class="page-header text-center animate-fade-up">
 			<span class="badge">Advanced Tools</span>
-			<h1>PID Control Tuner</h1>
+			<h1>Motion Profiling</h1>
 			<p class="subtitle">
-				Tuning PID (Proportional, Integral, Derivative) constants is one of the most common tasks in FTC. 
-				Use this interactive simulator to understand how each constant affects your robot's behavior.
+				Trapezoidal motion profiles let your robot move smoothly and predictably — accelerating to speed, cruising, then decelerating to a precise stop. Essential for consistent FTC autonomous routines.
 			</p>
 		</header>
 
 		<div class="visualizer-wrap animate-fade-up" style="animation-delay: 100ms">
-			<PIDVisualizer />
+			<MotionProfileVisualizer />
 		</div>
 
 		<div class="content animate-fade-up" style="animation-delay: 200ms">
 			<h2>How it Works</h2>
 			<div class="grid-2">
 				<div class="card">
-					<h3>1. The Setup</h3>
-					<p>The simulator models a robot mechanism (like an arm or drivetrain) trying to reach a target <strong>(the dashed green line)</strong>. The cyan circle represents your robot.</p>
+					<h3>1. The Profile</h3>
+					<p>The simulator generates a velocity profile for a mechanism traveling a set distance. Adjust <strong>Max Velocity</strong> and <strong>Max Acceleration</strong> to see how the profile shape changes — including the switch from trapezoidal to triangular when the distance is too short to reach peak speed.</p>
 				</div>
 				<div class="card">
 					<h3>2. Tuning Guide</h3>
 					<ul>
-						<li><strong>P:</strong> Start here. Increase until you see the robot moving quickly but oscillating.</li>
-						<li><strong>D:</strong> Add this to stop the shaking. It acts as a "brake."</li>
-						<li><strong>I:</strong> Use sparingly. It fixes small gaps if the robot stops slightly before the target.</li>
+						<li><strong>Distance:</strong> Total travel. Short distances produce a triangular profile — the robot never hits max velocity.</li>
+						<li><strong>Max Velocity:</strong> The cruise speed. Higher = faster overall movement, but requires more deceleration distance.</li>
+						<li><strong>Max Accel:</strong> How aggressively to ramp up/down. Low values = smoother but slower to respond.</li>
 					</ul>
 				</div>
 			</div>
 
 			<div class="callout animate-fade-up" style="animation-delay: 300ms">
 				<h3>Want to implement this in code?</h3>
-				<p>Our comprehensive PID guide covers all the theory and provides a ready-to-use Java implementation.</p>
-				<a href="/software/pid-control" class="btn">View PID Guide →</a>
+				<p>Our motion profiling guide covers the math and provides a ready-to-use Java implementation for FTC autonomous.</p>
+				<a href="/software/motion-profiling" class="btn">View Motion Profiling Guide →</a>
 			</div>
 		</div>
 	</div>
 </section>
 
 <style>
-	.pid-page {
+	.page {
 		padding: 6rem 0;
 	}
 
-	.pid-header {
+	.page-header {
 		margin-bottom: 4rem;
 	}
 

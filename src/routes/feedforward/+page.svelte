@@ -1,61 +1,74 @@
 <script lang="ts">
-	import PIDVisualizer from '$lib/components/PIDVisualizer.svelte';
-	
+	import FeedforwardVisualizer from '$lib/components/FeedforwardVisualizer.svelte';
 	import { fade, fly } from 'svelte/transition';
 </script>
 
 <svelte:head>
-	<title>PID Tuner — Blueprint</title>
-	<meta name="description" content="An interactive tool for tuning PID control algorithms for FTC robots." />
+	<title>Feedforward Tuning — Blueprint</title>
+	<meta name="description" content="An interactive tool for understanding and tuning feedforward control constants for FTC robots." />
 </svelte:head>
 
-<section class="pid-page">
+<section class="page">
 	<div class="container container--narrow">
-		<header class="pid-header text-center animate-fade-up">
+		<header class="page-header text-center animate-fade-up">
 			<span class="badge">Advanced Tools</span>
-			<h1>PID Control Tuner</h1>
+			<h1>Feedforward Tuning</h1>
 			<p class="subtitle">
-				Tuning PID (Proportional, Integral, Derivative) constants is one of the most common tasks in FTC. 
-				Use this interactive simulator to understand how each constant affects your robot's behavior.
+				Feedforward control predicts the motor output needed before errors even occur — reducing the burden on PID feedback and dramatically improving tracking accuracy in FTC drivetrains and mechanisms.
 			</p>
 		</header>
 
 		<div class="visualizer-wrap animate-fade-up" style="animation-delay: 100ms">
-			<PIDVisualizer />
+			<FeedforwardVisualizer />
 		</div>
 
 		<div class="content animate-fade-up" style="animation-delay: 200ms">
 			<h2>How it Works</h2>
 			<div class="grid-2">
 				<div class="card">
-					<h3>1. The Setup</h3>
-					<p>The simulator models a robot mechanism (like an arm or drivetrain) trying to reach a target <strong>(the dashed green line)</strong>. The cyan circle represents your robot.</p>
+					<h3>1. The Model</h3>
+					<p>The simulator runs a motor plant with realistic back-EMF and static friction. Your feedforward constants predict the required voltage at each moment; feedback only corrects what's left over. Switch between <strong>FF Only</strong>, <strong>PID Only</strong>, and <strong>FF + PID</strong> to compare their tracking error directly.</p>
 				</div>
 				<div class="card">
 					<h3>2. Tuning Guide</h3>
 					<ul>
-						<li><strong>P:</strong> Start here. Increase until you see the robot moving quickly but oscillating.</li>
-						<li><strong>D:</strong> Add this to stop the shaking. It acts as a "brake."</li>
-						<li><strong>I:</strong> Use sparingly. It fixes small gaps if the robot stops slightly before the target.</li>
+						<li><strong>kS:</strong> Voltage to overcome static friction. Start small — if the motor hesitates at rest, increase it.</li>
+						<li><strong>kV:</strong> Voltage per unit/s of velocity. Tune this first — it's the dominant term during cruise.</li>
+						<li><strong>kA:</strong> Voltage per unit/s² of acceleration. Helps during ramp-up/down; usually small.</li>
 					</ul>
+				</div>
+			</div>
+
+			<div class="grid-2">
+				<div class="card">
+					<h3>3. The Equation</h3>
+					<p>The feedforward output is calculated as:</p>
+					<p style="font-family: var(--font-mono); font-size: 0.9rem; margin-top: 0.75rem; color: var(--text-primary);">
+						V = kS·sgn(v) + kV·v + kA·a
+					</p>
+					<p style="margin-top: 0.75rem;">Each term handles a different physical characteristic of your motor and mechanism.</p>
+				</div>
+				<div class="card">
+					<h3>4. FF vs PID</h3>
+					<p>PID reacts to errors <em>after</em> they happen. Feedforward <em>anticipates</em> the required output. Used together, FF handles the steady-state load while PID corrects small residual errors — giving you fast, stable, low-oscillation control.</p>
 				</div>
 			</div>
 
 			<div class="callout animate-fade-up" style="animation-delay: 300ms">
 				<h3>Want to implement this in code?</h3>
-				<p>Our comprehensive PID guide covers all the theory and provides a ready-to-use Java implementation.</p>
-				<a href="/software/pid-control" class="btn">View PID Guide →</a>
+				<p>Our feedforward guide covers the full theory and provides a Java implementation compatible with the FTC SDK and Road Runner.</p>
+				<a href="/software/feedforward" class="btn">View Feedforward Guide →</a>
 			</div>
 		</div>
 	</div>
 </section>
 
 <style>
-	.pid-page {
+	.page {
 		padding: 6rem 0;
 	}
 
-	.pid-header {
+	.page-header {
 		margin-bottom: 4rem;
 	}
 
