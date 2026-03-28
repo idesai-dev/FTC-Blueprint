@@ -5,10 +5,41 @@
 	import { setupCopyButtons } from '$lib/utils/codeCopyButton';
 	import SectionSidebar from '$lib/components/sectionSidebar.svelte';
 	import LeftSidebar from '$lib/components/LeftSidebar.svelte';
+	import { onMount, tick } from 'svelte';
+
 	let { data }: { data: { content: Component; meta: PostMeta } } = $props();
+
+	// Progress Bar
+	let scrollPercent = $state(0);
+	
+	function handleScroll() {
+		const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+		const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+		scrollPercent = (winScroll / height) * 100;
+	}
+
+	onMount(() => {
+		window.addEventListener('scroll', handleScroll);
+		return () => window.removeEventListener('scroll', handleScroll);
+	});
 
 	$effect(() => {
 		setupCopyButtons();
+	});
+
+	// Reading Time
+	const readingTime = $derived(
+		data.meta.wordCount ? Math.ceil(data.meta.wordCount / 225) : 0
+	);
+
+	// Breadcrumbs logic
+	const breadcrumbs = $derived(() => {
+		const levels = ['Beginner', 'Intermediate', 'Advanced'];
+		const level = data.meta.tags?.find(t => levels.includes(t.charAt(0).toUpperCase() + t.slice(1)));
+		return [
+			{ label: 'Software', href: '/software' },
+			...(level ? [{ label: level, href: `/software?tag=${level.toLowerCase()}` }] : [])
+		];
 	});
 </script>
 
@@ -20,6 +51,9 @@
 	<meta property="og:description" content={data.meta.description || ''} />
 </svelte:head>
 
+<!-- Reading Progress Bar -->
+<div class="reading-progress" style="width: {scrollPercent}%" aria-hidden="true"></div>
+
 <article class="post-page">
 	<!-- Header -->
 	<header class="post-header">
@@ -27,15 +61,20 @@
 			<div class="header-orb"></div>
 		</div>
 		<div class="container">
-			<a href="/software" class="back-link animate-fade-up">
-				<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-					<path d="M19 12H5M12 5l-7 7 7 7"/>
-				</svg>
-				Back to prints
-			</a>
+			<!-- Breadcrumbs -->
+			<nav class="breadcrumbs animate-fade-up">
+				{#each breadcrumbs() as crumb, i}
+					<a href={crumb.href}>{crumb.label}</a>
+					{#if i < breadcrumbs().length - 1}
+						<span class="sep">/</span>
+					{/if}
+				{/each}
+			</nav>
 
 			<div class="post-meta animate-fade-up" style="animation-delay:60ms">
 				<time class="date" datetime={data.meta.date}>{formatDate(data.meta.date)}</time>
+				<span class="meta-sep">·</span>
+				<span class="reading-time">{readingTime} min read</span>
 				{#if data.meta.author}
 					<span class="meta-sep">·</span>
 					<span class="author">{data.meta.author}</span>
@@ -91,6 +130,17 @@
 </article>
 
 <style>
+	/* Progress Bar */
+	.reading-progress {
+		position: fixed;
+		top: 0;
+		left: 0;
+		height: 3px;
+		background: var(--gradient-accent);
+		z-index: 200;
+		transition: width 0.1s ease-out;
+	}
+
 	/* Header */
 	.post-header {
 		position: relative;
@@ -122,22 +172,33 @@
 		z-index: 1;
 		display: flex;
 		flex-direction: column;
-		gap: 1rem;
+		gap: 0.75rem;
 	}
 
-	.back-link {
-		display: inline-flex;
+	/* Breadcrumbs */
+	.breadcrumbs {
+		display: flex;
 		align-items: center;
-		gap: 0.4rem;
-		font-size: 0.82rem;
+		gap: 0.5rem;
 		font-family: var(--font-mono);
+		font-size: 0.8rem;
+		color: var(--text-muted);
+		margin-bottom: 0.5rem;
+	}
+
+	.breadcrumbs a {
 		color: var(--text-muted);
 		text-decoration: none;
 		transition: color var(--transition-fast);
-		width: fit-content;
 	}
 
-	.back-link:hover { color: var(--text-primary); }
+	.breadcrumbs a:hover {
+		color: var(--text-primary);
+	}
+
+	.breadcrumbs .sep {
+		opacity: 0.3;
+	}
 
 	.post-meta {
 		display: flex;

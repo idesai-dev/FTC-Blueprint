@@ -6,6 +6,7 @@ export interface PostMeta {
 	author?: string;
 	cover?: string;
 	published?: boolean;
+	wordCount?: number;
 }
 
 export interface Post {
@@ -18,15 +19,20 @@ export interface Post {
  * Returns sorted array (newest first), filtered to published only.
  */
 export async function getAllPosts(): Promise<Post[]> {
-	const modules = import.meta.glob<{ metadata: PostMeta }>('/src/posts/*.md');
+	const modules = import.meta.glob<{ metadata: PostMeta; default: any }>('/src/posts/*.md');
 
 	const posts: (Post | null)[] = await Promise.all(
 		Object.entries(modules).map(async ([path, resolver]) => {
-			const { metadata } = await resolver();
+			const { metadata, default: content } = await resolver();
 			if (!metadata) return null;
 			// Extract slug from file path: /src/posts/my-post.md → my-post
 			const slug = path.replace('/src/posts/', '').replace('.md', '');
-			return { slug, meta: metadata };
+			
+			// Basic word count calculation for reading time
+			const text = metadata.description + ' ' + (content.render?.().html || '');
+			const wordCount = text.split(/\s+/).length;
+			
+			return { slug, meta: { ...metadata, wordCount } };
 		})
 	);
 
