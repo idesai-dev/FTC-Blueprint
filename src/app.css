@@ -12,6 +12,9 @@
 	--border: #2a2a2a;
 	--border-subtle: #222222;
 
+	--bg-code: #111111;
+	--sidebar-bg: var(--bg-card-hover);
+
 	--text-primary: #74d7ed;
 	--text-secondary: #8fb9c7;
 	--text-muted: #4d7d8a;
@@ -53,32 +56,35 @@
 
 /* Light Mode */
 html.light {
-	--bg: #f0f6f8;
-	--bg-secondary: #e4eef2;
-	--bg-card: #e8f2f6;
-	--bg-card-hover: #dceef4;
-	--border: #b8d4dc;
-	--border-subtle: #cde2e8;
+	--bg: #fdfaf0;
+	--bg-secondary: #f5f0db;
+	--bg-card: #f9f4e3;
+	--bg-card-hover: #eaddb6;
+	--border: #dcd6c5;
+	--border-subtle: #e8e2d2;
 
-	--text-primary: #1a7a95;
-	--text-secondary: #2a6070;
-	--text-muted: #5a8a9a;
-	--text-body: #2a4a55;
+	--bg-code: #f0ebd8;
+	--sidebar-bg: rgba(42, 122, 69, 0.08);
 
-	--accent-green: #1a7a45;
+	--text-primary: #3d3b31;
+	--text-secondary: #5e5b4c;
+	--text-muted: #8c8976;
+	--text-body: #4a483e;
+
+	--accent-green: #2a7a45;
 	--accent-green-dim: #c5e8d4;
-	--accent-yellow: #8a7000;
+	--accent-yellow: #bd9d44;
 	--accent-yellow-dim: #f0e8a0;
 	--accent-cyan: #1a7a95;
 	--accent-cyan-dim: #c0e4ee;
 
-	--gradient-hero: linear-gradient(135deg, #f0f6f8 0%, #daeef5 50%, #f0f6f8 100%);
-	--gradient-accent: linear-gradient(90deg, #1a7a95, #1a7a45);
-	--gradient-card: linear-gradient(135deg, #e8f2f6 0%, #daeef5 100%);
+	--gradient-hero: linear-gradient(135deg, #fdfaf0 0%, #f5f0db 50%, #fdfaf0 100%);
+	--gradient-accent: linear-gradient(90deg, #1a7a95, #2a7a45);
+	--gradient-card: linear-gradient(135deg, #f9f4e3 0%, #eae3c8 100%);
 
-	--glow-cyan: 0 0 20px rgba(26, 122, 149, 0.12);
-	--glow-green: 0 0 20px rgba(26, 122, 69, 0.08);
-	--glow-yellow: 0 0 20px rgba(138, 112, 0, 0.08);
+	--glow-cyan: 0 0 20px rgba(26, 122, 149, 0.08);
+	--glow-green: 0 0 20px rgba(42, 122, 69, 0.08);
+	--glow-yellow: 0 0 20px rgba(181, 133, 0, 0.08);
 }
 
 /* ---------- Reset & Base ---------- */
@@ -247,47 +253,27 @@ code, kbd, pre {
 .stagger > *:nth-child(7) { animation-delay: 480ms; }
 .stagger > *:nth-child(8) { animation-delay: 560ms; }
 
-/* ---------- Code Copy Button ---------- */
-.copy-code-button {
-	position: absolute;
-	top: 0.75rem;
-	right: 0.75rem;
-	width: 32px;
-	height: 32px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	background: rgba(116, 215, 237, 0.08);
-	border: 1px solid rgba(116, 215, 237, 0.15);
-	border-radius: var(--radius-sm);
-	color: var(--text-muted);
-	cursor: pointer;
-	transition: all var(--transition-fast);
-	z-index: 10;
-	backdrop-filter: blur(4px);
+
+/* Global Prose pre styles */
+:global(.prose pre) {
+	background: #111111 !important;
+	border: 1px solid var(--border);
+	border-radius: var(--radius-md);
+	padding: 1.25rem 1.5rem;
+	overflow-x: auto;
+	margin: 1.25rem 0;
+	font-family: var(--font-mono);
+	font-size: 0.85rem;
+	line-height: 1.7;
+	color: var(--text-body);
+}
+
+:global(.prose pre code) {
+	background: none !important;
+	border: none;
 	padding: 0;
+	font-size: inherit;
+	color: inherit;
 }
 
-.copy-code-button:hover {
-	background: rgba(116, 215, 237, 0.15);
-	border-color: var(--text-primary);
-	color: var(--text-primary);
-	transform: translateY(-1px);
-	box-shadow: var(--glow-cyan);
-}
-
-.copy-code-button:active {
-	transform: translateY(0);
-}
-
-.copy-code-button.copied {
-	border-color: var(--accent-green);
-	background: rgba(126, 255, 160, 0.1);
-	color: var(--accent-green);
-}
-
-/* Ensure pre has relative positioning for the button */
-pre {
-	position: relative;
-}
 

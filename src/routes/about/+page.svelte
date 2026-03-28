@@ -1,3 +1,7 @@
+<script lang="ts">
+	import SuggestionForm from '$lib/components/SuggestionForm.svelte';
+</script>
+
 <svelte:head>
 	<title>About — Blueprint</title>
 	<meta
@@ -49,7 +53,7 @@ Your content here...
 					<h4>The Chuds <br> (FTC Team 12345)</h4>
 					<p> Based in Austin, Texas</p>
 					<div class="sidebar-links">
-						<a href="/articles" class="sidebar-link">
+						<a href="/software" class="sidebar-link">
 							<svg
 								width="14"
 								height="14"
@@ -64,7 +68,7 @@ Your content here...
 									points="14 2 14 8 20 8"
 								/></svg
 							>
-							Read the articles
+							Read the prints
 						</a>
 					</div>
 				</div>
@@ -79,6 +83,8 @@ Your content here...
 				</div>
 			</aside>
 		</div>
+
+		<SuggestionForm />
 	</div>
 </section>
 
@@ -120,12 +126,7 @@ Your content here...
 		color: var(--text-primary);
 	}
 
-	.prose-like h3 {
-		font-size: 1.1rem;
-		margin-top: 2rem;
-		margin-bottom: 0.75rem;
-		color: var(--text-primary);
-	}
+	
 
 	.prose-like p {
 		color: var(--text-body);
@@ -147,22 +148,11 @@ Your content here...
 		color: var(--text-primary);
 	}
 
-	.prose-like ul {
-		padding-left: 1.5rem;
-		margin-bottom: 1.5rem;
-		display: flex;
-		flex-direction: column;
-		gap: 0.4rem;
-	}
+	
 
-	.prose-like li {
-		color: var(--text-body);
-		line-height: 1.6;
-	}
+	
 
-	.prose-like li::marker {
-		color: var(--accent-green);
-	}
+	
 
 	.prose-like code {
 		font-family: var(--font-mono);

@@ -4,6 +4,7 @@
 	import type { Component } from 'svelte';
 	import { setupCopyButtons } from '$lib/utils/codeCopyButton';
 	import SectionSidebar from '$lib/components/sectionSidebar.svelte';
+	import LeftSidebar from '$lib/components/LeftSidebar.svelte';
 	let { data }: { data: { content: Component; meta: PostMeta } } = $props();
 
 	$effect(() => {
@@ -26,11 +27,11 @@
 			<div class="header-orb"></div>
 		</div>
 		<div class="container">
-			<a href="/articles" class="back-link animate-fade-up">
+			<a href="/software" class="back-link animate-fade-up">
 				<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
 					<path d="M19 12H5M12 5l-7 7 7 7"/>
 				</svg>
-				Back to articles
+				Back to prints
 			</a>
 
 			<div class="post-meta animate-fade-up" style="animation-delay:60ms">
@@ -66,6 +67,7 @@
 	<!-- Content -->
 	<div class="post-body animate-fade-up" style="animation-delay:360ms;">
 		<div class="post-body-inner">
+			<LeftSidebar />
 			<div class="container">
 				<div class="prose">
 					<data.content />
@@ -78,11 +80,11 @@
 	<!-- Footer nav -->
 	<div class="post-footer animate-fade-up">
 		<div class="container">
-			<a href="/articles" class="back-link">
+			<a href="/software" class="back-link">
 				<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
 					<path d="M19 12H5M12 5l-7 7 7 7"/>
 				</svg>
-				Back to all posts
+				Back to all prints
 			</a>
 		</div>
 	</div>
@@ -280,24 +282,7 @@
 		color: var(--accent-green);
 	}
 
-	:global(.prose pre) {
-		background: #111111 !important;
-		border: 1px solid var(--border);
-		border-radius: var(--radius-md);
-		padding: 1.25rem 1.5rem;
-		overflow-x: auto;
-		margin: 1.75rem 0;
-		box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
-	}
 
-	:global(.prose pre code) {
-		background: none;
-		border: none;
-		padding: 0;
-		color: inherit;
-		font-size: 0.9rem;
-		line-height: 1.7;
-	}
 
 	:global(.prose hr) {
 		border: none;

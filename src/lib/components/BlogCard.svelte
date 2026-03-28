@@ -2,10 +2,10 @@
 	import { formatDate, tagColor } from '$lib/utils/posts';
 	import type { Post } from '$lib/utils/posts';
 
-	let { post }: { post: Post } = $props();
+	let { post, basePath = '/software' }: { post: Post, basePath?: string } = $props();
 </script>
 
-<a href="/articles/{post.slug}" class="card animate-fade-up" aria-label="Read {post.meta.title}">
+<a href="{basePath}/{post.slug}" class="card animate-fade-up" aria-label="Read {post.meta.title}">
 	<div class="card-inner">
 		<div class="card-meta">
 			<time class="date" datetime={post.meta.date}>{formatDate(post.meta.date)}</time>

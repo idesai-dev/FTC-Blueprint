@@ -68,8 +68,8 @@
 			The complete blueprint for FTC — coding, hardware, and strategy, all made simple.
 		</p>
 		<div class="hero-cta">
-			<a href="/articles" class="btn btn-primary" id="hero-read-btn">Read the articles</a>
-			<a href="/about" class="btn btn-ghost" id="hero-about-btn">About</a>
+			<a href="/software" class="btn btn-primary" id="hero-read-btn">Read the prints</a>
+			<a href="/about" class="btn btn-ghost" id="hero-about-btn">Chuds</a>
 		</div>
 	</div>
 </section>
@@ -93,7 +93,7 @@
 
 			{#if data.recentPosts.length >= 3}
 				<div class="view-all animate-fade-up">
-					<a href="/articles" class="btn btn-ghost" id="home-view-all-btn">View all articles →</a>
+					<a href="/software" class="btn btn-ghost" id="home-view-all-btn">View all prints →</a>
 				</div>
 			{/if}
 		</div>
@@ -270,9 +270,6 @@
 		flex-direction: column;
 		gap: 0.5rem;
 		margin-bottom: 2.5rem;
-	}
-
-	.section-label {
 	}
 
 	.post-grid {

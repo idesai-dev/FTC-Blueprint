@@ -14,11 +14,13 @@
 
 		<nav class="footer-nav" aria-label="Footer navigation">
 			<a href="/">Home</a>
-			<a href="/articles">Articles</a>
+			<a href="/software">Software</a>
+			<a href="/hardware">Hardware</a>
+			<a href="/outreach">Outreach</a>
 			<a href="/about">About</a>
 		</nav>
 
-		<p class="copy">&copy; {year} Blueprint. Built with SvelteKit.</p>
+		<p class="copy">&copy; {year} Blueprint. Powered by SvelteKit</p>
 	</div>
 </footer>
 

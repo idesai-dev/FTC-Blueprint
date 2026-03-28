@@ -2,6 +2,7 @@
 	import '../app.css';
 	import Header from '$lib/components/Header.svelte';
 	import Footer from '$lib/components/Footer.svelte';
+	import CustomCursor from '$lib/components/CustomCursor.svelte';
 
 	let { children } = $props();
 </script>
@@ -9,6 +10,8 @@
 <svelte:head>
 	<meta name="description" content="Blueprint — a modern blog for ideas, articles, and more." />
 </svelte:head>
+
+<CustomCursor />
 
 <div class="site-wrapper">
 	<Header />

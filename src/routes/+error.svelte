@@ -18,7 +18,7 @@
 
 			<div class="actions">
 				<a href="/" class="btn-primary">Return Home</a>
-				<a href="/articles" class="btn-secondary">Browse Articles</a>
+				<a href="/software" class="btn-secondary">Browse Prints</a>
 			</div>
 		</div>
 	</div>
@@ -59,6 +59,7 @@
 		line-height: 1;
 		background: var(--gradient-accent);
 		-webkit-background-clip: text;
+		background-clip: text;
 		-webkit-text-fill-color: transparent;
 		opacity: 0.2;
 		margin-bottom: -2rem;

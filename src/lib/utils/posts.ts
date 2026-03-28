@@ -20,16 +20,17 @@ export interface Post {
 export async function getAllPosts(): Promise<Post[]> {
 	const modules = import.meta.glob<{ metadata: PostMeta }>('/src/posts/*.md');
 
-	const posts: Post[] = await Promise.all(
+	const posts: (Post | null)[] = await Promise.all(
 		Object.entries(modules).map(async ([path, resolver]) => {
 			const { metadata } = await resolver();
+			if (!metadata) return null;
 			// Extract slug from file path: /src/posts/my-post.md → my-post
 			const slug = path.replace('/src/posts/', '').replace('.md', '');
 			return { slug, meta: metadata };
 		})
 	);
 
-	return posts
+	return (posts.filter((p) => p !== null) as Post[])
 		.filter((p) => p.meta.published !== false)
 		.sort((a, b) => new Date(b.meta.date).getTime() - new Date(a.meta.date).getTime());
 }

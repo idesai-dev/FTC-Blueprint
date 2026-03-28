@@ -1,43 +1,43 @@
 ---
-title: Getting Started with Pedro Pathing
-date: 2026-03-26
-description: An overview of Pedro Pathing — the reactive autonomous path follower for FTC robots.
-tags: [software, tutorial, easy]
-author: Blueprint
+title: Pedro Pathing Introduction
+date: 2026-03-28
+description: A powerful path-following library for FTC.
+tags: [software, intermediate, autonomous]
+author: Ishaan Desai
 published: true
 ---
 
-# Getting Started with Pedro Pathing
+# Introduction to Pedro Pathing
 
-Pedro Pathing is an autonomous path-following system built specifically for FTC robots. It was designed to make autonomous routines smoother, faster, and more reliable. Using reactive vector following and Bézier curves, Pedro Pathing dynamically adjusts your robot’s movement in real-time, helping it stay on the planned path even when it encounters obstacles, wheel slip, or other unexpected disturbances.
+Pedro Pathing is a library designed to provide smooth, efficient path-following for FTC robots. It is particularly known for its ability to handle complex paths with ease and its integration with modern sensors like the Pinpoint Odometry Computer.
 
-Learn more at [pedropathing.com](https://pedropathing.com/overview.html).
+## Key Features
+- **Bezier Curves:** Uses Bezier curves for smooth path planning.
+- **Asynchronous Execution:** Runs path following in the background, allowing for simultaneous actions.
+- **Sensor Integration:** Native support for Pinpoint and other odometry sensors.
+- **Customizable:** Highly configurable for different drivetrain types and sensor setups.
 
-## Why Pedro Pathing?
+## Getting Started
+To use Pedro Pathing, you typically need to:
+1.  Add the library to your `build.gradle`.
+2.  Configure your robot's hardware in a dedicated `Hardware` class.
+3.  Initialize the `Follower` class with your constants and hardware settings.
 
-- **Reactive control** — adapts to the robot’s actual position continuously
-- **Smooth motion** — Bézier curves create natural, efficient paths
-- **Precision** — integrated PIDF control keeps speed and heading accurate
-- **Flexible** — works with any drivetrain and any field layout
+### Basic Setup Example
 
-## How It Works
+```java
+public class PedroInit {
+    public Follower follower;
 
-Pedro Pathing doesn’t just follow a pre-computed set of points. Instead, it constantly calculates the best vector for the robot to follow, reacting in real-time to keep it on track. This makes autonomous routines far more consistent, even in imperfect conditions.
+    public void init(HardwareMap hwMap) {
+        // Initialize the follower with your robot's constants
+        follower = new Follower(hwMap);
+        
+        // Set the starting position of the robot
+        follower.setStartingPose(new Pose(0, 0, Math.toRadians(0)));
+    }
+}
+```
 
-## Benefits for FTC Teams
-
-- **Consistent autonomous runs** — fewer mistakes caused by slippage or misalignment
-- **Faster path planning** — create complex trajectories without manually tuning every turn
-- **Simplified code** — focus on strategy and game tasks, not path math
-- **Adaptable** — works with small tweaks for any robot configuration
-
-## What's Next?
-
-Pedro Pathing is ideal for teams looking to improve their autonomous performance. By understanding how paths, vectors, and corrections work, you can create routines that are both reliable and efficient, giving your team an edge on the field.
-
-Explore the official [Pedro Pathing website](https://pedropathing.com/overview.html?utm_source=chatgpt.com) for more details, examples, and documentation.
-
-## Quick Summary
-
-**What Pedro Pathing is about**  
-Reactive • Smooth • Precise
+## Why Choose Pedro?
+Pedro Pathing offers a unique balance of performance and ease of use. It is especially effective for teams that want sophisticated autonomous routines without the overhead of building their own path-following logic from scratch.

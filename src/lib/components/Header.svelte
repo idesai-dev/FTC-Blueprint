@@ -1,17 +1,29 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import ThemeToggle from './ThemeToggle.svelte';
+	import { cursorState, toggleCursor } from '$lib/stores/cursor.svelte';
+	import { goto } from '$app/navigation';
 
 	const navLinks = [
 		{ href: '/', label: 'Home' },
-		{ href: '/articles', label: 'Articles' },
+		{ href: '/software', label: 'Software' },
+		{ href: '/hardware', label: 'Hardware' },
+		{ href: '/outreach', label: 'Outreach' },
 		{ href: '/about', label: 'About' }
 	];
 
 	let menuOpen = $state(false);
+	let searchQuery = $state('');
 
 	function closeMenu() {
 		menuOpen = false;
+	}
+
+	function handleSearch(e: KeyboardEvent) {
+		if (e.key === 'Enter' && searchQuery.trim()) {
+			goto(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+			searchQuery = '';
+		}
 	}
 </script>
 
@@ -27,7 +39,7 @@
 				<a
 					{href}
 					class="nav-link"
-					class:active={$page.url.pathname === href || ($page.url.pathname.startsWith('/articles') && href === '/articles')}
+					class:active={$page.url.pathname === href || ($page.url.pathname.startsWith('/software') && href === '/software')}
 					onclick={closeMenu}
 				>
 					{label}
@@ -36,7 +48,38 @@
 		</nav>
 
 		<div class="actions">
+			<div class="header-search-wrap">
+				<svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+					<circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+				</svg>
+				<input 
+					type="text" 
+					placeholder="Global Search..." 
+					bind:value={searchQuery}
+					onkeydown={handleSearch}
+					class="header-search-input" 
+				/>
+			</div>
+
+			<button 
+				class="action-btn cursor-toggle" 
+				class:active={cursorState.active}
+				onclick={toggleCursor}
+				title="Toggle Custom Cursor"
+			>
+				{#if cursorState.active}
+					<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+						<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/>
+					</svg>
+				{:else}
+					<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+						<path d="m3 3 7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/><path d="m13 13 6 6"/>
+					</svg>
+				{/if}
+			</button>
+
 			<ThemeToggle />
+			
 			<button
 				class="menu-btn"
 				aria-label="Toggle menu"
@@ -162,7 +205,64 @@
 	.actions {
 		display: flex;
 		align-items: center;
-		gap: 0.5rem;
+		gap: 0.75rem;
+	}
+
+	.header-search-wrap {
+		position: relative;
+		display: flex;
+		align-items: center;
+	}
+
+	.header-search-wrap .search-icon {
+		position: absolute;
+		left: 0.75rem;
+		color: var(--text-muted);
+		pointer-events: none;
+	}
+
+	.header-search-input {
+		background: var(--bg-card);
+		border: 1px solid var(--border);
+		border-radius: var(--radius-pill);
+		padding: 0.45rem 1rem 0.45rem 2.2rem;
+		font-size: 0.85rem;
+		color: var(--text-primary);
+		width: 160px;
+		transition: all var(--transition-base);
+		outline: none;
+	}
+
+	.header-search-input:focus {
+		width: 240px;
+		border-color: var(--text-primary);
+		box-shadow: var(--glow-cyan);
+	}
+
+	.action-btn {
+		width: 38px;
+		height: 38px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: var(--bg-card);
+		border: 1px solid var(--border);
+		border-radius: var(--radius-md);
+		color: var(--text-secondary);
+		cursor: pointer;
+		transition: all var(--transition-fast);
+	}
+
+	.action-btn:hover {
+		border-color: var(--text-primary);
+		color: var(--text-primary);
+		background: var(--bg-card-hover);
+	}
+
+	.action-btn.active {
+		background: var(--accent-cyan-dim);
+		border-color: var(--text-primary);
+		color: var(--text-primary);
 	}
 
 	/* Mobile menu button */

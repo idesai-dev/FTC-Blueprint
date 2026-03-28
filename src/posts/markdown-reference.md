@@ -2,14 +2,14 @@
 title: Writing in Markdown — A Quick Reference
 date: 2026-03-20
 description: A practical guide to markdown syntax — headings, code blocks, tables, blockquotes, and more.
-tags: [markdown, easy, formatting]
+tags: [markdown, beginner, formatting]
 author: Blueprint
 published: true
 ---
 
 # Writing in Markdown — A Quick Reference
 
-Markdown is plain text that renders as formatted HTML. It's fast to write, easy to read, and version-control friendly. Here's a reference for everything you need.
+Markdown is plain text that renders as formatted HTML. It's fast to write, beginner to read, and version-control friendly. Here's a reference for everything you need.
 
 ## Headers
 
@@ -20,7 +20,7 @@ Headers consist of information that is not shown to the public user, but instead
 title: Writing in Markdown — A Quick Reference
 date: 2026-03-20
 description: A practical guide to markdown syntax — headings, code blocks, tables, blockquotes, and more.
-tags: [markdown, easy, formatting]
+tags: [markdown, beginner, formatting]
 author: Blueprint
 published: true
 ---

@@ -160,34 +160,45 @@
     }
 
     .sidebar-link {
-        display: block;
+        display: inline-block;
+        position: relative;
         font-size: 0.78rem;
         font-family: var(--font-body);
         color: var(--text-muted);
         text-decoration: none;
-        padding: 0.3rem 0.5rem;
-        border-left: 2px solid transparent;
-        border-radius: 0 4px 4px 0;
-        transition:
-            color var(--transition-fast),
-            border-color var(--transition-fast),
-            background-color var(--transition-fast);
+        padding: 0.3rem 0;
+        margin-left: 0.5rem;
+        transition: color var(--transition-fast);
         line-height: 1.4;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
     }
 
+    .sidebar-link::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background: var(--accent-green);
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.3s ease;
+    }
+
     .sidebar-link:hover {
-        color: var(--text-secondary);
-        background: rgba(116, 215, 237, 0.05);
-        border-left-color: var(--border);
+        color: var(--text-primary);
     }
 
     .sidebar-link.active {
         color: var(--text-primary);
-        border-left-color: var(--text-primary);
-        background: rgba(116, 215, 237, 0.07);
+    }
+
+    .sidebar-link:hover::after,
+    .sidebar-link.active::after {
+        transform: scaleX(1);
     }
 
     /* Level-specific weight differences */
