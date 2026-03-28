@@ -16,16 +16,24 @@
 
 			await sleep(500);
 
+<<<<<<< HEAD
 			// Type str1
+=======
+>>>>>>> main-dev
 			for (let i = 0; i <= str1.length; i++) {
 				typedText = str1.substring(0, i);
 				await sleep(Math.random() * 50 + 50);
 			}
 
+<<<<<<< HEAD
 			// Pause before deleting
 			await sleep(1500);
 
 			// Delete str1
+=======
+			await sleep(1500);
+
+>>>>>>> main-dev
 			for (let i = str1.length; i >= 0; i--) {
 				typedText = str1.substring(0, i);
 				await sleep(40);
@@ -33,13 +41,20 @@
 
 			await sleep(500);
 
+<<<<<<< HEAD
 			// Type str2
+=======
+>>>>>>> main-dev
 			for (let i = 0; i <= str2.length; i++) {
 				typedText = str2.substring(0, i);
 				await sleep(Math.random() * 50 + 50);
 			}
 
+<<<<<<< HEAD
 			await sleep(1500); // Wait briefly before removing cursor completely
+=======
+			await sleep(1500); 
+>>>>>>> main-dev
 			showCursor = false;
 		};
 
@@ -48,7 +63,11 @@
 </script>
 
 <svelte:head>
+<<<<<<< HEAD
 	<title>The Complete Blueprint</title>
+=======
+	<title>Blueprint — FTC Made Easy</title>
+>>>>>>> main-dev
 	<meta name="description" content="Blueprint is an FTC guide made easy" />
 </svelte:head>
 
@@ -73,7 +92,11 @@
 		</p>
 		<div class="hero-cta">
 			<a href="/articles" class="btn btn-primary" id="hero-read-btn">Read the articles</a>
+<<<<<<< HEAD
 			<a href="/about" class="btn btn-ghost" id="hero-about-btn">The Chuds</a>
+=======
+			<a href="/about" class="btn btn-ghost" id="hero-about-btn">About</a>
+>>>>>>> main-dev
 		</div>
 	</div>
 </section>
@@ -97,7 +120,11 @@
 
 			{#if data.recentPosts.length >= 3}
 				<div class="view-all animate-fade-up">
+<<<<<<< HEAD
 					<a href="/articles" class="btn btn-ghost" id="home-view-all-btn">View all posts →</a>
+=======
+					<a href="/articles" class="btn btn-ghost" id="home-view-all-btn">View all articles →</a>
+>>>>>>> main-dev
 				</div>
 			{/if}
 		</div>

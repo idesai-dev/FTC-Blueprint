@@ -19,7 +19,7 @@
 
 	--accent-green: #7effa0;
 	--accent-green-dim: #3a7a50;
-	--accent-yellow: #f5e642;
+	--accent-yellow: #fff58a;
 	--accent-yellow-dim: #7a720e;
 	--accent-cyan: #74d7ed;
 	--accent-cyan-dim: #1a4d5c;
@@ -128,7 +128,7 @@ a {
 	text-decoration: none;
 	transition: color var(--transition-fast);
 }
-a:hover { color: var(--accent-green); }
+a:hover { color: var(--accent-yellow); }
 
 code, kbd, pre {
 	font-family: var(--font-mono);
@@ -246,3 +246,48 @@ code, kbd, pre {
 .stagger > *:nth-child(6) { animation-delay: 400ms; }
 .stagger > *:nth-child(7) { animation-delay: 480ms; }
 .stagger > *:nth-child(8) { animation-delay: 560ms; }
+
+/* ---------- Code Copy Button ---------- */
+.copy-code-button {
+	position: absolute;
+	top: 0.75rem;
+	right: 0.75rem;
+	width: 32px;
+	height: 32px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: rgba(116, 215, 237, 0.08);
+	border: 1px solid rgba(116, 215, 237, 0.15);
+	border-radius: var(--radius-sm);
+	color: var(--text-muted);
+	cursor: pointer;
+	transition: all var(--transition-fast);
+	z-index: 10;
+	backdrop-filter: blur(4px);
+	padding: 0;
+}
+
+.copy-code-button:hover {
+	background: rgba(116, 215, 237, 0.15);
+	border-color: var(--text-primary);
+	color: var(--text-primary);
+	transform: translateY(-1px);
+	box-shadow: var(--glow-cyan);
+}
+
+.copy-code-button:active {
+	transform: translateY(0);
+}
+
+.copy-code-button.copied {
+	border-color: var(--accent-green);
+	background: rgba(126, 255, 160, 0.1);
+	color: var(--accent-green);
+}
+
+/* Ensure pre has relative positioning for the button */
+pre {
+	position: relative;
+}
+

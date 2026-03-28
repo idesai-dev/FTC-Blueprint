@@ -2,9 +2,15 @@
 	import { formatDate, tagColor } from '$lib/utils/posts';
 	import type { PostMeta } from '$lib/utils/posts';
 	import type { Component } from 'svelte';
-
+	import { setupCopyButtons } from '$lib/utils/codeCopyButton';
+	import SectionSidebar from '$lib/components/sectionSidebar.svelte';
 	let { data }: { data: { content: Component; meta: PostMeta } } = $props();
+
+	$effect(() => {
+		setupCopyButtons();
+	});
 </script>
+
 
 <svelte:head>
 	<title>{data.meta.title} — Blueprint</title>
@@ -58,11 +64,14 @@
 	</header>
 
 	<!-- Content -->
-	<div class="post-body animate-fade-up" style="animation-delay:360ms">
-		<div class="container">
-			<div class="prose">
-				<data.content />
+	<div class="post-body animate-fade-up" style="animation-delay:360ms;">
+		<div class="post-body-inner">
+			<div class="container">
+				<div class="prose">
+					<data.content />
+				</div>
 			</div>
+			<SectionSidebar contentSelector=".prose" />
 		</div>
 	</div>
 
@@ -172,6 +181,23 @@
 	.post-body {
 		padding: 3.5rem 0 4rem;
 	}
+
+	.post-body-inner {
+		display: flex;
+		align-items: flex-start;
+		gap: 3rem;
+		max-width: calc(var(--container-max) + 220px + 3rem);
+		margin: 0 auto;
+		padding: 0 1.5rem;
+	}
+
+	/* Override container inside post-body-inner so it doesn't add extra padding */
+	.post-body-inner .container {
+		padding: 0;
+		flex: 1;
+		min-width: 0;
+	}
+
 
 	/* Prose styles */
 	:global(.prose) {
