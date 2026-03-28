@@ -6,7 +6,7 @@
 	let ki = $state(0.01);
 	let kd = $state(0.3);
 
-	// Simulation State
+	// Simulation Staten
 	let target = 100;
 	let currentPos = $state(0);
 	let velocity = $state(0);
@@ -19,7 +19,7 @@
 	let isRunning = $state(true);
 
 	// Auto-reset state
-	let autoResetSeconds = $state('');
+	let autoResetSeconds = $state('4.5');
 	let autoResetTimer = $state<ReturnType<typeof setInterval> | null>(null);
 	let countdownTimer = $state<ReturnType<typeof setInterval> | null>(null);
 	let countdown = $state<number | null>(null);
@@ -50,13 +50,17 @@
 	}
 
 	onMount(() => {
-		const interval = setInterval(step, 40);
-		return () => {
-			clearInterval(interval);
-			if (autoResetTimer) clearInterval(autoResetTimer);
-			if (countdownTimer) clearInterval(countdownTimer);
-		};
-	});
+    const interval = setInterval(step, 40);
+    
+    // start default auto‑reset timer (5.5 s)
+    handleAutoResetInput();
+
+    return () => {
+        clearInterval(interval);
+        if (autoResetTimer) clearInterval(autoResetTimer);
+        if (countdownTimer) clearInterval(countdownTimer);
+    };
+});
 
 	function resetSim() {
 		currentPos = 0;
@@ -254,13 +258,11 @@
 	/* Hide number input spinners */
 	.auto-reset-input::-webkit-outer-spin-button,
 	.auto-reset-input::-webkit-inner-spin-button {
-		appearance: none;
 		-webkit-appearance: none;
-		margin: 0;
 	}
-	.auto-reset-input[type="number"] {
-		appearance: textfield;
+	.auto-reset-input[type=number] {
 		-moz-appearance: textfield;
+		appearance: textfield;
 	}
 
 	.reset-btn {

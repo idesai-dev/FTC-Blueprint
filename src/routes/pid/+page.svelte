@@ -1,6 +1,5 @@
 <script lang="ts">
 	import PIDVisualizer from '$lib/components/PIDVisualizer.svelte';
-	
 	import { fade, fly } from 'svelte/transition';
 </script>
 

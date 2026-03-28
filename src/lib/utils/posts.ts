@@ -10,6 +10,7 @@ export interface PostMeta {
 }
 
 export interface Post {
+	body(body: any): unknown;
 	slug: string;
 	meta: PostMeta;
 }

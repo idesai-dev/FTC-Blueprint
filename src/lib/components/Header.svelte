@@ -12,7 +12,9 @@
             children: [
                 { href: '/pid', label: 'PID Simulator' },
                 { href: '/motionprofile', label: 'Motion Profiling' },
-                { href: '/feedforward', label: 'Feedforward' }
+                { href: '/feedforward', label: 'Feedforward' },
+				{ href: '/pid-game', label: 'PID Learning Game' },
+                { href: '/pedro-visualizer', label: 'Pedro Visualizer' }
             ]
         },
         { href: '/hardware', label: 'Hardware' },
@@ -38,7 +40,7 @@
     }
 
     const isSimulatorActive = () =>
-        ['/pid', '/motionprofile', '/feedforward'].some(
+        ['/pid', '/motionprofile', '/feedforward', '/simulators/pedro-visualizer'].some(
             (path) => $page.url.pathname === path || $page.url.pathname.startsWith(`${path}/`)
         );
 </script>
