@@ -3,7 +3,7 @@
 
     const { title, children, titleColor, childColor } = $props();
 
-    let open = $state(true);
+    let open = $state(false);
 
     function toggle() {
         open = !open;
