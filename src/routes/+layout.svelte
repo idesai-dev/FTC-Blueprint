@@ -3,6 +3,7 @@
 	import Header from '$lib/components/Header.svelte';
 	import Footer from '$lib/components/Footer.svelte';
 	import CustomCursor from '$lib/components/CustomCursor.svelte';
+	import DocBot from '$lib/components/DocBot.svelte';
 
 	let { children } = $props();
 </script>
@@ -12,6 +13,7 @@
 </svelte:head>
 
 <CustomCursor />
+<DocBot />
 
 <div class="site-wrapper">
 	<Header />

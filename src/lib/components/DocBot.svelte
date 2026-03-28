@@ -91,7 +91,12 @@
 		<div class="chat-window" transition:scale={{ duration: 300, start: 0.9, opacity: 0 }}>
 			<header class="chat-header">
 				<div class="bot-info">
-					<span class="bot-avatar">⬡</span>
+					<div class="bot-avatar">
+						<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+							<path d="M12 2l9 4.5v11L12 22l-9-4.5v-11z"/>
+							<circle cx="12" cy="12" r="3"/>
+						</svg>
+					</div>
 					<div>
 						<h3>DocBot</h3>
 						<span class="status">Online & Ready</span>
@@ -133,7 +138,7 @@
 					bind:value={query}
 					onkeydown={handleKeydown}
 				/>
-				<button type="submit" disabled={!query.trim() || isThinking}>
+				<button type="submit" disabled={!query.trim() || isThinking} aria-label="Send message">
 					<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
 						<path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/>
 					</svg>
@@ -150,7 +155,15 @@
 		aria-label="Open documentation assistant"
 	>
 		{#if !isOpen}
-			<span class="bot-icon" transition:fade>🤖</span>
+			<div class="bot-icon-wrap" transition:scale={{ duration: 300, start: 0.5 }}>
+				<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+					<path d="M12 2l9 4.5v11L12 22l-9-4.5v-11z"/>
+					<circle cx="12" cy="12" r="3"/>
+					<path d="M12 9v1"/>
+					<path d="M12 14v1"/>
+				</svg>
+				<span class="bot-pulse"></span>
+			</div>
 		{:else}
 			<span class="bot-icon" transition:fade>↓</span>
 		{/if}
@@ -168,29 +181,56 @@
 
 	/* FAB Button */
 	.bot-trigger {
-		width: 56px;
-		height: 56px;
+		width: 60px;
+		height: 60px;
 		border-radius: 50%;
-		background: var(--gradient-accent);
-		border: none;
-		color: white;
+		background: var(--bg-card);
+		border: 1px solid var(--border);
+		color: var(--text-primary);
 		font-size: 1.5rem;
 		cursor: pointer;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2), var(--glow-cyan);
-		transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+		box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3), var(--glow-cyan);
+		transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+		position: relative;
 	}
 
 	.bot-trigger:hover {
-		transform: scale(1.1);
+		transform: scale(1.05) translateY(-4px);
+		border-color: var(--text-primary);
+		background: var(--bg-card-hover);
 	}
 
 	.bot-trigger.active {
 		background: var(--bg-card);
 		color: var(--text-primary);
 		border: 1px solid var(--border);
+		transform: rotate(180deg);
+	}
+
+	.bot-icon-wrap {
+		position: relative;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: var(--accent-cyan);
+	}
+
+	.bot-pulse {
+		position: absolute;
+		inset: -8px;
+		border: 2px solid var(--accent-cyan);
+		border-radius: 50%;
+		opacity: 0;
+		animation: pulse-ring 2s infinite;
+	}
+
+	@keyframes pulse-ring {
+		0% { transform: scale(0.5); opacity: 0; }
+		50% { opacity: 0.3; }
+		100% { transform: scale(1.2); opacity: 0; }
 	}
 
 	/* Chat Window */
