@@ -7,8 +7,8 @@
 	const navLinks = [
 		{ href: '/', label: 'Home' },
 		{ href: '/software', label: 'Software' },
+		{ href: '/pid', label: 'PID Simulator' },
 		{ href: '/hardware', label: 'Hardware' },
-		{ href: '/pid', label: 'PID Tuner' },
 		{ href: '/outreach', label: 'Outreach' },
 		{ href: '/suggest', label: 'Suggest' },
 		{ href: '/about', label: 'About' }

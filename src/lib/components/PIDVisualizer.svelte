@@ -18,6 +18,12 @@
 	
 	let isRunning = $state(true);
 
+	// Auto-reset state
+	let autoResetSeconds = $state('');
+	let autoResetTimer = $state<ReturnType<typeof setInterval> | null>(null);
+	let countdownTimer = $state<ReturnType<typeof setInterval> | null>(null);
+	let countdown = $state<number | null>(null);
+
 	function step() {
 		if (!isRunning) return;
 
@@ -45,7 +51,11 @@
 
 	onMount(() => {
 		const interval = setInterval(step, 40);
-		return () => clearInterval(interval);
+		return () => {
+			clearInterval(interval);
+			if (autoResetTimer) clearInterval(autoResetTimer);
+			if (countdownTimer) clearInterval(countdownTimer);
+		};
 	});
 
 	function resetSim() {
@@ -54,6 +64,28 @@
 		integralSum = 0;
 		lastError = 0;
 		history = [];
+	}
+
+	function handleAutoResetInput() {
+		if (autoResetTimer) { clearInterval(autoResetTimer); autoResetTimer = null; }
+		if (countdownTimer) { clearInterval(countdownTimer); countdownTimer = null; }
+		countdown = null;
+
+		const seconds = parseFloat(autoResetSeconds);
+		if (!isNaN(seconds) && seconds > 0) {
+			const ms = Math.round(seconds * 1000);
+			countdown = ms;
+
+			autoResetTimer = setInterval(() => {
+				resetSim();
+				countdown = ms;
+			}, ms);
+
+			countdownTimer = setInterval(() => {
+				countdown = Math.max(0, (countdown ?? 0) - 100);
+				if (countdown <= 0) countdown = ms;
+			}, 100);
+		}
 	}
 
 	// SVG Helpers
@@ -74,7 +106,25 @@
 <div class="pid-visualizer">
 	<div class="header">
 		<h4>Interactive PID Tuner</h4>
-		<button onclick={resetSim} class="reset-btn">Reset Sim</button>
+		<div class="header-controls">
+			<div class="auto-reset">
+				<label for="auto-reset-input">Auto-reset (s)</label>
+				<input
+					id="auto-reset-input"
+					type="number"
+					min="0.5"
+					step="0.5"
+					placeholder="—"
+					bind:value={autoResetSeconds}
+					oninput={handleAutoResetInput}
+					class="auto-reset-input"
+				/>
+				{#if countdown !== null}
+					<span class="countdown">{(countdown / 1000).toFixed(1)}s</span>
+				{/if}
+			</div>
+			<button onclick={resetSim} class="reset-btn">Reset Sim</button>
+		</div>
 	</div>
 
 	<div class="visual-area">
@@ -154,6 +204,63 @@
 	.header h4 {
 		margin: 0;
 		color: var(--text-primary);
+	}
+
+	.header-controls {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+	}
+
+	.auto-reset {
+		display: flex;
+		align-items: center;
+		gap: 0.4rem;
+	}
+
+	.auto-reset label {
+		font-size: 0.8rem;
+		font-family: var(--font-mono);
+		color: var(--text-secondary);
+		white-space: nowrap;
+	}
+
+	.countdown {
+		font-size: 0.8rem;
+		font-family: var(--font-mono);
+		color: var(--accent-cyan);
+		min-width: 2rem;
+		text-align: left;
+	}
+
+	.auto-reset-input {
+		width: 4rem;
+		background: var(--bg-secondary);
+		border: 1px solid var(--border);
+		color: var(--text-primary);
+		padding: 0.2rem 0.4rem;
+		border-radius: var(--radius-sm);
+		font-size: 0.8rem;
+		font-family: var(--font-mono);
+		text-align: center;
+		transition: border-color 0.2s;
+	}
+
+	.auto-reset-input:focus {
+		outline: none;
+		border-color: var(--accent-cyan);
+	}
+
+	/* Hide number input spinners */
+	.auto-reset-input::-webkit-outer-spin-button,
+	.auto-reset-input::-webkit-inner-spin-button {
+		appearance: none;
+		-webkit-appearance: none;
+		margin: 0;
+	}
+	.auto-reset-input[type="number"] {
+		appearance: textfield;
+		-moz-appearance: textfield;
 	}
 
 	.reset-btn {
