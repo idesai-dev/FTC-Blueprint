@@ -4,6 +4,14 @@
 
 	let { active, x, y, hovering } = $derived(cursorState);
 
+	$effect(() => {
+		if (active) {
+			document.body.classList.add('custom-cursor-active');
+		} else {
+			document.body.classList.remove('custom-cursor-active');
+		}
+	});
+
 	onMount(() => {
 		const handleMouseMove = (e: MouseEvent) => {
 			cursorState.x = e.clientX;
