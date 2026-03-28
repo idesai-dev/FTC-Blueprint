@@ -1,1 +1,0 @@
-import{V as y,b as _,W as u,X as g,h as t,Y as o,Z as i,i as l,g as d,j as p,_ as m}from"./QtSQGayY.js";function C(n,r){let s=null,E=t;var a;if(t){s=p;for(var e=m(document.head);e!==null&&(e.nodeType!==o||e.data!==n);)e=i(e);if(e===null)l(!1);else{var f=i(e);e.remove(),d(f)}}t||(a=document.head.appendChild(y()));try{_(()=>r(a),u|g)}finally{E&&(l(!0),d(s))}}export{C as h};
