@@ -14,7 +14,7 @@ published: true
 PID (Proportional, Integral, Derivative) control is the most common control algorithm used in FTC for precise movements, whether it's for a drivetrain, an arm, or a slide.
 
 <div class="tuner-callout">
-    <p> <strong>Try our new full-page <a href="/pid">PID Tuner Tool</a></strong> for a bigger, easier tuning experience!</p>
+    <p> <strong>Try our new full-page <a href="/simulators/pid">PID Simulator</a></strong> for a deeper understanding of PID!</p>
 </div>
 
 <PIDVisualizer />
@@ -22,19 +22,25 @@ PID (Proportional, Integral, Derivative) control is the most common control algo
 ## The Three Components
 
 ### 1. Proportional (P)
-The **Proportional** term is the simplest. It produces an output that is proportional to the current error.
-- **Error** = Target - Current Position
-- **Output** = *K_p* × **Error**
 
-If you are far from the target, the output is large. As you get closer, the output decreases. 
+The **Proportional** term is the simplest. It produces an output that is proportional to the current error.
+
+- **Error** = Target - Current Position
+- **Output** = _K_p_ × **Error**
+
+If you are far from the target, the output is large. As you get closer, the output decreases.
 
 ### 2. Integral (I)
+
 The **Integral** term accounts for the accumulation of past errors. If the proportional term isn't enough to reach the target (due to friction or gravity), the Integral term will slowly increase the output over time until the target is reached.
-- **Output** = *K_p* × **Error** + *K_i* × Σ **Error** × *dt*
+
+- **Output** = _K_p_ × **Error** + _K_i_ × Σ **Error** × _dt_
 
 ### 3. Derivative (D)
+
 The **Derivative** term predicts future error based on the current rate of change. It acts as a "brake," dampening the movement to prevent overshoot and oscillations.
-- **Output** = *K_p* × **Error** + *K_d* × *d(Error)/dt*
+
+- **Output** = _K_p_ × **Error** + _K_d_ × _d(Error)/dt_
 
 ## Implementation in Java
 
@@ -58,17 +64,17 @@ public class PIDController {
         double error = target - currentPosition;
         double derivative = (error - lastError) / timer.seconds();
         integralSum += error * timer.seconds();
-        
+
         // Anti-windup for the integral term
         if (Math.abs(error) < 1) { // Threshold
              integralSum = 0;
         }
 
         double output = (Kp * error) + (Ki * integralSum) + (Kd * derivative);
-        
+
         lastError = error;
         timer.reset();
-        
+
         return output;
     }
 
@@ -80,7 +86,7 @@ public class PIDController {
 
 ## Tuning Your PID
 
-Tuning is the process of finding the right values for *K_p*, *K_i*, and *K_d*.
+Tuning is the process of finding the right values for _K_p_, _K_i_, and _K_d_.
 
 1. **Set $K_i$ and $K_d$ to zero.**
 2. **Increase $K_p$** until the system starts to oscillate steadily.

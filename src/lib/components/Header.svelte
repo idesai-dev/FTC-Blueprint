@@ -10,11 +10,11 @@
         {
             label: 'Simulators',
             children: [
-                { href: '/pid', label: 'PID Simulator' },
-                { href: '/motionprofile', label: 'Motion Profiling' },
-                { href: '/feedforward', label: 'Feedforward' },
-				{ href: '/pid-game', label: 'PID Learning Game' },
-                { href: '/pedro-visualizer', label: 'Pedro Visualizer' }
+                { href: '/simulators/pid', label: 'PID Simulator' },
+                { href: '/simulators/motionprofile', label: 'Motion Profiling' },
+                { href: '/simulators/feedforward', label: 'Feedforward' },
+				{ href: '/simulators/pid-game', label: 'PID Learning Game' },
+                { href: '/simulators/pedro-visualizer', label: 'Pedro Visualizer' }
             ]
         },
         { href: '/hardware', label: 'Hardware' },
@@ -40,7 +40,7 @@
     }
 
     const isSimulatorActive = () =>
-        ['/pid', '/motionprofile', '/feedforward', '/simulators/pedro-visualizer'].some(
+        ['/simulators/pid', '/simulators/motionprofile', '/simulators/feedforward', '/simulators/pedro-visualizer'].some(
             (path) => $page.url.pathname === path || $page.url.pathname.startsWith(`${path}/`)
         );
 </script>
