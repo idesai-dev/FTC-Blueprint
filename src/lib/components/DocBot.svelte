@@ -158,7 +158,7 @@
 
         return {
             role: 'assistant',
-            content: 'I did not find an exact Blueprint page for that, but I can still help if you ask about PID, odometry, drivetrain code, pathing, FTC hardware, or a specific page on blueprint.theftc.app.'
+            content: 'I did not find an exact Blueprint page for that, but I can still help if you ask about PID, odometry, drivetrain code, pathing, FTC hardware, or a specific page on ftcblueprint.com'
         };
     }
 
