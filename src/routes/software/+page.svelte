@@ -101,6 +101,7 @@
 		<ol style="padding:0; margin:0; list-style:none; color:var(--text-body);">
 			<li style="padding-left:1.25rem; margin-top:0.25rem;"><a href="/software/pid-control">PID Control</a></li>
 			<li style="padding-left:1.25rem; margin-top:0.25rem;"><a href="/software/feed-forward">Feedforward</a></li>
+			<li style="padding-left:1.25rem; margin-top:0.25rem;"><a href="/software/motion-profiling">Motion Profiling</a></li>
 		</ol>
 
 		<p class="sub" style="color:var(--accent-green); font-family:var(--font-heading); font-weight:600; font-size: 1.1rem; margin-top: 1rem; margin-bottom: 0.25rem;">Sensors</p>

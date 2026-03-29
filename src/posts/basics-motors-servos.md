@@ -2,7 +2,7 @@
 title: Basics: Motors and Servos
 date: 2026-03-28
 description: Programming guide for DC motors and servos in FTC.
-tags: [software, beginner, manual, completed guide]
+tags: [software, beginner, completed guide]
 author: Ishaan Desai
 published: true
 ---
