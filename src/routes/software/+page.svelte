@@ -53,7 +53,6 @@
 					<ol style="padding-left:1.5rem;" type="1">
 						<li><a href="/software/pedro-introduction">Introduction</a></li>
 						<li><a href="/software/pedro-tuning">How to Tune</a></li>
-						<li><a href="/software/pedro-subsystems">Subsystem Functions</a></li>
 						<li><a href="/software/pedro-making-an-auto">Making an Auto</a></li>
 						<li><a href="/software/pedro-localization">Localization</a></li>
 					</ol>

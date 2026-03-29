@@ -14,31 +14,6 @@ export interface Post {
 	meta: PostMeta;
 }
 
-export async function getAllPosts(): Promise<Post[]> {
-	const modules = import.meta.glob<{ metadata: PostMeta; default: any }>('/src/posts/*.md');
-	const rawModules = import.meta.glob<string>('/src/posts/*.md', { query: '?raw', import: 'default' });
-
-	const posts: (Post | null)[] = await Promise.all(
-		Object.entries(modules).map(async ([path, resolver]) => {
-			const { metadata } = await resolver();
-			if (!metadata) return null;
-
-			// Get raw content for word count
-			const rawContent = rawModules[path] ? await rawModules[path]() : '';
-			const slug = path.replace('/src/posts/', '').replace('.md', '');
-
-			// Remove frontmatter and extra whitespace for accurate count
-			const body = rawContent.replace(/^---[\s\S]*?---/, '');
-			const wordCount = body.split(/\s+/).filter(Boolean).length;
-			
-			return { slug, meta: { ...metadata, wordCount } };
-		})
-	);
-
-	return (posts.filter((p) => p !== null) as Post[])
-		.filter((p) => p.meta.published !== false)
-		.sort((a, b) => new Date(b.meta.date).getTime() - new Date(a.meta.date).getTime());
-}
 
 /**
  * Format a date string for display.
@@ -65,4 +40,21 @@ export function tagColor(tag: string): string {
 	}
 	const index = Math.abs(hash) % tagColors.length;
 	return tagColors[index];
+}
+
+export async function getAllPosts(): Promise<Post[]> {
+    const modules = import.meta.glob<{ metadata: PostMeta; default: any }>('/src/posts/*.md');
+
+    const posts: (Post | null)[] = await Promise.all(
+        Object.entries(modules).map(async ([path, resolver]) => {
+            const { metadata } = await resolver();
+            if (!metadata) return null;
+            const slug = path.replace('/src/posts/', '').replace('.md', '');
+            return { slug, meta: { ...metadata } };
+        })
+    );
+
+    return (posts.filter((p) => p !== null) as Post[])
+        .filter((p) => p.meta.published !== false)
+        .sort((a, b) => new Date(b.meta.date).getTime() - new Date(a.meta.date).getTime());
 }

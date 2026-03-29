@@ -76,7 +76,6 @@
 					<ol style="padding-left:2rem;" type="I">
 						<li><a href="/software/pedro-introduction">Introduction</a></li>
 						<li><a href="/software/pedro-tuning">How to Tune</a></li>
-						<li><a href="/software/pedro-subsystems">Subsystem Functions</a></li>
 						<li><a href="/software/pedro-making-an-auto">Making an Auto</a></li>
 						<li><a href="/software/pedro-localization">Localization</a></li>
 					</ol>
@@ -132,7 +131,7 @@
 								<li><a href="/software/basics-imu">IMU (Rev)</a></li>
 							</ol>
 						</li>
-						<li><a href="/software/types-of-opmodes">Linear OpMode vs. OpMode</a></li>
+						<li><a href="/software/basics-types-of-opmodes">Linear OpMode vs. OpMode</a></li>
 					</ol>
 				</Collapsible>
 			</li>

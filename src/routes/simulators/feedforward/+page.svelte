@@ -57,7 +57,7 @@
 			<div class="callout animate-fade-up" style="animation-delay: 300ms">
 				<h3>Want to implement this in code?</h3>
 				<p>Our feedforward guide covers the full theory and provides a Java implementation compatible with the FTC SDK and Road Runner.</p>
-				<a href="/software/feedforward" class="btn">View Feedforward Guide →</a>
+				<a href="/software/feed-forward" class="btn">View Feedforward Guide →</a>
 			</div>
 		</div>
 	</div>

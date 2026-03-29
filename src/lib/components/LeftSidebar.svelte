@@ -42,7 +42,7 @@
             links: [
                 { href: "/software/pedro-introduction", label: "Introduction" },
                 { href: "/software/pedro-tuning", label: "How to Tune" },
-                { href: "/software/nextftc-subsystems", label: "NextFTC Subsystems" },
+                { href: "/software/pedro-nextftc-subsystems", label: "NextFTC Subsystems" },
                 { href: "/software/pedro-making-an-auto", label: "Making an Auto" },
                 { href: "/software/pedro-localization", label: "Localization" }
             ]

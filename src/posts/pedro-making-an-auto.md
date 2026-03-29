@@ -2,7 +2,7 @@
 title: Pedro Pathing: Making an Auto
 date: 2026-03-28
 description: Building a complete autonomous routine with Pedro Pathing.
-tags: [software, intermediate, autonomous]
+tags: [software, intermediate]
 author: Ishaan Desai
 published: true
 ---
