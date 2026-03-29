@@ -22,19 +22,18 @@
                     body: json
                 });
 
-                const data = await response.json();
+                await response.json();
 
                 if (response.ok) {
                     window.location.href =
-                        "https://ftcblueprint.com/success?msg=Suggestion%20Sent!&from=suggest";
+                        "https://ftcblueprint.com/success?msg=Suggestion%20Sent%21&from=suggest";
                 } else {
-                    window.location.href =
-                        `https://ftcblueprint.com/failure?msg=Suggestion%20Failed!&from=suggest&code=${response.status}`;
-                }
+                    //window.location.href = `https://ftcblueprint.com/failure?msg=Suggestion%20Failed%21&from=suggest&code=${response.status}`;
+					console.log(response)
+				}
             } catch (error) {
                 console.error(error);
-                window.location.href =
-                    "https://ftcblueprint.com/failure?msg=Suggestion%20Failed!&from=suggest&code=network";
+                //window.location.href = "https://ftcblueprint.com/failure?msg=Suggestion%20Failed%21&from=suggest&code=network";
             }
         });
     });
