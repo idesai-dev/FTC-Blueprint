@@ -135,8 +135,10 @@ Blockquotes are useful for callouts, quotes, or emphasis.
 
 ```markdown
 [Link text](https://example.com)
-![Alt text](./image.png)
+![Alt text](/assets/markdown/image.png)
 ```
+
+![md logo](/assets/markdown/images.png)
 
 ## Horizontal Rules
 
