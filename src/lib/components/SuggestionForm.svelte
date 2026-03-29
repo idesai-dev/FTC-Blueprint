@@ -1,11 +1,53 @@
+<script lang="ts">
+    import { onMount } from "svelte";
+
+    onMount(() => {
+        const form = document.getElementById("form") as HTMLFormElement | null;
+        if (!form) return;
+
+        form.addEventListener("submit", async (e: SubmitEvent) => {
+            e.preventDefault();
+
+            const formData = new FormData(form);
+            const object = Object.fromEntries(formData.entries());
+            const json = JSON.stringify(object);
+
+            try {
+                const response = await fetch("https://api.web3forms.com/submit", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Accept": "application/json"
+                    },
+                    body: json
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    window.location.href =
+                        "https://ftcblueprint.com/success?msg=Suggestion%20Sent!&from=suggest";
+                } else {
+                    window.location.href =
+                        `https://ftcblueprint.com/failure?msg=Suggestion%20Failed!&from=suggest&code=${response.status}`;
+                }
+            } catch (error) {
+                console.error(error);
+                window.location.href =
+                    "https://ftcblueprint.com/failure?msg=Suggestion%20Failed!&from=suggest&code=network";
+            }
+        });
+    });
+</script>
+
+
 <div class="suggestion-container animate-fade-up">
 	<div class="form-header">
 		<h3>Submit a Request</h3>
 		<p>Have an idea for a guide or a tip? Let us know!</p>
 	</div>
 
-	<form action="https://api.web3forms.com/submit" method="POST" class="suggestion-form">
-		<input type="hidden" name="access_key" value="75203397-0013-44ac-bc8b-b7477ce9a056" />
+	<form method="POST" class="suggestion-form" id="form">
 		<input 
 			type="hidden" 
 			name="redirect" 
