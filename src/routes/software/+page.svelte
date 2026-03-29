@@ -136,6 +136,7 @@
 			<li style="padding-left:1.25rem; margin-top:0.25rem;"><a href="/software/common-practices">Common practices</a></li>
 			<li style="padding-left:1.25rem; margin-top:0.25rem;"><a href="/software/bulkreads">Bulkreads</a></li>
 			<li style="padding-left:1.25rem; margin-top:0.25rem;"><a href="/software/mecanum-drivetrain">Mecanum Drivetrain</a></li>
+			<li style="padding-left:1.25rem; margin-top:0.25rem;"><a href="/software/markdown-reference">Markdown Reference</a></li>
 		</ol>
 	</div>
 	<div style="width: 100%;">
