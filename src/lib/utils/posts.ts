@@ -10,7 +10,6 @@ export interface PostMeta {
 }
 
 export interface Post {
-	body(body: any): unknown;
 	slug: string;
 	meta: PostMeta;
 }
@@ -25,7 +24,7 @@ export async function getAllPosts(): Promise<Post[]> {
 			if (!metadata) return null;
 
 			// Get raw content for word count
-			const rawContent = await rawModules[path]();
+			const rawContent = rawModules[path] ? await rawModules[path]() : '';
 			const slug = path.replace('/src/posts/', '').replace('.md', '');
 
 			// Remove frontmatter and extra whitespace for accurate count
