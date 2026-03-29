@@ -20,7 +20,8 @@
         { href: '/hardware', label: 'Hardware' },
         { href: '/outreach', label: 'Outreach' },
         { href: '/suggest', label: 'Suggest' },
-        { href: '/about', label: 'About' }
+        { href: '/about', label: 'About' },
+        { href: '/complete-rookie-guide', label: 'Rookie Guide' }
     ];
 
     let menuOpen = $state(false);
