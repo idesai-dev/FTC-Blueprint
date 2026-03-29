@@ -272,7 +272,7 @@
 		font-style: italic;
 	}
 
-	:global(.prose code) {
+	:global(.prose code:not(pre code)) {
 		font-family: var(--font-mono);
 		font-size: 0.88em;
 		padding: 0.15em 0.45em;
