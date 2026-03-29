@@ -1,12 +1,14 @@
 <script lang="ts">
-	let subject = $state('');
-	let message = $state('');
 
-	function handleSubmit(e: Event) {
-		e.preventDefault();
-		const body = encodeURIComponent(message);
-		const mailtoUrl = `mailto:idesai.dev@gmail.com?subject=${encodeURIComponent(subject)}&body=${body}`;
-		window.location.href = mailtoUrl;
+	function handleSubmit() {
+		let button = document.getElementById("submitBtn") as HTMLButtonElement;
+		if (!button) return;
+		button.disabled = true;
+		button.innerHTML = "Suggestion Sent!";
+		setTimeout(() => {
+			button.disabled = false;
+			button.innerHTML = "Send Suggestion";
+		}, 2000);
 	}
 </script>
 
@@ -16,34 +18,37 @@
 		<p>Have an idea for a guide or a tip? Let us know!</p>
 	</div>
 
-	<form onsubmit={handleSubmit} class="suggestion-form">
+	<form action="https://api.web3forms.com/submit" method="POST" class="suggestion-form" onsubmit={handleSubmit}>
+		<input type="hidden" name="access_key" value="e4a99a82-5904-4f9a-b7fa-4118aa1df060" />
+
 		<div class="form-group">
 			<label for="subject">Subject</label>
 			<input 
-				type="text" 
-				id="subject" 
-				bind:value={subject} 
-				placeholder="e.g., Roadrunner advanced tuning" 
-				required
+			type="text"
+			id="subject"
+			name="subject"
+			placeholder="e.g., Roadrunner advanced tuning"
+			required
 			/>
 		</div>
 
 		<div class="form-group">
 			<label for="message">Message</label>
 			<textarea 
-				id="message" 
-				bind:value={message} 
-				placeholder="Describe what you'd like to see..." 
-				rows="4" 
-				required
+			id="message"
+			name="message"
+			placeholder="Describe what you'd like to see..."
+			rows="4"
+			required
 			></textarea>
 		</div>
 
-		<button type="submit" class="submit-btn">
+		<button type="submit" class="submit-btn" id="submitBtn">
 			<span>Send Suggestion</span>
 			<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
 		</button>
 	</form>
+
 </div>
 
 <style>
