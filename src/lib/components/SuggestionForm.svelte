@@ -19,7 +19,8 @@
 	</div>
 
 	<form action="https://api.web3forms.com/submit" method="POST" class="suggestion-form" onsubmit={handleSubmit}>
-		<input type="hidden" name="access_key" value="e4a99a82-5904-4f9a-b7fa-4118aa1df060" />
+		<input type="hidden" name="access_key" value="ac96b501-6ce6-485e-b866-8beb591d22a4" />
+		<input type="hidden" name="redirect" value="https://ftcblueprint.com/success?msg=Suggestion%20Sent!&from=suggestion" />
 
 		<div class="form-group">
 			<label for="subject">Subject</label>
