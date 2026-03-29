@@ -8,6 +8,15 @@ export default {
     kit: {
         adapter: adapter({
             fallback: '404.html'
-        })
+        }),
+        prerender: {
+            handleHttpError: ({ path, referrer, message }) => {
+                if (message.includes('404')) {
+                    console.warn(`Warning: 404 on ${path} (linked from ${referrer})`);
+                    return;
+                }
+                throw new Error(message);
+            }
+        }
     }
 };
