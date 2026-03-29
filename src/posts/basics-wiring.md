@@ -1,5 +1,5 @@
 ---
-title: Basics: Wiring and Configuration
+title: Basics of Wiring and Configuration
 date: 2026-03-28
 description: Essential guide to wiring your FTC robot and configuring it in the app.
 tags: [software, beginner, manual, completed guide]
@@ -12,13 +12,17 @@ Proper wiring and configuration are the foundation of a reliable FTC robot. This
 ## Wiring Your Robot
 
 ### 1. Connecting Motors
+
 Motors should be connected to the motor ports on the Control Hub or Expansion Hub. Ensure you use the correct cable type for your motors (e.g., Anderson Powerpole or JST-VH).
 
 ### 2. Connecting Servos
+
 Servos are connected to the servo ports. Pay close attention to the orientation of the connectors; the black (ground) wire should be on the outside.
 
 ### 3. Connecting Sensors
-Most sensors in FTC use I2C, Digital, or Analog ports. 
+
+Most sensors in FTC use I2C, Digital, or Analog ports.
+
 - **I2C:** Used for sensors like the IMU, color sensors, and distance sensors.
 - **Digital:** Used for touch sensors or limit switches.
 - **Analog:** Used for potentiometers or specialized sensors.
@@ -28,13 +32,16 @@ Most sensors in FTC use I2C, Digital, or Analog ports.
 Once your hardware is wired, you must configure it in the FTC Robot Controller app so your code knows which device is on which port.
 
 ### 1. Accessing the Configuration
+
 On the Driver Station app, navigate to **Settings > Configure Robot**.
 
 ### 2. Creating a Configuration
+
 Select **New** to create a new configuration. The app will scan for connected hubs.
 
 ### 3. Naming Your Devices
-For each port, select the device type and give it a unique name. This name *must* match the string you use in your Java code's `hardwareMap.get()` call.
+
+For each port, select the device type and give it a unique name. This name _must_ match the string you use in your Java code's `hardwareMap.get()` call.
 
 ```java
 // Example: The name "leftDrive" in the app must match here
