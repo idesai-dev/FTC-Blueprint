@@ -28,12 +28,11 @@
                     window.location.href =
                         "https://ftcblueprint.com/success?msg=Suggestion%20Sent%21&from=suggest";
                 } else {
-                    //window.location.href = `https://ftcblueprint.com/failure?msg=Suggestion%20Failed%21&from=suggest&code=${response.status}`;
-					console.log(response)
+                    window.location.href = `https://ftcblueprint.com/failure?msg=Suggestion%20Failed%21&from=suggest&code=${response.status}`;
 				}
             } catch (error) {
                 console.error(error);
-                //window.location.href = "https://ftcblueprint.com/failure?msg=Suggestion%20Failed%21&from=suggest&code=network";
+                window.location.href = "https://ftcblueprint.com/failure?msg=Suggestion%20Failed%21&from=suggest&code=network";
             }
         });
     });
@@ -72,8 +71,8 @@
 		</div>
 
 		<button type="submit" class="submit-btn" id="submitBtn">
-			<span>Send Suggestion</span>
-			<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+			<span style="color: var(--bg);">Send Suggestion</span>
+			<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--bg)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
 		</button>
 	</form>
 
@@ -123,7 +122,7 @@
 	}
 
 	input, textarea {
-		background: #111111;
+		background: var(--bg-code);
 		border: 1px solid var(--border);
 		border-radius: var(--radius-md);
 		padding: 0.8rem 1rem;

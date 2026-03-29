@@ -324,3 +324,17 @@ pre{
 	color: var(--accent-green);
 	border-color: var(--accent-green);
 }
+
+/* Code line hover effects */
+.code-line {
+	display: inline-block;
+	min-width: 100%;
+	padding: 0 0.5rem;
+	margin-left: -0.5rem;
+	border-radius: 4px;
+	transition: background-color var(--transition-fast);
+}
+
+.code-line:hover {
+	background-color: var(--bg);
+}
