@@ -47,11 +47,8 @@
 	</div>
 
 	<form method="POST" class="suggestion-form" id="form">
-		<input 
-			type="hidden" 
-			name="redirect" 
-			value="https://ftcblueprint.com/success?msg=Suggestion%20Sent%21&from=suggest" 
-		/>
+		<input type="hidden" name="access_key" value="e4a99a82-5904-4f9a-b7fa-4118aa1df060" />
+
 		<div class="form-group">
 			<label for="subject">Subject</label>
 			<input 
