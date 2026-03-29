@@ -2,7 +2,7 @@
 title: Mecanum Drivetrain
 date: 2026-03-28
 description: Programming and optimizing a 4-wheel mecanum drivetrain for FTC.
-tags: [software, beginner, drivetrain]
+tags: [software, beginner]
 author: Ishaan Desai
 published: true
 ---
