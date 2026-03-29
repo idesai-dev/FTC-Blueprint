@@ -1,0 +1,1 @@
+import"./B8hLVlQX.js";import"./BzeKQkOh.js";const t={title:"FTC Dashboard",date:"2026-01-01T00:00:00.000Z",description:"How to use the FTC Dashboard in FTC",published:!0,tags:["software"]},{title:s,date:d,description:i,published:r,tags:n}=t;function c(a){}export{c as default,t as metadata};

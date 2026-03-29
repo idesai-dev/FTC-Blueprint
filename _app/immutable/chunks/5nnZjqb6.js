@@ -1,0 +1,1 @@
+import"./B8hLVlQX.js";import"./BzeKQkOh.js";const t={title:"IMU",date:"2026-01-01T00:00:00.000Z",description:"How to use the IMU in FTC",published:!0,tags:["software"]},{title:a,date:o,description:d,published:n,tags:r}=t;function c(e){}export{c as default,t as metadata};
