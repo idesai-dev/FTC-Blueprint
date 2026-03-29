@@ -1,27 +1,16 @@
-<script lang="ts">
-
-	function handleSubmit() {
-		let button = document.getElementById("submitBtn") as HTMLButtonElement;
-		if (!button) return;
-		button.disabled = true;
-		button.innerHTML = "Suggestion Sent!";
-		setTimeout(() => {
-			button.disabled = false;
-			button.innerHTML = "Send Suggestion";
-		}, 2000);
-	}
-</script>
-
 <div class="suggestion-container animate-fade-up">
 	<div class="form-header">
 		<h3>Submit a Request</h3>
 		<p>Have an idea for a guide or a tip? Let us know!</p>
 	</div>
 
-	<form action="https://api.web3forms.com/submit" method="POST" class="suggestion-form" onsubmit={handleSubmit}>
-		<input type="hidden" name="access_key" value="ac96b501-6ce6-485e-b866-8beb591d22a4" />
-		<input type="hidden" name="redirect" value="https://ftcblueprint.com/success?msg=Suggestion%20Sent!&from=suggestion" />
-
+	<form action="https://api.web3forms.com/submit" method="POST" class="suggestion-form">
+		<input type="hidden" name="access_key" value="75203397-0013-44ac-bc8b-b7477ce9a056" />
+		<input 
+			type="hidden" 
+			name="redirect" 
+			value="https://ftcblueprint.com/success?msg=Suggestion%20Sent%21&from=suggest" 
+		/>
 		<div class="form-group">
 			<label for="subject">Subject</label>
 			<input 
