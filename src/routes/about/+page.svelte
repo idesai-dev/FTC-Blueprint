@@ -24,32 +24,19 @@
 			<div class="about-main prose-like">
 				<h2>Hello there 👋</h2>
 				<p>
-					Welcome to <strong>Blueprint</strong> — a digital notebook for FTC, engineering, and more!
+					Welcome to <strong>Blueprint</strong> - a WORK IN PROGRESS digital notebook for FTC, engineering, and more!
 				</p>
 
 				<p>
 					Check out our <a href="https://youtube.com" target="_blank" rel="noopener noreferrer">YouTube channel!</a>
 				</p>
 
-				<pre class="code-block"><code
-						>---
-title: My Post Title
-date: 2026-03-26
-description: A short summary of the post.
-tags: [tag1, tag2]
-author: Your Name
-published: true
----
-
-Your content here...
-</code></pre>
-
 			</div>
 
 			<aside class="about-sidebar">
 				<div class="sidebar-card">
 					<div class="sidebar-icon">⬡</div>
-					<h4>The Chuds <br> (FTC Team 12345)</h4>
+					<h4>Ishaan Desai - Slingshot <br> (FTC Team 20240)</h4>
 					<p> Based in Austin, Texas</p>
 					<div class="sidebar-links">
 						<a href="/software" class="sidebar-link">

@@ -6,8 +6,17 @@ tags: [software, intermediate, control, completed guide]
 author: Ishaan Desai
 published: true
 ---
+<script>
+    import FeedforwardVisualizer from '$lib/components/FeedforwardVisualizer.svelte';
+</script>
 
 Feedforward control is a pro-active way of controlling mechanisms. Unlike PID, which reacts to errors, Feedforward uses a model of the physical system to pre-calculate the power needed to achieve a specific movement.
+
+<div class="tuner-callout">
+    <p> <strong>Try our <a href="/simulators/feedforward">Feedforward + PID Simulator</a></strong> for a deeper understanding of Feedforward!</p>
+</div>
+
+<FeedforwardVisualizer />
 
 ## Why use Feedforward?
 With PID alone, if you have gravity or friction (like an arm or linear slide), the mechanism will likely sag or drop. You would have to use a high K_i to compensate, which makes the robot slower to respond.
