@@ -88,7 +88,7 @@ public class PIDController {
 
 Tuning is the process of finding the right values for _K_p_, _K_i_, and _K_d_.
 
-1. **Set $K_i$ and $K_d$ to zero.**
-2. **Increase $K_p$** until the system starts to oscillate steadily.
-3. **Increase $K_d$** to dampen the oscillations and reach the target quickly without overshooting.
-4. **Increase $K_i$** only if you have a steady-state error (the robot stops just before the target).
+1. **Set K_i and K_d to zero.**
+2. **Increase K_p** until the system starts to oscillate steadily.
+3. **Increase K_d** to dampen the oscillations and reach the target quickly without overshooting.
+4. **Increase K_i** only if you have a steady-state error (the robot stops just before the target).

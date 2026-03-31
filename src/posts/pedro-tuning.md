@@ -33,6 +33,6 @@ Pedro Pathing includes a built-in dashboard for real-time tuning and visualizati
 3.  Use the tuning tools to adjust constants and see the robot's performance live.
 
 ## Common Issues
-- **Overshooting:** Increase $K_d$ or decrease $K_p$ in your follower PID.
+- **Overshooting:** Increase K_d or decrease K_p in your follower PID.
 - **Inconsistent Paths:** Check your odometry hardware for any mechanical issues.
-- **Slow Response:** Increase your $K_p$ or $K_v$ values.
+- **Slow Response:** Increase your K_p or K_v values.
