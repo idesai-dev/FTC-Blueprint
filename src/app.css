@@ -13,7 +13,7 @@
 	--border: #2a2a2a;
 	--border-subtle: #222222;
 
-	--bg-code: #111111;
+	--bg-code: #282828;
 	--sidebar-bg: var(--bg-card-hover);
 
 	--text-primary: #74d7ed;
@@ -64,7 +64,7 @@ html.light {
 	--border: #dcd6c5;
 	--border-subtle: #e8e2d2;
 
-	--bg-code: #f0ebd8;
+	--bg-code: #576467;
 	--sidebar-bg: rgba(42, 122, 69, 0.08);
 
 	--text-primary: #3d3b31;
@@ -269,7 +269,7 @@ code, kbd, pre {
 	color: var(--text-body);
 }
 pre{
-	background: var(--bg-secondary) !important;
+	background: var(--bg-code) !important;
 	border-radius: var(--radius-md);
 }
 :global(.prose pre code) {
@@ -333,7 +333,7 @@ pre{
 	margin-left: -0.5rem;
 	border-radius: 4px;
 	transition: background-color var(--transition-fast);
-}
+}	
 
 .code-line:hover {
 	background-color: var(--bg);

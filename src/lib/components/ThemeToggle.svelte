@@ -1,4 +1,5 @@
 <script lang="ts">
+	import toast from 'svelte-5-french-toast'
 	let theme = $state<'dark' | 'light'>('dark');
 
 	$effect(() => {
@@ -7,6 +8,9 @@
 
 	function toggle() {
 		theme = theme === 'dark' ? 'light' : 'dark';
+		if (theme == 'light'){
+			toast('Light mode is not recommended.');
+		}
 		document.documentElement.className = theme;
 		localStorage.setItem('theme', theme);
 	}

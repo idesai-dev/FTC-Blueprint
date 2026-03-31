@@ -4,6 +4,7 @@
 	import Footer from '$lib/components/Footer.svelte';
 	import CustomCursor from '$lib/components/CustomCursor.svelte';
 	import DocBot from '$lib/components/DocBot.svelte';
+	import { Toaster } from 'svelte-5-french-toast';
 
 	let { children } = $props();
 </script>
@@ -14,7 +15,7 @@
 
 <CustomCursor />
 <DocBot />
-
+<Toaster />
 <div class="site-wrapper">
 	<Header />
 	<main class="main-content">

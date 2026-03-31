@@ -2,8 +2,7 @@
     import { page } from '$app/stores';
     import ThemeToggle from './ThemeToggle.svelte';
     import { cursorState, toggleCursor } from '$lib/stores/cursor.svelte';
-    import { goto } from '$app/navigation';
-
+    import { goto } from '$app/navigation';    
     const navLinks = [
         { href: '/', label: 'Home' },
         { href: '/software', label: 'Software' },
