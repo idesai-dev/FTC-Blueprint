@@ -1,1 +1,0 @@
-import{p as y,b as _,af as g,ag as u,h as t,C as o,_ as i,i as l,g as d,j as p,v}from"./DYAPEY7b.js";function C(n,r){let a=null,f=t;var s;if(t){a=p;for(var e=v(document.head);e!==null&&(e.nodeType!==o||e.data!==n);)e=i(e);if(e===null)l(!1);else{var E=i(e);e.remove(),d(E)}}t||(s=document.head.appendChild(y()));try{_(()=>r(s),g|u)}finally{f&&(l(!0),d(a))}}export{C as h};
