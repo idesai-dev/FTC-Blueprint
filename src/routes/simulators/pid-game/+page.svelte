@@ -59,7 +59,7 @@
         const hints = [
             'Try increasing P until it starts to oscillate, then add D to calm it down.',
             'Small P changes can make a huge difference on this configuration.',
-            'If it stops short, a touch of I may help it settle.',
+            'If it stops short, a touch of P may help it settle.',
             'This setup responds fast, but can get unstable if overdriven.',
             'The best tuning usually comes from balancing P and D first.'
         ];

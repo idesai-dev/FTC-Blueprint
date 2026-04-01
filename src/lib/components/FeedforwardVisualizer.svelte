@@ -167,7 +167,7 @@
 			<span class="label">SIMULATION</span>
 			<h1>Feedforward Tuning</h1>
 			<p class="subtitle">
-				Model-based control that predicts the required output — reducing the burden on feedback and improving tracking accuracy.
+				Model-based control that predicts the required output, reducing the burden on feedback and improving tracking accuracy.
 			</p>
 		</div>
 		<div class="stat-row">
@@ -290,15 +290,15 @@
 				<div class="card-label">FEEDFORWARD GAINS</div>
 				<div class="sliders">
 					<div class="control-group">
-						<label>kS — Static <span>{kS.toFixed(3)}</span></label>
+						<label>kS - Static <span>{kS.toFixed(3)}</span></label>
 						<input type="range" min="0" max="0.3" step="0.005" bind:value={kS}/>
 					</div>
 					<div class="control-group">
-						<label>kV — Velocity <span>{kV.toFixed(3)}</span></label>
+						<label>kV - Velocity <span>{kV.toFixed(3)}</span></label>
 						<input type="range" min="0" max="0.08" step="0.001" bind:value={kV}/>
 					</div>
 					<div class="control-group">
-						<label>kA — Accel <span>{kA.toFixed(4)}</span></label>
+						<label>kA - Accel <span>{kA.toFixed(4)}</span></label>
 						<input type="range" min="0" max="0.02" step="0.0002" bind:value={kA}/>
 					</div>
 				</div>
@@ -363,21 +363,21 @@
 			<div class="explainer-item">
 				<span class="phase-dot ks-dot"></span>
 				<div>
-					<strong>kS — Static Friction</strong>
+					<strong>kS - Static Friction</strong>
 					<p>Minimum voltage to overcome static friction and start moving. Applied as ±kS based on direction of motion.</p>
 				</div>
 			</div>
 			<div class="explainer-item">
 				<span class="phase-dot kv-dot"></span>
 				<div>
-					<strong>kV — Velocity Gain</strong>
+					<strong>kV - Velocity Gain</strong>
 					<p>Voltage required to sustain a given velocity against back-EMF and friction. Dominant during cruise phase.</p>
 				</div>
 			</div>
 			<div class="explainer-item">
 				<span class="phase-dot ka-dot"></span>
 				<div>
-					<strong>kA — Acceleration Gain</strong>
+					<strong>kA - Acceleration Gain</strong>
 					<p>Extra voltage needed to accelerate the mechanism's inertia. Matters most during ramp-up/ramp-down.</p>
 				</div>
 			</div>
@@ -385,7 +385,7 @@
 				<span class="phase-dot fb-dot"></span>
 				<div>
 					<strong>Feedback Role</strong>
-					<p>With good FF, feedback only corrects small residual errors — it doesn't have to do all the work, reducing oscillation.</p>
+					<p>With good FF, feedback only corrects small residual errors - it doesn't have to do all the work, reducing oscillation.</p>
 				</div>
 			</div>
 		</div>
