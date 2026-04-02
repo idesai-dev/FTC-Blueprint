@@ -12,15 +12,15 @@
                 { href: '/simulators/pid', label: 'PID Simulator' },
                 { href: '/simulators/motionprofile', label: 'Motion Profiling' },
                 { href: '/simulators/feedforward', label: 'Feedforward' },
-				{ href: '/simulators/pid-game', label: 'PID Learning Game' },
+                { href: '/simulators/pid-game', label: 'PID Learning Game' },
                 { href: '/simulators/pedro-visualizer', label: 'Pedro Visualizer' }
             ]
         },
-        { href: '/hardware', label: 'Hardware' },
-        { href: '/outreach', label: 'Outreach' },
+        // { href: '/hardware', label: 'Hardware' },
+        // { href: '/outreach', label: 'Outreach' },
         { href: '/suggest', label: 'Suggest' },
         { href: '/about', label: 'About' },
-        { href: '/complete-rookie-guide', label: 'Rookie Guide' }
+        // { href: '/complete-rookie-guide', label: 'Rookie Guide' }
     ];
 
     let menuOpen = $state(false);

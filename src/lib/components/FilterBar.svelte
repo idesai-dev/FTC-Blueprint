@@ -10,7 +10,7 @@
     let isExpanded = $state(false);
     let difficulty = $state('all');
     let videoTutorial = $state('all');
-    let completedGuide = $state('all');
+    let completedGuide = $state('yes');
 
     function toggleFilter() {
         isExpanded = !isExpanded;
