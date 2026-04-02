@@ -1,0 +1,1 @@
+import"./DVuhoKpx.js";import"./CfcC15oe.js";const t={title:"Color Sensor",date:"2026-01-01T00:00:00.000Z",description:"How to use the color sensor in FTC",published:!0,tags:["software"]},{title:i,date:r,description:a,published:n,tags:c}=t;function d(o){}export{d as default,t as metadata};

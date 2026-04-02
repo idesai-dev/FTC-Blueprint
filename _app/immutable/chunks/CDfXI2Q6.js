@@ -1,0 +1,1 @@
+import"./DVuhoKpx.js";import"./CfcC15oe.js";const t={title:"Touch Sensor",date:"2026-01-01T00:00:00.000Z",description:"How to use the touch sensor in FTC",published:!0,tags:["software"]},{title:i,date:a,description:c,published:n,tags:r}=t;function d(e){}export{d as default,t as metadata};

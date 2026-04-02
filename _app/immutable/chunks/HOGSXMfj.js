@@ -1,1 +1,0 @@
-import{k as y,b as u,ad as _,ae as g,h as t,C as o,W as i,i as l,g as d,j as m,m as p}from"./DxlxX5-2.js";function C(n,r){let a=null,E=t;var s;if(t){a=m;for(var e=p(document.head);e!==null&&(e.nodeType!==o||e.data!==n);)e=i(e);if(e===null)l(!1);else{var f=i(e);e.remove(),d(f)}}t||(s=document.head.appendChild(y()));try{u(()=>r(s),_|g)}finally{E&&(l(!0),d(a))}}export{C as h};
