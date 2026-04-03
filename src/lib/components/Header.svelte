@@ -5,6 +5,8 @@
     import { goto } from '$app/navigation';    
     const navLinks = [
         { href: '/', label: 'Home' },
+        { href: '/complete-rookie-guide', label: 'Complete Rookie Guide' },
+
         { href: '/software', label: 'Software' },
         {
             label: 'Simulators',
@@ -16,11 +18,10 @@
                 { href: '/simulators/pedro-visualizer', label: 'Pedro Visualizer' }
             ]
         },
-        // { href: '/hardware', label: 'Hardware' },
-        // { href: '/outreach', label: 'Outreach' },
+        { href: '/hardware', label: 'Hardware' },
+        { href: '/outreach', label: 'Outreach' },
         { href: '/suggest', label: 'Suggest' },
-        { href: '/about', label: 'About' },
-        // { href: '/complete-rookie-guide', label: 'Rookie Guide' }
+        { href: '/about', label: 'About' }
     ];
 
     let menuOpen = $state(false);
