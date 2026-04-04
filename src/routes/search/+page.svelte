@@ -10,7 +10,8 @@
 	onMount(() => {
 		initDevMode();
 		window.addEventListener('clearPageSearch', () => {
-			searchQuery = '';
+			displayQuery = '';
+			actualQuery = '';
 			const url = new URL(window.location.href);
 			url.searchParams.delete('q');
 			replaceState(url, $page.state);
@@ -19,17 +20,53 @@
 
 	let { data }: { data: { posts: Post[] } } = $props();
 
-	let searchQuery = $state($page.url.searchParams.get('q') || '');
+	let displayQuery = $state($page.url.searchParams.get('q') || '');
+	let actualQuery = $state($page.url.searchParams.get('q') || '');
 
-	// Push state cleanly when searchQuery changes (two-way binding via DOM handles typing normally)
+	function handleMainInput(e: Event) {
+		const target = e.target as HTMLInputElement;
+		const val = target.value;
+
+		if (val.startsWith('/dev') || val.startsWith('/reg')) {
+			const prefix = val.substring(0, 4);
+			const typedSuffix = val.substring(4);
+			const realSuffix = actualQuery.length > 4 ? actualQuery.substring(4) : '';
+
+			if (typedSuffix.length > realSuffix.length) {
+				const addedStr = typedSuffix.slice(-(typedSuffix.length - realSuffix.length));
+				actualQuery = prefix + realSuffix + addedStr;
+			} else if (typedSuffix.length < realSuffix.length) {
+				actualQuery = prefix + realSuffix.slice(0, typedSuffix.length);
+			} else {
+				actualQuery = val;
+			}
+			displayQuery = prefix + '*'.repeat(Math.max(0, actualQuery.length - 4));
+			target.value = displayQuery;
+		} else {
+			actualQuery = val;
+			displayQuery = val;
+		}
+
+		// Also handle auto-unlocking on the search page!
+		if (actualQuery === '/dev3432' || actualQuery === '/reg3432') {
+			import('$lib/stores/devMode.svelte').then(({ setDevMode }) => {
+				setDevMode(actualQuery === '/dev3432');
+				import('svelte-5-french-toast').then(({ default: toast }) => {
+					toast.success(actualQuery === '/dev3432' ? 'Developer Mode Enabled' : 'Regular Mode Enabled');
+				});
+				displayQuery = '';
+				actualQuery = '';
+			});
+		}
+	}
+
 	$effect(() => {
 		const url = new URL(window.location.href);
-		if (searchQuery) {
-			url.searchParams.set('q', searchQuery);
+		if (actualQuery) {
+			url.searchParams.set('q', actualQuery);
 		} else {
 			url.searchParams.delete('q');
 		}
-		// Don't replace state if it hasn't changed to avoid jitter
 		if (url.search !== window.location.search) {
 			replaceState(url, $page.state);
 		}
@@ -47,7 +84,7 @@
 
 	const filteredPosts = $derived(
 		visiblePosts.filter((p) => {
-			const query = searchQuery.toLowerCase();
+			const query = actualQuery.toLowerCase();
 			if (!query) return true;
 			return (
 				(p.meta.title || '').toString().toLowerCase().includes(query) ||
@@ -61,7 +98,8 @@
 		window.addEventListener('headerToMainSearchSync', (e: Event) => {
 			const ce = e as CustomEvent<string>;
 			if (ce.detail) {
-				searchQuery = ce.detail; // Capture their keystroke!
+				actualQuery = ce.detail;
+				displayQuery = ce.detail;
 			}
 			document.getElementById('main-search-input')?.focus();
 		});
@@ -94,7 +132,8 @@
 					id="main-search-input"
 					type="text"
 					placeholder="Search for articles, prints, or keywords..."
-					bind:value={searchQuery}
+					bind:value={displayQuery}
+					oninput={handleMainInput}
 					class="search-input"
 				/>
 			</div>

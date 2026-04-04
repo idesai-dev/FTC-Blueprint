@@ -14,21 +14,49 @@
 		isSandboxChild = window.location.search.includes('sandbox=true');
 		
 		window.addEventListener('clearHeaderSearch', () => {
-			searchQuery = '';
+			displayQuery = '';
+			actualQuery = '';
 		});
 		if (typeof navigator !== 'undefined' && /Win|Linux/.test(navigator.userAgent)) {
 			isMac = false;
 		}
 	});
 
+	let displayQuery = $state('');
+	let actualQuery = $state('');
+
 	function handleHeaderInput(e: Event) {
+		const target = e.target as HTMLInputElement;
+		const val = target.value;
+
 		if ($page.url.pathname === '/search') {
-			const val = (e.target as HTMLInputElement).value;
 			// Sync what they typed down to the main page!
-			searchQuery = ''; // Clear header bar
+			displayQuery = ''; 
+			actualQuery = '';
 			document.getElementById('main-search-input')?.focus();
 			// Dispatch event so main page can append/set this char
 			window.dispatchEvent(new CustomEvent('headerToMainSearchSync', { detail: val }));
+			return;
+		}
+
+		if (val.startsWith('/dev') || val.startsWith('/reg')) {
+			const prefix = val.substring(0, 4);
+			const typedSuffix = val.substring(4);
+			const realSuffix = actualQuery.length > 4 ? actualQuery.substring(4) : '';
+
+			if (typedSuffix.length > realSuffix.length) {
+				const addedStr = typedSuffix.slice(-(typedSuffix.length - realSuffix.length));
+				actualQuery = prefix + realSuffix + addedStr;
+			} else if (typedSuffix.length < realSuffix.length) {
+				actualQuery = prefix + realSuffix.slice(0, typedSuffix.length);
+			} else {
+				actualQuery = val;
+			}
+			displayQuery = prefix + '*'.repeat(Math.max(0, actualQuery.length - 4));
+			target.value = displayQuery;
+		} else {
+			actualQuery = val;
+			displayQuery = val;
 		}
 	}
 
@@ -95,7 +123,6 @@
 	);
 
 	let menuOpen = $state(false);
-	let searchQuery = $state('');
 	let simulatorsOpen = $state(false);
 
 	function closeMenu() {
@@ -105,22 +132,25 @@
 
 	function handleSearchSubmit(e: Event) {
 		e.preventDefault();
-		if (searchQuery.trim()) {
-			const q = searchQuery.trim();
+		if (actualQuery.trim()) {
+			const q = actualQuery.trim();
 			if (q === '/dev3432') {
 				setDevMode(true);
 				toast.success('Developer Mode Enabled');
-				searchQuery = '';
+				displayQuery = '';
+				actualQuery = '';
 				return;
 			}
 			if (q === '/reg3432') {
 				setDevMode(false);
 				toast.success('Regular Mode Enabled');
-				searchQuery = '';
+				displayQuery = '';
+				actualQuery = '';
 				return;
 			}
 			goto(`/search?q=${encodeURIComponent(q)}`);
-			searchQuery = '';
+			displayQuery = '';
+			actualQuery = '';
 		}
 	}
 
@@ -213,7 +243,7 @@
 					bind:this={headerSearchInput}
 					type="search"
 					placeholder="Global Search..."
-					bind:value={searchQuery}
+					bind:value={displayQuery}
 					oninput={handleHeaderInput}
 					onfocus={handleHeaderFocus}
 					class="header-search-input"
