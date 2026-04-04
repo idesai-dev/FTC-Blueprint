@@ -5,9 +5,12 @@
 	import { setupCopyButtons } from '$lib/utils/codeCopyButton';
 	import SectionSidebar from '$lib/components/sectionSidebar.svelte';
 	import SoftwareLeftSidebar from '$lib/components/SoftwareLeftSidebar.svelte';
+	import MarkdownEditor from '$lib/components/MarkdownEditor.svelte';
+	import { page } from '$app/stores';
 	import { onMount, tick } from 'svelte';
 
 	let { data }: { data: { content: Component; meta: PostMeta } } = $props();
+	const slug = $derived($page.params.slug);
 
 	// Progress Bar
 	let scrollPercent = $state(0);
@@ -134,6 +137,8 @@
 		</div>
 	</div>
 </article>
+
+<MarkdownEditor slug={$page.params.slug ?? ''} section="software" />
 
 <style>
 	/* Progress Bar */
