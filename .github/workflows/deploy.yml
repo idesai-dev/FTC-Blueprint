@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
   build-deploy:
@@ -28,7 +29,7 @@ jobs:
           VITE_GEMINI_API_KEY: ${{ secrets.VITE_GEMINI_API_KEY }}
           VITE_GITHUB_TOKEN: ${{ secrets.VITE_GITHUB_TOKEN }}
           VITE_GITHUB_OWNER: idesai-dev
-          VITE_GITHUB_REPO: Blueprint-ftc
+          VITE_GITHUB_REPO: FTC-Blueprint
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4

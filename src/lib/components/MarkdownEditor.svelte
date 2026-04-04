@@ -35,7 +35,7 @@
 	let tagSearch = $state('');
 	let currentTags = $state<string[]>([]);
 
-	const filePath = `src/posts/${slug}.md`;
+	const filePath = $derived(`src/posts/${slug}.md`);
 
 	function parseTags(raw: string): string[] {
 		const match = raw.match(/tags:\s*\[([^\]]*)\]/);
@@ -149,7 +149,26 @@
 			const data = await res.json();
 			fileSha = data.content.sha;
 			status = 'success';
-			statusMsg = 'Saved! CI building… live in ~60s ✓';
+			statusMsg = 'Saved! Triggering deploy…';
+
+			// Trigger the GitHub Actions workflow to rebuild & deploy
+			try {
+				await fetch(
+					`https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/actions/workflows/deploy.yml/dispatches`,
+					{
+						method: 'POST',
+						headers: {
+							Authorization: `Bearer ${GITHUB_TOKEN}`,
+							Accept: 'application/vnd.github.v3+json',
+							'Content-Type': 'application/json'
+						},
+						body: JSON.stringify({ ref: 'main' })
+					}
+				);
+				statusMsg = 'Saved! CI building… live in ~60s ✓';
+			} catch {
+				statusMsg = 'Saved! (trigger deploy manually)';
+			}
 			setTimeout(() => {
 				status = 'idle';
 				statusMsg = '';
@@ -552,8 +571,8 @@
 		flex: 1;
 		width: 100%;
 		height: 100%;
-		background: #0c0c0c;
-		color: #ddd;
+		background: var(--bg-code, #111);
+		color: var(--text-body);
 		font-family: var(--font-mono);
 		font-size: 0.86rem;
 		line-height: 1.75;
@@ -707,7 +726,6 @@
 	.editor-footer code { color: var(--accent-cyan); }
 
 	@media (max-width: 640px) {
-		.edit-fab span { display: none; }
 		.editor-panel { height: 92vh; }
 		.editor-filename { display: none; }
 	}
