@@ -22,6 +22,7 @@
 	// Visibility filter: only show completed or coming soon posts (unless dev mode)
 	const completedSlugs = $derived(data.posts.filter((p) => (p.meta.tags || []).includes('completed')).map((p) => p.slug));
 	const showLink = (href: string) => devModeState.active || completedSlugs.includes(href.split('/').pop() || '');
+	const showGroup = (hrefs: string[]) => hrefs.some(showLink);
 
 	const visiblePosts = $derived(
 		data.posts.filter((p) => {
@@ -71,6 +72,7 @@
 		<h3>Blueprint Guide</h3>
 		<br />
 
+		{#if showGroup(["/software/pedro-introduction", "/software/pedro-tuning", "/software/pedro-making-an-auto", "/software/pedro-localization", "/software/roadrunner-introduction", "/software/roadrunner-how-to-tune", "/software/roadrunner-actions", "/software/roadrunner-making-an-auto", "/software/roadrunner-localization", "/software/roadrunner-meepmeep", "/software/encoder-autonomous-introduction", "/software/encoder-autonomous-drivetrain-functions", "/software/encoder-autonomous-subsystem-functions"])}
 		<p
 			class="sub"
 			style="color:var(--accent-green); font-family:var(--font-heading); font-weight:600; font-size: 1.1rem; margin-top: 1rem; margin-bottom: 0.25rem;"
@@ -78,6 +80,7 @@
 			Autonomous
 		</p>
 		<ol style="padding:0; margin:0; list-style:none; color:var(--text-body);">
+			{#if showGroup(["/software/pedro-introduction", "/software/pedro-tuning", "/software/pedro-making-an-auto", "/software/pedro-localization"])}
 			<li style="padding-left:1.25rem; margin-top:0.25rem;">
 				<Collapsible title="Pedro" titleColor="var(--text-primary)" childColor="var(--text-body)">
 					<ol style="padding-left:1.5rem;" type="1">
@@ -96,6 +99,8 @@
 					</ol>
 				</Collapsible>
 			</li>
+			{/if}
+			{#if showGroup(["/software/roadrunner-introduction", "/software/roadrunner-how-to-tune", "/software/roadrunner-actions", "/software/roadrunner-making-an-auto", "/software/roadrunner-localization", "/software/roadrunner-meepmeep"])}
 			<li style="padding-left:1.25rem; margin-top:0.25rem;">
 				<Collapsible
 					title="Roadrunner"
@@ -124,6 +129,8 @@
 					</ol>
 				</Collapsible>
 			</li>
+			{/if}
+			{#if showGroup(["/software/encoder-autonomous-introduction", "/software/encoder-autonomous-drivetrain-functions", "/software/encoder-autonomous-subsystem-functions"])}
 			<li style="padding-left:1.25rem; margin-top:0.25rem;">
 				<Collapsible
 					title="Encoder Based"
@@ -147,8 +154,11 @@
 					</ol>
 				</Collapsible>
 			</li>
+			{/if}
 		</ol>
+		{/if}
 
+		{#if showGroup(["/software/teleop-introduction", "/software/teleop-beginner", "/software/teleop-fsm", "/software/basics-types-of-opmodes", "/software/mecanum-drivetrain"])}
 		<p
 			class="sub"
 			style="color:var(--accent-green); font-family:var(--font-heading); font-weight:600; font-size: 1.1rem; margin-top: 1rem; margin-bottom: 0.25rem;"
@@ -156,6 +166,7 @@
 			TeleOp
 		</p>
 		<ol style="padding:0; margin:0; list-style:none; color:var(--text-body);">
+			{#if showGroup(["/software/teleop-introduction", "/software/teleop-beginner", "/software/teleop-fsm"])}
 			<li style="padding-left:1.25rem; margin-top:0.25rem;">
 				<Collapsible title="TeleOp" titleColor="var(--text-primary)" childColor="var(--text-body)">
 					<ol style="padding-left:1.5rem;" type="1">
@@ -171,6 +182,7 @@
 					</ol>
 				</Collapsible>
 			</li>
+			{/if}
 			{#if showLink("/software/basics-types-of-opmodes")}
 				<li style="padding-left:1.25rem; margin-top:0.25rem;">
 				<a href="/software/basics-types-of-opmodes">Types of OpModes</a>
@@ -182,7 +194,9 @@
 			</li>
 			{/if}
 		</ol>
+		{/if}
 
+		{#if showGroup(["/software/pid-control", "/software/feed-forward", "/software/motion-profiling"])}
 		<p
 			class="sub"
 			style="color:var(--accent-green); font-family:var(--font-heading); font-weight:600; font-size: 1.1rem; margin-top: 1rem; margin-bottom: 0.25rem;"
@@ -206,7 +220,9 @@
 			</li>
 			{/if}
 		</ol>
+		{/if}
 
+		{#if showGroup(["/software/vision-opencv", "/software/vision-limelight", "/software/vision-april-tag", "/software/vision-object-detection", "/software/vision-relocalization-metatag2", "/software/pinpoint-odometry-computer", "/software/basics-distance", "/software/basics-color", "/software/basics-touch", "/software/basics-imu"])}
 		<p
 			class="sub"
 			style="color:var(--accent-green); font-family:var(--font-heading); font-weight:600; font-size: 1.1rem; margin-top: 1rem; margin-bottom: 0.25rem;"
@@ -214,6 +230,7 @@
 			Sensors
 		</p>
 		<ol style="padding:0; margin:0; list-style:none; color:var(--text-body);">
+			{#if showGroup(["/software/vision-opencv", "/software/vision-limelight", "/software/vision-april-tag", "/software/vision-object-detection", "/software/vision-relocalization-metatag2"])}
 			<li style="padding-left:1.25rem; margin-top:0.25rem;">
 				<Collapsible title="Vision" titleColor="var(--text-primary)" childColor="var(--text-body)">
 					<ol style="padding-left:1.5rem;" type="1">
@@ -237,6 +254,7 @@
 					</ol>
 				</Collapsible>
 			</li>
+			{/if}
 			{#if showLink("/software/pinpoint-odometry-computer")}
 				<li style="padding-left:1.25rem; margin-top:0.25rem;">
 				<a href="/software/pinpoint-odometry-computer">Pinpoint</a>
@@ -263,7 +281,9 @@
 			</li>
 			{/if}
 		</ol>
+		{/if}
 
+		{#if showGroup(["/software/basics-android-studio", "/software/basics-wiring", "/software/basics-motors-servos"])}
 		<p
 			class="sub"
 			style="color:var(--accent-green); font-family:var(--font-heading); font-weight:600; font-size: 1.1rem; margin-top: 1rem; margin-bottom: 0.25rem;"
@@ -287,7 +307,9 @@
 			</li>
 			{/if}
 		</ol>
+		{/if}
 
+		{#if showGroup(["/software/sloth-load", "/software/common-practices", "/software/bulkreads", "/software/mecanum-drivetrain", "/software/markdown-reference"])}
 		<p
 			class="sub"
 			style="color:var(--accent-green); font-family:var(--font-heading); font-weight:600; font-size: 1.1rem; margin-top: 1rem; margin-bottom: 0.25rem;"
@@ -321,6 +343,7 @@
 			</li>
 			{/if}
 		</ol>
+		{/if}
 	</div>
 	<div style="width: 100%;">
 		<section class="blog-header">
