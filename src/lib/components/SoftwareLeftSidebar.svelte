@@ -106,18 +106,20 @@
 </script>
 
 {#if activeGroup}
-	<button class="mobile-toggle-bar" onclick={() => (mobileOpen = !mobileOpen)} aria-label="Toggle section navigation">
-		<span class="mobile-toggle-title">Sections — {activeGroup.title}</span>
+	<button class="mobile-toggle-fab" onclick={() => (mobileOpen = !mobileOpen)} aria-label="Toggle section navigation" class:active={mobileOpen}>
 		<svg
-			width="16"
-			height="16"
+			width="22"
+			height="22"
 			viewBox="0 0 24 24"
 			fill="none"
 			stroke="currentColor"
-			stroke-width="2"
-			style="transform: rotate({mobileOpen ? 180 : 0}deg); transition: transform 0.3s;"
+			stroke-width="2.5"
+			stroke-linecap="round"
+			stroke-linejoin="round"
 		>
-			<path d="M6 9l6 6 6-6" />
+			<line x1="4" y1="12" x2="20" y2="12"></line>
+			<line x1="4" y1="6" x2="20" y2="6"></line>
+			<line x1="4" y1="18" x2="20" y2="18"></line>
 		</svg>
 	</button>
 
@@ -216,7 +218,7 @@
 		font-weight: 500;
 	}
 
-	.mobile-toggle-bar {
+	.mobile-toggle-fab {
 		display: none;
 	}
 
@@ -226,26 +228,35 @@
 
 	/* Hide natively on narrow screens and turn into a toggleable drawer */
 	@media (max-width: 1100px) {
-		.mobile-toggle-bar {
+		.mobile-toggle-fab {
 			display: flex;
 			align-items: center;
-			justify-content: space-between;
-			width: 100%;
+			justify-content: center;
+			position: fixed;
+			bottom: 1.5rem;
+			left: 1.5rem;
+			width: 60px;
+			height: 60px;
 			background: var(--bg-card);
-			border: 1px solid var(--border-subtle);
-			border-radius: var(--radius-sm);
-			padding: 0.6rem 1rem;
-			margin-bottom: 1.5rem;
-			font-family: var(--font-sans);
+			border: 1px solid var(--border);
+			border-radius: 50%;
 			color: var(--text-primary);
 			cursor: pointer;
-			box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-			z-index: 80;
+			box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3), var(--glow-cyan);
+			z-index: 1000;
+			transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 		}
 
-		.mobile-toggle-title {
-			font-size: 0.85rem;
-			font-weight: 500;
+		.mobile-toggle-fab:hover {
+			transform: scale(1.05) translateY(-4px);
+			border-color: var(--text-primary);
+			background: var(--bg-card-hover);
+		}
+
+		.mobile-toggle-fab.active {
+			background: var(--bg-card);
+			color: var(--text-primary);
+			border: 1px solid var(--border);
 		}
 
 		.left-sidebar {
