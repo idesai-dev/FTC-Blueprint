@@ -70,7 +70,7 @@
 	let isMac = $state(true);
 
 	function handleWindowKeydown(e: KeyboardEvent) {
-		if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+		if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
 			e.preventDefault();
 			if ($page.url.pathname === '/search') {
 				document.getElementById('main-search-input')?.focus();

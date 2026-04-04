@@ -261,7 +261,11 @@ ${contextText}
 		await scrollToEnd();
 	}
 
-	function toggle() {
+	function toggle(e?: Event) {
+		if (e) {
+			e.preventDefault();
+			e.stopPropagation();
+		}
 		isOpen = !isOpen;
 		if (isOpen) scrollToEnd();
 	}
@@ -307,7 +311,7 @@ ${contextText}
 							{#if msg.links}
 								<div class="links">
 									{#each msg.links as link}
-										<a href={link.href} class="doc-link" onclick={toggle}>
+										<a href={link.href} class="doc-link" onclick={() => (isOpen = false)}>
 											{link.title} →
 										</a>
 									{/each}

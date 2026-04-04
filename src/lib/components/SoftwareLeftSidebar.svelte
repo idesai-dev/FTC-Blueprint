@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+	import { fade } from 'svelte/transition';
 
 	const groups = [
 		{
@@ -100,15 +101,43 @@
 	let activeGroup = $derived(
 		visibleGroups.find((group) => group.links.some((link) => link.href === currentPath))
 	);
+
+	let mobileOpen = $state(false);
 </script>
 
 {#if activeGroup}
-	<nav class="left-sidebar" aria-label="Section navigation">
+	<button class="mobile-toggle-bar" onclick={() => (mobileOpen = !mobileOpen)} aria-label="Toggle section navigation">
+		<span class="mobile-toggle-title">Sections — {activeGroup.title}</span>
+		<svg
+			width="16"
+			height="16"
+			viewBox="0 0 24 24"
+			fill="none"
+			stroke="currentColor"
+			stroke-width="2"
+			style="transform: rotate({mobileOpen ? 180 : 0}deg); transition: transform 0.3s;"
+		>
+			<path d="M6 9l6 6 6-6" />
+		</svg>
+	</button>
+
+	<!-- svelte-ignore a11y_click_events_have_key_events -->
+	<!-- svelte-ignore a11y_no_static_element_interactions -->
+	{#if mobileOpen}
+		<div class="mobile-backdrop" transition:fade={{duration: 200}} onclick={() => (mobileOpen = false)}></div>
+	{/if}
+
+	<nav class="left-sidebar" class:mobile-open={mobileOpen} aria-label="Section navigation">
 		<p class="sidebar-label">{activeGroup.title}</p>
 		<ul class="sidebar-list">
 			{#each activeGroup.links as { href, label }}
 				<li class="sidebar-item">
-					<a {href} class="sidebar-link" class:active={currentPath === href}>
+					<a
+						{href}
+						class="sidebar-link"
+						class:active={currentPath === href}
+						onclick={() => (mobileOpen = false)}
+					>
 						{label}
 					</a>
 				</li>
@@ -187,10 +216,66 @@
 		font-weight: 500;
 	}
 
-	/* Hide on narrow screens */
+	.mobile-toggle-bar {
+		display: none;
+	}
+
+	.mobile-backdrop {
+		display: none;
+	}
+
+	/* Hide natively on narrow screens and turn into a toggleable drawer */
 	@media (max-width: 1100px) {
+		.mobile-toggle-bar {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			width: 100%;
+			background: var(--bg-card);
+			border: 1px solid var(--border-subtle);
+			border-radius: var(--radius-sm);
+			padding: 0.6rem 1rem;
+			margin-bottom: 1.5rem;
+			font-family: var(--font-sans);
+			color: var(--text-primary);
+			cursor: pointer;
+			box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+			z-index: 80;
+		}
+
+		.mobile-toggle-title {
+			font-size: 0.85rem;
+			font-weight: 500;
+		}
+
 		.left-sidebar {
-			display: none;
+			position: fixed;
+			top: var(--header-height);
+			left: 0;
+			width: 250px;
+			height: calc(100vh - var(--header-height));
+			max-height: none;
+			background: var(--bg-secondary);
+			z-index: 100;
+			border-radius: 0;
+			border-right: 1px solid var(--border);
+			padding: 1.5rem;
+			transform: translateX(-100%);
+			transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+		}
+
+		.left-sidebar.mobile-open {
+			transform: translateX(0);
+		}
+
+		.mobile-backdrop {
+			display: block;
+			position: fixed;
+			inset: 0;
+			top: var(--header-height);
+			background: rgba(0, 0, 0, 0.4);
+			backdrop-filter: blur(2px);
+			z-index: 90;
 		}
 	}
 </style>
