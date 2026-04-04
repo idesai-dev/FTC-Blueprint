@@ -1,17 +1,29 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 
+	// ── Raw key state ──────────────────────────────────────────────────────────
 	let keys = $state({ w: false, a: false, s: false, d: false, q: false, e: false });
 	let isFieldCentric = $state(false);
-	let imuAngle = $state(0);
+	let imuAngle = $state(0);          // degrees, updated by Q/E in both modes
 
-	let raw_y = $derived((keys.w ? 1 : 0) + (keys.s ? -1 : 0));
-	let raw_x = $derived((keys.d ? 1 : 0) + (keys.a ? -1 : 0));
-	let rx = $derived((keys.e ? 1 : 0) + (keys.q ? -1 : 0));
+	let accel = $state(0.18);
+
+	let smooth_x = $state(0);
+	let smooth_y = $state(0);
+	let smooth_rx = $state(0);
+
+	let target_y  = $derived((keys.w ? 1 : 0) + (keys.s ? -1 : 0));
+	let target_x  = $derived((keys.d ? 1 : 0) + (keys.a ? -1 : 0));
+	let target_rx = $derived((keys.e ? 1 : 0) + (keys.q ? -1 : 0));
 
 	let rad = $derived((-imuAngle * Math.PI) / 180);
-	let x = $derived(isFieldCentric ? raw_x * Math.cos(rad) - raw_y * Math.sin(rad) : raw_x);
-	let y = $derived(isFieldCentric ? raw_x * Math.sin(rad) + raw_y * Math.cos(rad) : raw_y);
+	let x = $derived(isFieldCentric
+		? smooth_x * Math.cos(rad) - smooth_y * Math.sin(rad)
+		: smooth_x);
+	let y = $derived(isFieldCentric
+		? smooth_x * Math.sin(rad) + smooth_y * Math.cos(rad)
+		: smooth_y);
+	let rx = $derived(smooth_rx);
 
 	let fl = $derived(y + x + rx);
 	let fr = $derived(y - x - rx);
@@ -24,6 +36,11 @@
 	let bl_n = $derived(bl / maxMag);
 	let br_n = $derived(br / maxMag);
 
+	let arrowAngleDeg = $derived(
+		Math.atan2(smooth_x, smooth_y) * (180 / Math.PI)
+		+ (isFieldCentric ? -imuAngle : 0)
+	);
+
 	function handleKeydown(e: KeyboardEvent) {
 		const k = e.key.toLowerCase();
 		if (k in keys) keys[k as keyof typeof keys] = true;
@@ -33,12 +50,41 @@
 		if (k in keys) keys[k as keyof typeof keys] = false;
 	}
 
+	// ── Animation loop ─────────────────────────────────────────────────────────
+	// Lerps smooth_* toward targets and also integrates imuAngle from rotation.
+	let rafId: number;
+	const ROT_SPEED = 120; // degrees per second at full rx
+	let lastTime = 0;
+
+	function loop(ts: number) {
+		const dt = lastTime === 0 ? 0 : Math.min((ts - lastTime) / 1000, 0.1);
+		lastTime = ts;
+
+		const k = Math.min(accel, 1);
+
+		smooth_x  += (target_x  - smooth_x)  * k;
+		smooth_y  += (target_y  - smooth_y)  * k;
+		smooth_rx += (target_rx - smooth_rx) * k;
+
+		// Snap to zero when very small to avoid float drift
+		if (Math.abs(smooth_x)  < 0.001) smooth_x  = 0;
+		if (Math.abs(smooth_y)  < 0.001) smooth_y  = 0;
+		if (Math.abs(smooth_rx) < 0.001) smooth_rx = 0;
+
+		// Rotate orientation based on smooth_rx — accumulate freely, no wrap
+		imuAngle += smooth_rx * ROT_SPEED * dt;
+
+		rafId = requestAnimationFrame(loop);
+	}
+
 	onMount(() => {
 		window.addEventListener('keydown', handleKeydown);
 		window.addEventListener('keyup', handleKeyup);
+		rafId = requestAnimationFrame(loop);
 		return () => {
 			window.removeEventListener('keydown', handleKeydown);
 			window.removeEventListener('keyup', handleKeyup);
+			cancelAnimationFrame(rafId);
 		};
 	});
 
@@ -46,6 +92,20 @@
 		if (v > 0.05) return 'var(--color-success, #10b981)';
 		if (v < -0.05) return 'var(--color-error, #ef4444)';
 		return 'var(--text-secondary)';
+	}
+
+	// Normalized -180..180 view of the unbounded imuAngle (for display & slider)
+	let imuNorm = $derived(((imuAngle % 360) + 540) % 360 - 180);
+	let imuDisplay = $derived(Math.round(imuNorm));
+
+	// Slider handler: apply the delta so imuAngle stays unbounded
+	let _prevSlider = 0;
+	function onSliderInput(e: Event) {
+		const next = Number((e.target as HTMLInputElement).value);
+		const delta = next - imuNorm;
+		// Unwrap the delta: if the user dragged past the ±180 edge pick the short path
+		const unwrapped = ((delta + 540) % 360) - 180;
+		imuAngle += unwrapped;
 	}
 </script>
 
@@ -80,22 +140,22 @@
 						</div>
 					{/if}
 
-					<!-- The whole chassis rotates with IMU angle -->
+					<!-- The whole chassis rotates in field-centric mode -->
 					<div
 						class="robot-chassis"
 						style={isFieldCentric ? `transform: rotate(${imuAngle}deg)` : ''}
 					>
-						<!-- Movement vector arrow -->
-						{#if Math.max(Math.abs(x), Math.abs(y)) > 0}
+						<!-- Movement vector arrow — always centered, world-space direction -->
+						{#if Math.max(Math.abs(smooth_x), Math.abs(smooth_y)) > 0.01}
 							<div
 								class="move-vector"
-								style="transform: translate(-50%, -50%) rotate({Math.atan2(x, y) * (180 / Math.PI)}deg)"
+								style="transform: translate(-50%, -100%) rotate({arrowAngleDeg}deg)"
 							></div>
 						{/if}
 
 						<!-- Rotation indicator -->
-						{#if Math.abs(rx) > 0}
-							<div class="rot-indicator" style="transform: translate(-50%,-50%) scaleX({rx < 0 ? 1 : -1})">
+						{#if Math.abs(smooth_rx) > 0.01}
+							<div class="rot-indicator" style="transform: translate(-50%,-50%) scaleX({smooth_rx < 0 ? 1 : -1})">
 								<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 									<path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
 									<path d="M3 3v5h5"/>
@@ -140,9 +200,9 @@
 					<div class="inputs-block">
 						<p class="panel-label">Input state</p>
 						<div class="axis-row">
-							<div class="axis-pill"><span>y</span><strong>{raw_y}</strong></div>
-							<div class="axis-pill"><span>x</span><strong>{raw_x}</strong></div>
-							<div class="axis-pill"><span>rx</span><strong>{rx}</strong></div>
+							<div class="axis-pill"><span>y</span><strong>{smooth_y.toFixed(2)}</strong></div>
+							<div class="axis-pill"><span>x</span><strong>{smooth_x.toFixed(2)}</strong></div>
+							<div class="axis-pill"><span>rx</span><strong>{smooth_rx.toFixed(2)}</strong></div>
 						</div>
 						<div class="keyboard">
 							<div class="kb-row">
@@ -158,6 +218,24 @@
 						</div>
 					</div>
 
+					<!-- Acceleration slider (always visible) -->
+					<div class="accel-block">
+						<p class="panel-label" style="margin-bottom: 0.5rem;">Acceleration smoothing</p>
+						<div class="accel-row">
+							<span class="accel-label">Smooth</span>
+							<input
+								type="range"
+								min="0.05"
+								max="1"
+								step="0.01"
+								bind:value={accel}
+								class="accel-range"
+							/>
+							<span class="accel-label">Instant</span>
+						</div>
+						<div class="accel-val">{(accel * 100).toFixed(0)}%</div>
+					</div>
+
 					<div class="field-centric-block">
 						<label class="toggle-row">
 							<input type="checkbox" bind:checked={isFieldCentric} />
@@ -167,9 +245,9 @@
 						{#if isFieldCentric}
 							<div class="imu-row">
 								<span>IMU heading</span>
-								<code>{imuAngle}°</code>
+								<code>{imuDisplay}°</code>
 							</div>
-							<input type="range" min="0" max="360" bind:value={imuAngle} class="imu-range" />
+							<input type="range" min="-180" max="180" value={imuNorm} oninput={onSliderInput} class="imu-range" />
 						{/if}
 					</div>
 				</div>
@@ -334,15 +412,20 @@
 		border: 2px solid rgba(56, 189, 248, 0.35);
 		border-radius: 10px;
 		margin: 0 20px 28px;
-		transition: transform 0.1s;
+		transition: transform 0.08s linear;
 	}
 
-	/* Movement vector */
+	/* Movement vector — pivot at bottom-center so it points away from center */
 	.move-vector {
 		position: absolute;
-		top: 50%; left: 50%;
-		width: 3px; height: 60px;
+		top: 50%;
+		left: 50%;
+		width: 3px;
+		height: 60px;
 		background: var(--text-primary);
+		/* transform-origin default is 50% 50% of the element.
+		   We shift the element so its bottom sits on the chassis center,
+		   then rotate around that bottom edge. */
 		transform-origin: bottom center;
 		border-radius: 2px 2px 0 0;
 	}
@@ -483,6 +566,36 @@
 		color: white;
 		box-shadow: 0 0 0 #0284c7;
 		transform: translateY(3px);
+	}
+
+	/* Acceleration block */
+	.accel-block {
+		background: var(--bg-secondary);
+		border: 1px solid var(--border);
+		border-radius: var(--radius-md);
+		padding: 1rem;
+	}
+	.accel-row {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+	}
+	.accel-label {
+		font-size: 0.72rem;
+		font-family: var(--font-mono);
+		color: var(--text-secondary);
+		white-space: nowrap;
+	}
+	.accel-range {
+		flex: 1;
+		accent-color: var(--accent-cyan);
+	}
+	.accel-val {
+		font-size: 0.78rem;
+		font-family: var(--font-mono);
+		color: var(--accent-cyan);
+		text-align: center;
+		margin-top: 0.3rem;
 	}
 
 	.field-centric-block {
