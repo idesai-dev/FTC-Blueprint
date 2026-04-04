@@ -13,7 +13,7 @@ Motion profiling is a technique for moving motors smoothly by limiting not just 
 
 ## Why profile a drivetrain?
 
-On a 4‑motor FTC drivetrain, slamming full power into the motors from rest can cause the wheels to break traction and skid. Motion profiling instead shapes the *target* velocity (or position) so that the drivetrain accelerates and decelerates smoothly, which keeps the wheels rolling cleanly and makes autonomous and driver‑controlled motion more predictable.
+On a 4‑motor FTC drivetrain, slamming full power into the motors from rest can cause the wheels to break traction and skid. Motion profiling instead shapes the _target_ velocity (or position) so that the drivetrain accelerates and decelerates smoothly, which keeps the wheels rolling cleanly and makes autonomous and driver‑controlled motion more predictable.
 
 ## What is a trapezoid profile?
 
@@ -27,7 +27,7 @@ The velocity vs. time graph looks like a trapezoid if the robot reaches max spee
 
 ## How profiling helps drivetrains
 
-Instead of telling your PID controller “go to 3000 encoder ticks right now,” you tell it “here is the ideal position, velocity, and acceleration at this moment.” The profile becomes the *reference trajectory*, and the controller follows it. This approach is used in libraries like Road Runner and can be adapted to your own drivetrain code.
+Instead of telling your PID controller “go to 3000 encoder ticks right now,” you tell it “here is the ideal position, velocity, and acceleration at this moment.” The profile becomes the _reference trajectory_, and the controller follows it. This approach is used in libraries like Road Runner and can be adapted to your own drivetrain code.
 
 ## Core kinematics
 
@@ -385,4 +385,3 @@ This example uses the **same trapezoid profile logic** on both left and right si
 - Start with low `maxVel` and `maxAccel` and increase only after the robot moves smoothly.
 - If the robot skips or slips, reduce acceleration first, not just velocity.
 - Use `RUN_USING_ENCODER` on all drivetrain motors so the controller can see velocity and position.
-

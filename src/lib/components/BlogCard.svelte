@@ -2,7 +2,7 @@
 	import { formatDate, tagColor } from '$lib/utils/posts';
 	import type { Post } from '$lib/utils/posts';
 
-	let { post, basePath = '/software' }: { post: Post, basePath?: string } = $props();
+	let { post, basePath = '/software' }: { post: Post; basePath?: string } = $props();
 </script>
 
 <a href="{basePath}/{post.slug}" class="card animate-fade-up" aria-label="Read {post.meta.title}">
@@ -21,9 +21,9 @@
 			<p class="card-desc">{post.meta.description}</p>
 		{/if}
 
-		{#if post.meta.tags && post.meta.tags.length > 0}
+		{#if post.meta.tags && post.meta.tags.filter((t) => t.toLowerCase() !== 'completed').length > 0}
 			<div class="tags">
-				{#each post.meta.tags as tag}
+				{#each post.meta.tags.filter((t) => t.toLowerCase() !== 'completed') as tag}
 					<span class="tag {tagColor(tag)}">{tag}</span>
 				{/each}
 			</div>
@@ -31,8 +31,18 @@
 
 		<div class="read-more">
 			<span>Read post</span>
-			<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-				<path d="M5 12h14M12 5l7 7-7 7"/>
+			<svg
+				width="14"
+				height="14"
+				viewBox="0 0 24 24"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="2.5"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+				aria-hidden="true"
+			>
+				<path d="M5 12h14M12 5l7 7-7 7" />
 			</svg>
 		</div>
 	</div>
@@ -59,7 +69,9 @@
 	.card:hover {
 		border-color: var(--text-primary);
 		transform: translateY(-3px);
-		box-shadow: var(--glow-cyan), 0 8px 32px rgba(0, 0, 0, 0.2);
+		box-shadow:
+			var(--glow-cyan),
+			0 8px 32px rgba(0, 0, 0, 0.2);
 	}
 
 	.card:hover .accent-line {
@@ -87,8 +99,12 @@
 		color: var(--text-muted);
 	}
 
-	.separator { opacity: 0.5; }
-	.author { color: var(--accent-green); }
+	.separator {
+		opacity: 0.5;
+	}
+	.author {
+		color: var(--accent-green);
+	}
 
 	.card-title {
 		font-size: 1.2rem;

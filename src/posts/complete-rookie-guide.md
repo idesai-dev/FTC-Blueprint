@@ -1,7 +1,7 @@
 ---
-title: "Complete Rookie Guide"
-date: "2024-01-01"
-description: "A comprehensive guide for FTC rookies."
+title: 'Complete Rookie Guide'
+date: '2024-01-01'
+description: 'A comprehensive guide for FTC rookies.'
 tags:
   - rookie
   - guide

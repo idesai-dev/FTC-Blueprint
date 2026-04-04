@@ -5,7 +5,10 @@
 
 <svelte:head>
 	<title>PID Tuner — Blueprint</title>
-	<meta name="description" content="An interactive tool for tuning PID control algorithms for FTC robots." />
+	<meta
+		name="description"
+		content="An interactive tool for tuning PID control algorithms for FTC robots."
+	/>
 </svelte:head>
 
 <section class="pid-page">
@@ -14,8 +17,9 @@
 			<span class="badge">Advanced Tools</span>
 			<h1>PID Control Tuner</h1>
 			<p class="subtitle">
-				Tuning PID (Proportional, Integral, Derivative) constants is one of the most common tasks in FTC. 
-				Use this interactive simulator to understand how each constant affects your robot's behavior.
+				Tuning PID (Proportional, Integral, Derivative) constants is one of the most common tasks in
+				FTC. Use this interactive simulator to understand how each constant affects your robot's
+				behavior.
 			</p>
 		</header>
 
@@ -28,21 +32,32 @@
 			<div class="grid-2">
 				<div class="card">
 					<h3>1. The Setup</h3>
-					<p>The simulator models a robot mechanism (like an arm or drivetrain) trying to reach a target <strong>(the dashed green line)</strong>. The cyan circle represents your robot.</p>
+					<p>
+						The simulator models a robot mechanism (like an arm or drivetrain) trying to reach a
+						target <strong>(the dashed green line)</strong>. The cyan circle represents your robot.
+					</p>
 				</div>
 				<div class="card">
 					<h3>2. Tuning Guide</h3>
 					<ul>
-						<li><strong>P:</strong> Start here. Increase until you see the robot moving quickly but oscillating.</li>
+						<li>
+							<strong>P:</strong> Start here. Increase until you see the robot moving quickly but oscillating.
+						</li>
 						<li><strong>D:</strong> Add this to stop the shaking. It acts as a "brake."</li>
-						<li><strong>I:</strong> Use sparingly. It fixes small gaps if the robot stops slightly before the target.</li>
+						<li>
+							<strong>I:</strong> Use sparingly. It fixes small gaps if the robot stops slightly before
+							the target.
+						</li>
 					</ul>
 				</div>
 			</div>
 
 			<div class="callout animate-fade-up" style="animation-delay: 300ms">
 				<h3>Want to implement this in code?</h3>
-				<p>Our comprehensive PID guide covers all the theory and provides a ready-to-use Java implementation.</p>
+				<p>
+					Our comprehensive PID guide covers all the theory and provides a ready-to-use Java
+					implementation.
+				</p>
 				<a href="/software/pid-control" class="btn">View PID Guide →</a>
 			</div>
 		</div>
@@ -99,7 +114,8 @@
 		color: var(--accent-cyan);
 	}
 
-	.card p, .card li {
+	.card p,
+	.card li {
 		color: var(--text-body);
 		font-size: 0.95rem;
 		line-height: 1.6;

@@ -5,15 +5,15 @@
 
 <div class="error-page">
 	<div class="error-orb" aria-hidden="true"></div>
-	
+
 	<div class="container">
 		<div class="error-content animate-fade-up">
 			<span class="status-code">{page.status}</span>
-			
+
 			<h1>{page.status === 404 ? 'Page Lost in Orbit' : 'System Glitch'}</h1>
-			
+
 			<p>
-				{page.error?.message || "Something went wrong while navigating the blueprint."}
+				{page.error?.message || 'Something went wrong while navigating the blueprint.'}
 			</p>
 
 			<div class="actions">
@@ -84,7 +84,8 @@
 		justify-content: center;
 	}
 
-	.btn-primary, .btn-secondary {
+	.btn-primary,
+	.btn-secondary {
 		padding: 0.8rem 1.5rem;
 		border-radius: var(--radius-md);
 		font-weight: 600;

@@ -14,7 +14,6 @@ export interface Post {
 	meta: PostMeta;
 }
 
-
 /**
  * Format a date string for display.
  */
@@ -43,18 +42,18 @@ export function tagColor(tag: string): string {
 }
 
 export async function getAllPosts(): Promise<Post[]> {
-    const modules = import.meta.glob<{ metadata: PostMeta; default: any }>('/src/posts/*.md');
+	const modules = import.meta.glob<{ metadata: PostMeta; default: any }>('/src/posts/*.md');
 
-    const posts: (Post | null)[] = await Promise.all(
-        Object.entries(modules).map(async ([path, resolver]) => {
-            const { metadata } = await resolver();
-            if (!metadata) return null;
-            const slug = path.replace('/src/posts/', '').replace('.md', '');
-            return { slug, meta: { ...metadata } };
-        })
-    );
+	const posts: (Post | null)[] = await Promise.all(
+		Object.entries(modules).map(async ([path, resolver]) => {
+			const { metadata } = await resolver();
+			if (!metadata) return null;
+			const slug = path.replace('/src/posts/', '').replace('.md', '');
+			return { slug, meta: { ...metadata } };
+		})
+	);
 
-    return (posts.filter((p) => p !== null) as Post[])
-        .filter((p) => p.meta.published !== false)
-        .sort((a, b) => new Date(b.meta.date).getTime() - new Date(a.meta.date).getTime());
+	return (posts.filter((p) => p !== null) as Post[])
+		.filter((p) => p.meta.published !== false)
+		.sort((a, b) => new Date(b.meta.date).getTime() - new Date(a.meta.date).getTime());
 }

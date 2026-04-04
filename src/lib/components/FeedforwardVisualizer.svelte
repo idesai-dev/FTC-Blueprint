@@ -2,9 +2,9 @@
 	import { onMount } from 'svelte';
 
 	// ── Feedforward constants ───────────────────────────────────────────────
-	let kS = $state(0.05);   // Static friction (voltage to overcome friction)
-	let kV = $state(0.02);   // Velocity constant (voltage per unit/s)
-	let kA = $state(0.003);  // Acceleration constant (voltage per unit/s²)
+	let kS = $state(0.05); // Static friction (voltage to overcome friction)
+	let kV = $state(0.02); // Velocity constant (voltage per unit/s)
+	let kA = $state(0.003); // Acceleration constant (voltage per unit/s²)
 
 	// PID feedback (for comparison mode)
 	let kP = $state(0.4);
@@ -15,29 +15,29 @@
 	let mode = $state<Mode>('ff+pid');
 
 	// Setpoint profile
-	let targetVel  = $state(80);
+	let targetVel = $state(80);
 	let targetAccel = $state(40);
 
 	// Simulation state
 	const DT = 0.02;
-	let t         = $state(0);
-	let pos       = $state(0);
-	let vel       = $state(0);
+	let t = $state(0);
+	let pos = $state(0);
+	let vel = $state(0);
 	let isRunning = $state(false);
 	let intervalId: ReturnType<typeof setInterval> | null = null;
 
 	// Plant model constants (hidden from user, represents a real motor)
-	const PLANT_KV   = 0.018;
-	const PLANT_KA   = 0.004;
-	const PLANT_KS   = 0.06;
+	const PLANT_KV = 0.018;
+	const PLANT_KA = 0.004;
+	const PLANT_KS = 0.06;
 	const PLANT_MASS = 1.0;
 
 	// History
 	const MAX_H = 250;
-	let velHistory     = $state<{t:number,v:number}[]>([]);
-	let targetHistory  = $state<{t:number,v:number}[]>([]);
-	let voltageHistory = $state<{t:number,v:number}[]>([]);
-	let errorHistory   = $state<{t:number,v:number}[]>([]);
+	let velHistory = $state<{ t: number; v: number }[]>([]);
+	let targetHistory = $state<{ t: number; v: number }[]>([]);
+	let voltageHistory = $state<{ t: number; v: number }[]>([]);
+	let errorHistory = $state<{ t: number; v: number }[]>([]);
 
 	// ── Profile generator (trapezoidal velocity) ────────────────────────────
 	function targetVelAtTime(time: number): number {
@@ -120,39 +120,54 @@
 	}
 
 	function stopSim() {
-		if (intervalId) { clearInterval(intervalId); intervalId = null; }
+		if (intervalId) {
+			clearInterval(intervalId);
+			intervalId = null;
+		}
 		isRunning = false;
 	}
 
 	function resetSim() {
 		stopSim();
-		t = 0; pos = 0; vel = 0; lastError = 0;
-		velHistory = []; targetHistory = []; voltageHistory = []; errorHistory = [];
+		t = 0;
+		pos = 0;
+		vel = 0;
+		lastError = 0;
+		velHistory = [];
+		targetHistory = [];
+		voltageHistory = [];
+		errorHistory = [];
 	}
 
 	onMount(() => () => stopSim());
 
 	// ── Graph helpers ────────────────────────────────────────────────────────
-	const GW = 560, GH = 150, GP = 36;
+	const GW = 560,
+		GH = 150,
+		GP = 36;
 
-	function toPath(data: {t:number,v:number}[], yMin: number, yMax: number): string {
+	function toPath(data: { t: number; v: number }[], yMin: number, yMax: number): string {
 		if (data.length < 2) return '';
 		const tMin = data[0].t;
 		const tRange = data[data.length - 1].t - tMin || 1;
-		return data.map((d, i) => {
-			const x = GP + ((d.t - tMin) / tRange) * (GW - 2 * GP);
-			const y = GH - GP - ((d.v - yMin) / (yMax - yMin)) * (GH - 2 * GP);
-			return `${i === 0 ? 'M' : 'L'} ${x.toFixed(1)} ${y.toFixed(1)}`;
-		}).join(' ');
+		return data
+			.map((d, i) => {
+				const x = GP + ((d.t - tMin) / tRange) * (GW - 2 * GP);
+				const y = GH - GP - ((d.v - yMin) / (yMax - yMin)) * (GH - 2 * GP);
+				return `${i === 0 ? 'M' : 'L'} ${x.toFixed(1)} ${y.toFixed(1)}`;
+			})
+			.join(' ');
 	}
 
-	let velPath    = $derived(toPath(velHistory, 0, targetVel * 1.3));
+	let velPath = $derived(toPath(velHistory, 0, targetVel * 1.3));
 	let targetPath = $derived(toPath(targetHistory, 0, targetVel * 1.3));
-	let voltPath   = $derived(toPath(voltageHistory, -13, 13));
-	let errorPath  = $derived(toPath(errorHistory, -targetVel * 0.4, targetVel * 0.4));
+	let voltPath = $derived(toPath(voltageHistory, -13, 13));
+	let errorPath = $derived(toPath(errorHistory, -targetVel * 0.4, targetVel * 0.4));
 
 	// ── Live metrics ─────────────────────────────────────────────────────────
-	let currentError  = $derived(velHistory.length ? targetHistory.at(-1)!.v - velHistory.at(-1)!.v : 0);
+	let currentError = $derived(
+		velHistory.length ? targetHistory.at(-1)!.v - velHistory.at(-1)!.v : 0
+	);
 	let currentVoltage = $derived(voltageHistory.at(-1)?.v ?? 0);
 	let rmsError = $derived(() => {
 		if (errorHistory.length < 5) return 0;
@@ -167,17 +182,26 @@
 			<span class="label">SIMULATION</span>
 			<h1>Feedforward Tuning</h1>
 			<p class="subtitle">
-				Model-based control that predicts the required output, reducing the burden on feedback and improving tracking accuracy.
+				Model-based control that predicts the required output, reducing the burden on feedback and
+				improving tracking accuracy.
 			</p>
 		</div>
 		<div class="stat-row">
 			<div class="stat">
 				<span class="stat-label">Velocity Error</span>
-				<span class="stat-value {Math.abs(currentError) < 3 ? 'good' : Math.abs(currentError) < 10 ? 'warn' : 'bad'}">{currentError.toFixed(1)}<em>u/s</em></span>
+				<span
+					class="stat-value {Math.abs(currentError) < 3
+						? 'good'
+						: Math.abs(currentError) < 10
+							? 'warn'
+							: 'bad'}">{currentError.toFixed(1)}<em>u/s</em></span
+				>
 			</div>
 			<div class="stat">
 				<span class="stat-label">RMS Error</span>
-				<span class="stat-value {rmsError() < 3 ? 'good' : rmsError() < 10 ? 'warn' : 'bad'}">{rmsError().toFixed(1)}</span>
+				<span class="stat-value {rmsError() < 3 ? 'good' : rmsError() < 10 ? 'warn' : 'bad'}"
+					>{rmsError().toFixed(1)}</span
+				>
 			</div>
 			<div class="stat">
 				<span class="stat-label">Voltage</span>
@@ -190,10 +214,13 @@
 	<section class="card mode-card">
 		<div class="card-label">CONTROLLER MODE</div>
 		<div class="mode-grid">
-			{#each (['ff-only', 'pid-only', 'ff+pid'] as Mode[]) as m}
+			{#each ['ff-only', 'pid-only', 'ff+pid'] as Mode[] as m}
 				<button
 					class="mode-btn {mode === m ? 'active' : ''}"
-					onclick={() => { mode = m; resetSim(); }}
+					onclick={() => {
+						mode = m;
+						resetSim();
+					}}
 				>
 					<span class="mode-icon">
 						{#if m === 'ff-only'}⚡{:else if m === 'pid-only'}🔁{:else}⚡+🔁{/if}
@@ -202,7 +229,8 @@
 						{#if m === 'ff-only'}FF Only{:else if m === 'pid-only'}PID Only{:else}FF + PID{/if}
 					</span>
 					<span class="mode-desc">
-						{#if m === 'ff-only'}Predictive, no correction{:else if m === 'pid-only'}Reactive, no model{:else}Best of both{/if}
+						{#if m === 'ff-only'}Predictive, no correction{:else if m === 'pid-only'}Reactive, no
+							model{:else}Best of both{/if}
 					</span>
 				</button>
 			{/each}
@@ -215,39 +243,99 @@
 		<svg width={GW} height={GH} viewBox="0 0 {GW} {GH}" class="graph">
 			<defs>
 				<linearGradient id="ff-vel-fill" x1="0" y1="0" x2="0" y2="1">
-					<stop offset="0%" stop-color="var(--accent-cyan)" stop-opacity="0.2"/>
-					<stop offset="100%" stop-color="var(--accent-cyan)" stop-opacity="0"/>
+					<stop offset="0%" stop-color="var(--accent-cyan)" stop-opacity="0.2" />
+					<stop offset="100%" stop-color="var(--accent-cyan)" stop-opacity="0" />
 				</linearGradient>
 			</defs>
 			{#each [0, 0.5, 1] as frac}
-				<line x1={GP} y1={GP + frac*(GH-2*GP)} x2={GW-GP} y2={GP + frac*(GH-2*GP)}
-					stroke="var(--border)" stroke-width="1" opacity="0.4" stroke-dasharray="3 4"/>
-				<text x={GP-4} y={GP + frac*(GH-2*GP)+4} text-anchor="end"
-					fill="var(--text-muted)" font-size="9" font-family="var(--font-mono)">
-					{((1-frac) * targetVel * 1.3).toFixed(0)}
+				<line
+					x1={GP}
+					y1={GP + frac * (GH - 2 * GP)}
+					x2={GW - GP}
+					y2={GP + frac * (GH - 2 * GP)}
+					stroke="var(--border)"
+					stroke-width="1"
+					opacity="0.4"
+					stroke-dasharray="3 4"
+				/>
+				<text
+					x={GP - 4}
+					y={GP + frac * (GH - 2 * GP) + 4}
+					text-anchor="end"
+					fill="var(--text-muted)"
+					font-size="9"
+					font-family="var(--font-mono)"
+				>
+					{((1 - frac) * targetVel * 1.3).toFixed(0)}
 				</text>
 			{/each}
 
 			<!-- Target -->
-			<path d={targetPath} fill="none" stroke="var(--accent-green)" stroke-width="1.5"
-				stroke-dasharray="5 3" opacity="0.7"/>
+			<path
+				d={targetPath}
+				fill="none"
+				stroke="var(--accent-green)"
+				stroke-width="1.5"
+				stroke-dasharray="5 3"
+				opacity="0.7"
+			/>
 			<!-- Actual -->
 			{#if velHistory.length > 1}
-				<path d="{velPath} L {GP + (GW - 2*GP)} {GH-GP} L {GP} {GH-GP} Z"
-					fill="url(#ff-vel-fill)"/>
-				<path d={velPath} fill="none" stroke="var(--accent-cyan)" stroke-width="2.5" stroke-linejoin="round"/>
+				<path
+					d="{velPath} L {GP + (GW - 2 * GP)} {GH - GP} L {GP} {GH - GP} Z"
+					fill="url(#ff-vel-fill)"
+				/>
+				<path
+					d={velPath}
+					fill="none"
+					stroke="var(--accent-cyan)"
+					stroke-width="2.5"
+					stroke-linejoin="round"
+				/>
 			{/if}
 
 			<!-- Legend -->
-			<line x1={GW - GP - 80} y1={GP + 8} x2={GW - GP - 60} y2={GP + 8}
-				stroke="var(--accent-green)" stroke-width="1.5" stroke-dasharray="5 3"/>
-			<text x={GW - GP - 56} y={GP + 12} fill="var(--text-muted)" font-size="8" font-family="var(--font-mono)">TARGET</text>
-			<line x1={GW - GP - 80} y1={GP + 22} x2={GW - GP - 60} y2={GP + 22}
-				stroke="var(--accent-cyan)" stroke-width="2"/>
-			<text x={GW - GP - 56} y={GP + 26} fill="var(--text-muted)" font-size="8" font-family="var(--font-mono)">ACTUAL</text>
+			<line
+				x1={GW - GP - 80}
+				y1={GP + 8}
+				x2={GW - GP - 60}
+				y2={GP + 8}
+				stroke="var(--accent-green)"
+				stroke-width="1.5"
+				stroke-dasharray="5 3"
+			/>
+			<text
+				x={GW - GP - 56}
+				y={GP + 12}
+				fill="var(--text-muted)"
+				font-size="8"
+				font-family="var(--font-mono)">TARGET</text
+			>
+			<line
+				x1={GW - GP - 80}
+				y1={GP + 22}
+				x2={GW - GP - 60}
+				y2={GP + 22}
+				stroke="var(--accent-cyan)"
+				stroke-width="2"
+			/>
+			<text
+				x={GW - GP - 56}
+				y={GP + 26}
+				fill="var(--text-muted)"
+				font-size="8"
+				font-family="var(--font-mono)">ACTUAL</text
+			>
 
-			<line x1={GP} y1={GH-GP} x2={GW-GP} y2={GH-GP} stroke="var(--border)" stroke-width="1"/>
-			<line x1={GP} y1={GP} x2={GP} y2={GH-GP} stroke="var(--border)" stroke-width="1"/>
+			<line
+				x1={GP}
+				y1={GH - GP}
+				x2={GW - GP}
+				y2={GH - GP}
+				stroke="var(--border)"
+				stroke-width="1"
+			/>
+			<line x1={GP} y1={GP} x2={GP} y2={GH - GP} stroke="var(--border)" stroke-width="1" />
 		</svg>
 	</section>
 
@@ -256,14 +344,41 @@
 			<div class="card-label">VOLTAGE OUTPUT</div>
 			<svg width={GW} height={GH} viewBox="0 0 {GW} {GH}" class="graph">
 				{#each [-1, 0, 1] as frac}
-					<line x1={GP} y1={GP + ((1 - (frac + 1) / 2)) * (GH - 2 * GP)} x2={GW - GP} y2={GP + ((1 - (frac + 1) / 2)) * (GH - 2 * GP)}
-						stroke="var(--border)" stroke-width={frac === 0 ? 1.5 : 1} opacity="0.5" stroke-dasharray={frac === 0 ? '' : '3 4'}/>
-					<text x={GP - 4} y={GP + ((1 - (frac + 1) / 2)) * (GH - 2 * GP) + 4} text-anchor="end"
-						fill="var(--text-muted)" font-size="9" font-family="var(--font-mono)">{frac * 12}V</text>
+					<line
+						x1={GP}
+						y1={GP + (1 - (frac + 1) / 2) * (GH - 2 * GP)}
+						x2={GW - GP}
+						y2={GP + (1 - (frac + 1) / 2) * (GH - 2 * GP)}
+						stroke="var(--border)"
+						stroke-width={frac === 0 ? 1.5 : 1}
+						opacity="0.5"
+						stroke-dasharray={frac === 0 ? '' : '3 4'}
+					/>
+					<text
+						x={GP - 4}
+						y={GP + (1 - (frac + 1) / 2) * (GH - 2 * GP) + 4}
+						text-anchor="end"
+						fill="var(--text-muted)"
+						font-size="9"
+						font-family="var(--font-mono)">{frac * 12}V</text
+					>
 				{/each}
-				<path d={voltPath} fill="none" stroke="var(--accent-yellow)" stroke-width="2" stroke-linejoin="round"/>
-				<line x1={GP} y1={GH-GP} x2={GW-GP} y2={GH-GP} stroke="var(--border)" stroke-width="1"/>
-				<line x1={GP} y1={GP} x2={GP} y2={GH-GP} stroke="var(--border)" stroke-width="1"/>
+				<path
+					d={voltPath}
+					fill="none"
+					stroke="var(--accent-yellow)"
+					stroke-width="2"
+					stroke-linejoin="round"
+				/>
+				<line
+					x1={GP}
+					y1={GH - GP}
+					x2={GW - GP}
+					y2={GH - GP}
+					stroke="var(--border)"
+					stroke-width="1"
+				/>
+				<line x1={GP} y1={GP} x2={GP} y2={GH - GP} stroke="var(--border)" stroke-width="1" />
 			</svg>
 		</section>
 
@@ -271,14 +386,41 @@
 			<div class="card-label">VELOCITY ERROR</div>
 			<svg width={GW} height={GH} viewBox="0 0 {GW} {GH}" class="graph">
 				{#each [-1, 0, 1] as frac}
-					<line x1={GP} y1={GP + ((1 - (frac + 1) / 2)) * (GH - 2 * GP)} x2={GW - GP} y2={GP + ((1 - (frac + 1) / 2)) * (GH - 2 * GP)}
-						stroke="var(--border)" stroke-width={frac === 0 ? 1.5 : 1} opacity="0.5" stroke-dasharray={frac === 0 ? '' : '3 4'}/>
-					<text x={GP - 4} y={GP + ((1 - (frac + 1) / 2)) * (GH - 2 * GP) + 4} text-anchor="end"
-						fill="var(--text-muted)" font-size="9" font-family="var(--font-mono)">{(frac * targetVel * 0.4).toFixed(0)}</text>
+					<line
+						x1={GP}
+						y1={GP + (1 - (frac + 1) / 2) * (GH - 2 * GP)}
+						x2={GW - GP}
+						y2={GP + (1 - (frac + 1) / 2) * (GH - 2 * GP)}
+						stroke="var(--border)"
+						stroke-width={frac === 0 ? 1.5 : 1}
+						opacity="0.5"
+						stroke-dasharray={frac === 0 ? '' : '3 4'}
+					/>
+					<text
+						x={GP - 4}
+						y={GP + (1 - (frac + 1) / 2) * (GH - 2 * GP) + 4}
+						text-anchor="end"
+						fill="var(--text-muted)"
+						font-size="9"
+						font-family="var(--font-mono)">{(frac * targetVel * 0.4).toFixed(0)}</text
+					>
 				{/each}
-				<path d={errorPath} fill="none" stroke="var(--accent-red, #f87171)" stroke-width="2" stroke-linejoin="round"/>
-				<line x1={GP} y1={GH-GP} x2={GW-GP} y2={GH-GP} stroke="var(--border)" stroke-width="1"/>
-				<line x1={GP} y1={GP} x2={GP} y2={GH-GP} stroke="var(--border)" stroke-width="1"/>
+				<path
+					d={errorPath}
+					fill="none"
+					stroke="var(--accent-red, #f87171)"
+					stroke-width="2"
+					stroke-linejoin="round"
+				/>
+				<line
+					x1={GP}
+					y1={GH - GP}
+					x2={GW - GP}
+					y2={GH - GP}
+					stroke="var(--border)"
+					stroke-width="1"
+				/>
+				<line x1={GP} y1={GP} x2={GP} y2={GH - GP} stroke="var(--border)" stroke-width="1" />
 			</svg>
 		</section>
 	</div>
@@ -290,16 +432,16 @@
 				<div class="card-label">FEEDFORWARD GAINS</div>
 				<div class="sliders">
 					<div class="control-group">
-						<label>kS - Static <span>{kS.toFixed(3)}</span></label>
-						<input type="range" min="0" max="0.3" step="0.005" bind:value={kS}/>
+						<label for="ks-slider">kS - Static <span>{kS.toFixed(3)}</span></label>
+						<input id="ks-slider" type="range" min="0" max="0.3" step="0.005" bind:value={kS} />
 					</div>
 					<div class="control-group">
-						<label>kV - Velocity <span>{kV.toFixed(3)}</span></label>
-						<input type="range" min="0" max="0.08" step="0.001" bind:value={kV}/>
+						<label for="kv-slider">kV - Velocity <span>{kV.toFixed(3)}</span></label>
+						<input id="kv-slider" type="range" min="0" max="0.08" step="0.001" bind:value={kV} />
 					</div>
 					<div class="control-group">
-						<label>kA - Accel <span>{kA.toFixed(4)}</span></label>
-						<input type="range" min="0" max="0.02" step="0.0002" bind:value={kA}/>
+						<label for="ka-slider">kA - Accel <span>{kA.toFixed(4)}</span></label>
+						<input id="ka-slider" type="range" min="0" max="0.02" step="0.0002" bind:value={kA} />
 					</div>
 				</div>
 			</div>
@@ -310,12 +452,28 @@
 				<div class="card-label">FEEDBACK GAINS (PID)</div>
 				<div class="sliders {mode === 'ff-only' ? 'disabled' : ''}">
 					<div class="control-group">
-						<label>kP <span>{kP.toFixed(2)}</span></label>
-						<input type="range" min="0" max="2" step="0.02" bind:value={kP} disabled={mode === 'ff-only'}/>
+						<label for="kp-slider">kP <span>{kP.toFixed(2)}</span></label>
+						<input
+							id="kp-slider"
+							type="range"
+							min="0"
+							max="2"
+							step="0.02"
+							bind:value={kP}
+							disabled={mode === 'ff-only'}
+						/>
 					</div>
 					<div class="control-group">
-						<label>kD <span>{kD.toFixed(2)}</span></label>
-						<input type="range" min="0" max="0.5" step="0.01" bind:value={kD} disabled={mode === 'ff-only'}/>
+						<label for="kd-slider">kD <span>{kD.toFixed(2)}</span></label>
+						<input
+							id="kd-slider"
+							type="range"
+							min="0"
+							max="0.5"
+							step="0.01"
+							bind:value={kD}
+							disabled={mode === 'ff-only'}
+						/>
 					</div>
 				</div>
 			</div>
@@ -326,12 +484,28 @@
 				<div class="card-label">SETPOINT PROFILE</div>
 				<div class="sliders">
 					<div class="control-group">
-						<label>Target Vel <span>{targetVel} u/s</span></label>
-						<input type="range" min="10" max="150" step="5" bind:value={targetVel} oninput={resetSim}/>
+						<label for="tvel-slider">Target Vel <span>{targetVel} u/s</span></label>
+						<input
+							id="tvel-slider"
+							type="range"
+							min="10"
+							max="150"
+							step="5"
+							bind:value={targetVel}
+							oninput={resetSim}
+						/>
 					</div>
 					<div class="control-group">
-						<label>Ramp Accel <span>{targetAccel} u/s²</span></label>
-						<input type="range" min="5" max="100" step="5" bind:value={targetAccel} oninput={resetSim}/>
+						<label for="tacc-slider">Ramp Accel <span>{targetAccel} u/s²</span></label>
+						<input
+							id="tacc-slider"
+							type="range"
+							min="5"
+							max="100"
+							step="5"
+							bind:value={targetAccel}
+							oninput={resetSim}
+						/>
 					</div>
 				</div>
 			</div>
@@ -364,28 +538,40 @@
 				<span class="phase-dot ks-dot"></span>
 				<div>
 					<strong>kS - Static Friction</strong>
-					<p>Minimum voltage to overcome static friction and start moving. Applied as ±kS based on direction of motion.</p>
+					<p>
+						Minimum voltage to overcome static friction and start moving. Applied as ±kS based on
+						direction of motion.
+					</p>
 				</div>
 			</div>
 			<div class="explainer-item">
 				<span class="phase-dot kv-dot"></span>
 				<div>
 					<strong>kV - Velocity Gain</strong>
-					<p>Voltage required to sustain a given velocity against back-EMF and friction. Dominant during cruise phase.</p>
+					<p>
+						Voltage required to sustain a given velocity against back-EMF and friction. Dominant
+						during cruise phase.
+					</p>
 				</div>
 			</div>
 			<div class="explainer-item">
 				<span class="phase-dot ka-dot"></span>
 				<div>
 					<strong>kA - Acceleration Gain</strong>
-					<p>Extra voltage needed to accelerate the mechanism's inertia. Matters most during ramp-up/ramp-down.</p>
+					<p>
+						Extra voltage needed to accelerate the mechanism's inertia. Matters most during
+						ramp-up/ramp-down.
+					</p>
 				</div>
 			</div>
 			<div class="explainer-item">
 				<span class="phase-dot fb-dot"></span>
 				<div>
 					<strong>Feedback Role</strong>
-					<p>With good FF, feedback only corrects small residual errors - it doesn't have to do all the work, reducing oscillation.</p>
+					<p>
+						With good FF, feedback only corrects small residual errors - it doesn't have to do all
+						the work, reducing oscillation.
+					</p>
 				</div>
 			</div>
 		</div>
@@ -402,7 +588,9 @@
 		gap: 1.25rem;
 	}
 
-	.page-header { margin-bottom: 0.5rem; }
+	.page-header {
+		margin-bottom: 0.5rem;
+	}
 
 	.label {
 		font-family: var(--font-mono);
@@ -432,7 +620,11 @@
 		gap: 1.5rem;
 	}
 
-	.stat { display: flex; flex-direction: column; gap: 0.1rem; }
+	.stat {
+		display: flex;
+		flex-direction: column;
+		gap: 0.1rem;
+	}
 
 	.stat-label {
 		font-family: var(--font-mono);
@@ -456,16 +648,22 @@
 		margin-left: 2px;
 	}
 
-	.stat-value.good { color: var(--accent-green); }
-	.stat-value.warn { color: var(--accent-yellow); }
-	.stat-value.bad  { color: var(--accent-red, #f87171); }
+	.stat-value.good {
+		color: var(--accent-green);
+	}
+	.stat-value.warn {
+		color: var(--accent-yellow);
+	}
+	.stat-value.bad {
+		color: var(--accent-red, #f87171);
+	}
 
 	.card {
 		background: var(--bg-card);
 		border: 1px solid var(--border);
 		border-radius: var(--radius-lg);
 		padding: 1.25rem;
-		box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+		box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
 	}
 
 	.card-label {
@@ -497,14 +695,18 @@
 		text-align: center;
 	}
 
-	.mode-btn:hover { border-color: var(--accent-cyan); }
+	.mode-btn:hover {
+		border-color: var(--accent-cyan);
+	}
 
 	.mode-btn.active {
 		border-color: var(--accent-cyan);
 		background: color-mix(in srgb, var(--accent-cyan) 10%, var(--bg-secondary));
 	}
 
-	.mode-icon { font-size: 1.1rem; }
+	.mode-icon {
+		font-size: 1.1rem;
+	}
 
 	.mode-name {
 		font-family: var(--font-mono);
@@ -555,7 +757,10 @@
 		gap: 0.85rem;
 	}
 
-	.sliders.disabled { opacity: 0.35; pointer-events: none; }
+	.sliders.disabled {
+		opacity: 0.35;
+		pointer-events: none;
+	}
 
 	.control-group {
 		display: flex;
@@ -576,13 +781,15 @@
 		font-weight: 600;
 	}
 
-	input[type="range"] {
+	input[type='range'] {
 		width: 100%;
 		accent-color: var(--accent-cyan);
 		cursor: pointer;
 	}
 
-	input[type="range"]:disabled { cursor: not-allowed; }
+	input[type='range']:disabled {
+		cursor: not-allowed;
+	}
 
 	.btn-row {
 		display: flex;
@@ -605,7 +812,9 @@
 		border-color: var(--accent-cyan);
 	}
 
-	.btn-primary:hover { filter: brightness(1.15); }
+	.btn-primary:hover {
+		filter: brightness(1.15);
+	}
 
 	.btn-secondary {
 		background: var(--bg-secondary);
@@ -613,7 +822,10 @@
 		border-color: var(--border);
 	}
 
-	.btn-secondary:hover { color: var(--text-primary); background: var(--bg-card-hover); }
+	.btn-secondary:hover {
+		color: var(--text-primary);
+		background: var(--bg-card-hover);
+	}
 
 	.btn-danger {
 		background: transparent;
@@ -621,7 +833,9 @@
 		border-color: var(--accent-red, #f87171);
 	}
 
-	.btn-danger:hover { background: rgba(248,113,113,0.1); }
+	.btn-danger:hover {
+		background: rgba(248, 113, 113, 0.1);
+	}
 
 	/* FF equation */
 	.ff-eq {
@@ -634,12 +848,29 @@
 		flex-wrap: wrap;
 	}
 
-	.eq-label { color: var(--text-secondary); }
-	.eq-plus   { color: var(--text-muted); }
-	.eq-term   { padding: 0.2rem 0.5rem; border-radius: 4px; font-weight: 700; }
-	.ks { background: rgba(251,191,36,0.15); color: var(--accent-yellow); }
-	.kv { background: rgba(34,211,238,0.15); color: var(--accent-cyan); }
-	.ka { background: rgba(74,222,128,0.15); color: var(--accent-green); }
+	.eq-label {
+		color: var(--text-secondary);
+	}
+	.eq-plus {
+		color: var(--text-muted);
+	}
+	.eq-term {
+		padding: 0.2rem 0.5rem;
+		border-radius: 4px;
+		font-weight: 700;
+	}
+	.ks {
+		background: rgba(251, 191, 36, 0.15);
+		color: var(--accent-yellow);
+	}
+	.kv {
+		background: rgba(34, 211, 238, 0.15);
+		color: var(--accent-cyan);
+	}
+	.ka {
+		background: rgba(74, 222, 128, 0.15);
+		color: var(--accent-green);
+	}
 
 	/* Explainer */
 	.explainer-grid {
@@ -662,10 +893,21 @@
 		flex-shrink: 0;
 	}
 
-	.ks-dot { background: var(--accent-yellow); box-shadow: 0 0 5px var(--accent-yellow); }
-	.kv-dot { background: var(--accent-cyan);   box-shadow: 0 0 5px var(--accent-cyan); }
-	.ka-dot { background: var(--accent-green);  box-shadow: 0 0 5px var(--accent-green); }
-	.fb-dot { background: var(--text-muted); }
+	.ks-dot {
+		background: var(--accent-yellow);
+		box-shadow: 0 0 5px var(--accent-yellow);
+	}
+	.kv-dot {
+		background: var(--accent-cyan);
+		box-shadow: 0 0 5px var(--accent-cyan);
+	}
+	.ka-dot {
+		background: var(--accent-green);
+		box-shadow: 0 0 5px var(--accent-green);
+	}
+	.fb-dot {
+		background: var(--text-muted);
+	}
 
 	.explainer-item strong {
 		display: block;
@@ -682,11 +924,23 @@
 	}
 
 	@media (max-width: 520px) {
-		.graphs-row      { grid-template-columns: 1fr; }
-		.explainer-grid  { grid-template-columns: 1fr; }
-		.stat-row        { gap: 1rem; }
-		.controls-split  { grid-template-columns: 1fr; }
-		.divider         { display: none; }
-		.mode-grid       { grid-template-columns: 1fr; }
+		.graphs-row {
+			grid-template-columns: 1fr;
+		}
+		.explainer-grid {
+			grid-template-columns: 1fr;
+		}
+		.stat-row {
+			gap: 1rem;
+		}
+		.controls-split {
+			grid-template-columns: 1fr;
+		}
+		.divider {
+			display: none;
+		}
+		.mode-grid {
+			grid-template-columns: 1fr;
+		}
 	}
 </style>

@@ -8,4 +8,5 @@ published: true
 ---
 
 # Vision Object Detection
+
 Content coming soon...

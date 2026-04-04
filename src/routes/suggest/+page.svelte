@@ -4,7 +4,10 @@
 
 <svelte:head>
 	<title>Suggest — Blueprint</title>
-	<meta name="description" content="Submit a request or suggestion for the Blueprint FTC software site." />
+	<meta
+		name="description"
+		content="Submit a request or suggestion for the Blueprint FTC software site."
+	/>
 </svelte:head>
 
 <section class="suggest-header">

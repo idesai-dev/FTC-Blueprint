@@ -11,7 +11,7 @@
 
 	// Progress Bar
 	let scrollPercent = $state(0);
-	
+
 	function handleScroll() {
 		const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
 		const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
@@ -27,22 +27,18 @@
 		setupCopyButtons();
 	});
 
-	// Reading Time
-	const readingTime = $derived(
-		data.meta.wordCount ? Math.ceil(data.meta.wordCount / 225) : 0
-	);
-
 	// Breadcrumbs logic
 	const breadcrumbs = $derived(() => {
 		const levels = ['Beginner', 'Intermediate', 'Advanced'];
-		const level = data.meta.tags?.find(t => levels.includes(t.charAt(0).toUpperCase() + t.slice(1)));
+		const level = data.meta.tags?.find((t) =>
+			levels.includes(t.charAt(0).toUpperCase() + t.slice(1))
+		);
 		return [
 			{ label: 'Software', href: '/software' },
 			...(level ? [{ label: level, href: `/software?tag=${level.toLowerCase()}` }] : [])
 		];
 	});
 </script>
-
 
 <svelte:head>
 	<title>{data.meta.title} — Blueprint</title>
@@ -57,9 +53,7 @@
 <article class="post-page">
 	<!-- Header -->
 	<header class="post-header">
-		<div class="post-header-bg" aria-hidden="true">
-			<div class="header-orb"></div>
-		</div>
+		<div class="post-header-bg" aria-hidden="true"></div>
 		<div class="container">
 			<!-- Breadcrumbs -->
 			<nav class="breadcrumbs animate-fade-up">
@@ -73,8 +67,6 @@
 
 			<div class="post-meta animate-fade-up" style="animation-delay:60ms">
 				<time class="date" datetime={data.meta.date}>{formatDate(data.meta.date)}</time>
-				<span class="meta-sep">·</span>
-				<span class="reading-time">{readingTime} min read</span>
 				{#if data.meta.author}
 					<span class="meta-sep">·</span>
 					<span class="author">{data.meta.author}</span>
@@ -91,15 +83,19 @@
 				</p>
 			{/if}
 
-			{#if data.meta.tags && data.meta.tags.length > 0}
+			{#if data.meta.tags && data.meta.tags.filter((t) => t.toLowerCase() !== 'completed').length > 0}
 				<div class="post-tags animate-fade-up" style="animation-delay:240ms">
-					{#each data.meta.tags as tag, i}
+					{#each data.meta.tags.filter((t) => t.toLowerCase() !== 'completed') as tag, i}
 						<span class="tag {tagColor(tag)}">{tag}</span>
 					{/each}
 				</div>
 			{/if}
 
-			<div class="title-rule animate-fade-up" style="animation-delay:300ms" aria-hidden="true"></div>
+			<div
+				class="title-rule animate-fade-up"
+				style="animation-delay:300ms"
+				aria-hidden="true"
+			></div>
 		</div>
 	</header>
 
@@ -120,8 +116,18 @@
 	<div class="post-footer animate-fade-up">
 		<div class="container">
 			<a href="/software" class="back-link">
-				<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-					<path d="M19 12H5M12 5l-7 7 7 7"/>
+				<svg
+					width="14"
+					height="14"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="2.5"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					aria-hidden="true"
+				>
+					<path d="M19 12H5M12 5l-7 7 7 7" />
 				</svg>
 				Back to all prints
 			</a>
@@ -209,8 +215,12 @@
 		color: var(--text-muted);
 	}
 
-	.meta-sep { opacity: 0.4; }
-	.author { color: var(--accent-green); }
+	.meta-sep {
+		opacity: 0.4;
+	}
+	.author {
+		color: var(--accent-green);
+	}
 
 	.post-title {
 		font-size: clamp(1.8rem, 5vw, 3rem);
@@ -261,7 +271,6 @@
 		min-width: 0;
 	}
 
-
 	/* Prose styles */
 	:global(.prose) {
 		max-width: 720px;
@@ -281,9 +290,15 @@
 		line-height: 1.3;
 	}
 
-	:global(.prose h2) { font-size: 1.6rem; }
-	:global(.prose h3) { font-size: 1.25rem; }
-	:global(.prose h4) { font-size: 1.1rem; }
+	:global(.prose h2) {
+		font-size: 1.6rem;
+	}
+	:global(.prose h3) {
+		font-size: 1.25rem;
+	}
+	:global(.prose h4) {
+		font-size: 1.1rem;
+	}
 
 	:global(.prose p) {
 		margin-bottom: 1.4rem;
@@ -295,7 +310,9 @@
 		text-decoration: underline;
 		text-underline-offset: 3px;
 		text-decoration-color: rgba(116, 215, 237, 0.4);
-		transition: color var(--transition-fast), text-decoration-color var(--transition-fast);
+		transition:
+			color var(--transition-fast),
+			text-decoration-color var(--transition-fast);
 	}
 
 	:global(.prose a:hover) {
@@ -308,7 +325,9 @@
 		font-weight: 600;
 	}
 
-	:global(.prose em) { color: var(--text-secondary); }
+	:global(.prose em) {
+		color: var(--text-secondary);
+	}
 
 	:global(.prose ul),
 	:global(.prose ol) {
@@ -321,7 +340,9 @@
 		color: var(--text-body);
 	}
 
-	:global(.prose li::marker) { color: var(--accent-green); }
+	:global(.prose li::marker) {
+		color: var(--accent-green);
+	}
 
 	:global(.prose blockquote) {
 		border-left: 3px solid var(--text-primary);
@@ -342,8 +363,6 @@
 		border-radius: var(--radius-sm);
 		color: var(--accent-green);
 	}
-
-
 
 	:global(.prose hr) {
 		border: none;
@@ -376,7 +395,9 @@
 		color: var(--text-body);
 	}
 
-	:global(.prose tr:last-child td) { border-bottom: none; }
+	:global(.prose tr:last-child td) {
+		border-bottom: none;
+	}
 
 	:global(.prose img) {
 		max-width: 100%;

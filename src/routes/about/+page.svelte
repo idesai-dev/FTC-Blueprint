@@ -24,20 +24,22 @@
 			<div class="about-main prose-like">
 				<h2>Hello there 👋</h2>
 				<p>
-					Welcome to <strong>Blueprint</strong> - a WORK IN PROGRESS digital notebook for FTC, engineering, and more!
+					Welcome to <strong>Blueprint</strong> - a WORK IN PROGRESS digital notebook for FTC, engineering,
+					and more!
 				</p>
 
 				<p>
-					Check out our <a href="https://youtube.com" target="_blank" rel="noopener noreferrer">YouTube channel!</a>
+					Check out our <a href="https://youtube.com" target="_blank" rel="noopener noreferrer"
+						>YouTube channel!</a
+					>
 				</p>
-
 			</div>
 
 			<aside class="about-sidebar">
 				<div class="sidebar-card">
 					<div class="sidebar-icon">⬡</div>
-					<h4>Ishaan Desai - Slingshot <br> (FTC Team 20240)</h4>
-					<p> Based in Austin, Texas</p>
+					<h4>Ishaan Desai - Slingshot <br /> (FTC Team 20240) <br /> Arnav Saraf</h4>
+					<p>Based in Austin, Texas</p>
 					<div class="sidebar-links">
 						<a href="/software" class="sidebar-link">
 							<svg
@@ -69,7 +71,6 @@
 				</div>
 			</aside>
 		</div>
-
 	</div>
 </section>
 
@@ -111,8 +112,6 @@
 		color: var(--text-primary);
 	}
 
-	
-
 	.prose-like p {
 		color: var(--text-body);
 		line-height: 1.8;
@@ -131,43 +130,6 @@
 
 	.prose-like strong {
 		color: var(--text-primary);
-	}
-
-	
-
-	
-
-	
-
-	.prose-like code {
-		font-family: var(--font-mono);
-		font-size: 0.87em;
-		padding: 0.15em 0.45em;
-		background: rgba(116, 215, 237, 0.08);
-		border: 1px solid rgba(116, 215, 237, 0.15);
-		border-radius: var(--radius-sm);
-		color: var(--accent-green);
-	}
-
-	.code-block {
-		background: #111111;
-		border: 1px solid var(--border);
-		border-radius: var(--radius-md);
-		padding: 1.25rem 1.5rem;
-		font-family: var(--font-mono);
-		font-size: 0.85rem;
-		line-height: 1.7;
-		color: var(--text-body);
-		overflow-x: auto;
-		margin: 1.25rem 0;
-	}
-
-	.code-block code {
-		background: none;
-		border: none;
-		padding: 0;
-		font-size: inherit;
-		color: inherit;
 	}
 
 	/* Sidebar */

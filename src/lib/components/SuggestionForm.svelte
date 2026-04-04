@@ -1,43 +1,43 @@
 <script lang="ts">
-    import { onMount } from "svelte";
+	import { onMount } from 'svelte';
 
-    onMount(() => {
-        const form = document.getElementById("form") as HTMLFormElement | null;
-        if (!form) return;
+	onMount(() => {
+		const form = document.getElementById('form') as HTMLFormElement | null;
+		if (!form) return;
 
-        form.addEventListener("submit", async (e: SubmitEvent) => {
-            e.preventDefault();
+		form.addEventListener('submit', async (e: SubmitEvent) => {
+			e.preventDefault();
 
-            const formData = new FormData(form);
-            const object = Object.fromEntries(formData.entries());
-            const json = JSON.stringify(object);
+			const formData = new FormData(form);
+			const object = Object.fromEntries(formData.entries());
+			const json = JSON.stringify(object);
 
-            try {
-                const response = await fetch("https://api.web3forms.com/submit", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Accept": "application/json"
-                    },
-                    body: json
-                });
+			try {
+				const response = await fetch('https://api.web3forms.com/submit', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+						Accept: 'application/json'
+					},
+					body: json
+				});
 
-                await response.json();
+				await response.json();
 
-                if (response.ok) {
-                    window.location.href =
-                        "https://ftcblueprint.com/success?msg=Suggestion%20Sent%21&from=suggest";
-                } else {
-                    window.location.href = `https://ftcblueprint.com/failure?msg=Suggestion%20Failed%21&from=suggest&code=${response.status}`;
+				if (response.ok) {
+					window.location.href =
+						'https://ftcblueprint.com/success?msg=Suggestion%20Sent%21&from=suggest';
+				} else {
+					window.location.href = `https://ftcblueprint.com/failure?msg=Suggestion%20Failed%21&from=suggest&code=${response.status}`;
 				}
-            } catch (error) {
-                console.error(error);
-                window.location.href = "https://ftcblueprint.com/failure?msg=Suggestion%20Failed%21&from=suggest&code=network";
-            }
-        });
-    });
+			} catch (error) {
+				console.error(error);
+				window.location.href =
+					'https://ftcblueprint.com/failure?msg=Suggestion%20Failed%21&from=suggest&code=network';
+			}
+		});
+	});
 </script>
-
 
 <div class="suggestion-container animate-fade-up">
 	<div class="form-header">
@@ -50,32 +50,42 @@
 
 		<div class="form-group">
 			<label for="subject">Subject</label>
-			<input 
-			type="text"
-			id="subject"
-			name="subject"
-			placeholder="e.g., Roadrunner advanced tuning"
-			required
+			<input
+				type="text"
+				id="subject"
+				name="subject"
+				placeholder="e.g., Roadrunner advanced tuning"
+				required
 			/>
 		</div>
 
 		<div class="form-group">
 			<label for="message">Message</label>
-			<textarea 
-			id="message"
-			name="message"
-			placeholder="Describe what you'd like to see..."
-			rows="4"
-			required
+			<textarea
+				id="message"
+				name="message"
+				placeholder="Describe what you'd like to see..."
+				rows="4"
+				required
 			></textarea>
 		</div>
 
 		<button type="submit" class="submit-btn" id="submitBtn">
 			<span style="color: var(--bg);">Send Suggestion</span>
-			<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--bg)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+			<svg
+				width="16"
+				height="16"
+				viewBox="0 0 24 24"
+				fill="none"
+				stroke="var(--bg)"
+				stroke-width="2.5"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+				><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"
+				></polygon></svg
+			>
 		</button>
 	</form>
-
 </div>
 
 <style>
@@ -121,7 +131,8 @@
 		font-family: var(--font-body);
 	}
 
-	input, textarea {
+	input,
+	textarea {
 		background: var(--bg-code);
 		border: 1px solid var(--border);
 		border-radius: var(--radius-md);
@@ -129,10 +140,13 @@
 		color: var(--text-primary);
 		font-family: var(--font-body);
 		font-size: 0.95rem;
-		transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+		transition:
+			border-color var(--transition-fast),
+			box-shadow var(--transition-fast);
 	}
 
-	input:focus, textarea:focus {
+	input:focus,
+	textarea:focus {
 		outline: none;
 		border-color: var(--accent-green);
 		box-shadow: 0 0 0 2px rgba(126, 255, 160, 0.1);

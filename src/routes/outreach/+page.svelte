@@ -2,27 +2,52 @@
 	import BlogCard from '$lib/components/BlogCard.svelte';
 	import type { Post } from '$lib/utils/posts';
 	import FilterBar from '$lib/components/FilterBar.svelte';
+	import { devModeState, initDevMode } from '$lib/stores/devMode.svelte';
+	import { onMount } from 'svelte';
 
 	let { data }: { data: { posts: Post[] } } = $props();
+
+	onMount(() => {
+		initDevMode();
+	});
 
 	let searchQuery = $state('');
 	let activeTags = $state<string[]>([]);
 
-	const filteredPosts = $derived(
+	const completedSlugs = $derived(data.posts.filter((p) => (p.meta.tags || []).includes('completed')).map((p) => p.slug));
+	const showLink = (href: string) => devModeState.active || completedSlugs.includes(href.split('/').pop() || '');
+	const showGroup = (hrefs: string[]) => hrefs.some(showLink);
+
+	const visiblePosts = $derived(
 		data.posts.filter((p) => {
+			if (devModeState.active) return true;
+			const tags = (p.meta.tags || []).map((t) =>
+				typeof t === 'string' ? t.toLowerCase().trim() : ''
+			);
+			return tags.includes('completed') || tags.includes('coming soon');
+		})
+	);
+
+	const filteredPosts = $derived(
+		visiblePosts.filter((p) => {
 			const matchSearch =
 				!searchQuery ||
 				p.meta.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-				(p.meta.description || '').toLowerCase().includes(searchQuery.toLowerCase());
+				(p.meta.description || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+				(p.meta.tags || []).some(
+					(t) => typeof t === 'string' && t.toLowerCase().includes(searchQuery.toLowerCase())
+				);
 
-			const matchTag = activeTags.length === 0 || activeTags.every((t) => {
-				const postTags = (p.meta.tags || []).map(tag => typeof tag === 'string' ? tag.toLowerCase().trim() : '');
-				const lowerT = t.toLowerCase();
-				if (lowerT === 'novideo') return !postTags.includes('video');
-				if (lowerT === 'completed-guide') return postTags.includes('completed guide');
-				if (lowerT === 'uncompleted-guide') return !postTags.includes('completed guide');
-				return postTags.includes(lowerT);
-			});
+			const matchTag =
+				activeTags.length === 0 ||
+				activeTags.every((t) => {
+					const postTags = (p.meta.tags || []).map((tag) =>
+						typeof tag === 'string' ? tag.toLowerCase().trim() : ''
+					);
+					const lowerT = t.toLowerCase();
+					if (lowerT === 'novideo') return !postTags.includes('video');
+					return postTags.includes(lowerT);
+				});
 
 			return matchSearch && matchTag;
 		})
@@ -35,34 +60,100 @@
 </svelte:head>
 
 <div style="display: flex; width:100%; justify-content:flex-end;">
-	<div style="width:24vw; background-color:var(--sidebar-bg); border-right:5px solid var(--accent-green); padding:1rem;">
+	<div
+		style="width:24vw; background-color:var(--sidebar-bg); border-right:2px solid var(--border); padding:1rem;"
+	>
 		<h3>Blueprint Guide</h3>
 		<br />
 
-		<p class="sub" style="color:var(--accent-green); font-family:var(--font-heading); font-weight:600; font-size: 1.1rem; margin-top: 1rem; margin-bottom: 0.25rem;">Getting Started</p>
+		{#if showGroup(["/outreach/outreach-intro", "/outreach/outreach-planning"])}
+		<p
+			class="sub"
+			style="color:var(--accent-green); font-family:var(--font-heading); font-weight:600; font-size: 1.1rem; margin-top: 1rem; margin-bottom: 0.25rem;"
+		>
+			Getting Started
+		</p>
 		<ol style="padding:0; margin:0; list-style:none; color:var(--text-body);">
-			<li style="padding-left:1.25rem; margin-top:0.25rem;"><a href="/outreach/outreach-intro">What is Outreach?</a></li>
-			<li style="padding-left:1.25rem; margin-top:0.25rem;"><a href="/outreach/outreach-planning">Planning Events</a></li>
+			{#if showLink("/outreach/outreach-intro")}
+				<li style="padding-left:1.25rem; margin-top:0.25rem;">
+				<a href="/outreach/outreach-intro">What is Outreach?</a>
+			</li>
+			{/if}
+			{#if showLink("/outreach/outreach-planning")}
+				<li style="padding-left:1.25rem; margin-top:0.25rem;">
+				<a href="/outreach/outreach-planning">Planning Events</a>
+			</li>
+			{/if}
 		</ol>
+		{/if}
 
-		<p class="sub" style="color:var(--accent-green); font-family:var(--font-heading); font-weight:600; font-size: 1.1rem; margin-top: 1rem; margin-bottom: 0.25rem;">Community Events</p>
+		{#if showGroup(["/outreach/outreach-demos", "/outreach/outreach-workshops", "/outreach/outreach-stem-fairs"])}
+		<p
+			class="sub"
+			style="color:var(--accent-green); font-family:var(--font-heading); font-weight:600; font-size: 1.1rem; margin-top: 1rem; margin-bottom: 0.25rem;"
+		>
+			Community Events
+		</p>
 		<ol style="padding:0; margin:0; list-style:none; color:var(--text-body);">
-			<li style="padding-left:1.25rem; margin-top:0.25rem;"><a href="/outreach/outreach-demos">Robot Demos</a></li>
-			<li style="padding-left:1.25rem; margin-top:0.25rem;"><a href="/outreach/outreach-workshops">Workshops</a></li>
-			<li style="padding-left:1.25rem; margin-top:0.25rem;"><a href="/outreach/outreach-stem-fairs">STEM Fairs</a></li>
+			{#if showLink("/outreach/outreach-demos")}
+				<li style="padding-left:1.25rem; margin-top:0.25rem;">
+				<a href="/outreach/outreach-demos">Robot Demos</a>
+			</li>
+			{/if}
+			{#if showLink("/outreach/outreach-workshops")}
+				<li style="padding-left:1.25rem; margin-top:0.25rem;">
+				<a href="/outreach/outreach-workshops">Workshops</a>
+			</li>
+			{/if}
+			{#if showLink("/outreach/outreach-stem-fairs")}
+				<li style="padding-left:1.25rem; margin-top:0.25rem;">
+				<a href="/outreach/outreach-stem-fairs">STEM Fairs</a>
+			</li>
+			{/if}
 		</ol>
+		{/if}
 
-		<p class="sub" style="color:var(--accent-green); font-family:var(--font-heading); font-weight:600; font-size: 1.1rem; margin-top: 1rem; margin-bottom: 0.25rem;">Mentoring</p>
+		{#if showGroup(["/outreach/mentoring-teams", "/outreach/outreach-rookie-support"])}
+		<p
+			class="sub"
+			style="color:var(--accent-green); font-family:var(--font-heading); font-weight:600; font-size: 1.1rem; margin-top: 1rem; margin-bottom: 0.25rem;"
+		>
+			Mentoring
+		</p>
 		<ol style="padding:0; margin:0; list-style:none; color:var(--text-body);">
-			<li style="padding-left:1.25rem; margin-top:0.25rem;"><a href="/outreach/mentoring-teams">Mentoring Teams</a></li>
-			<li style="padding-left:1.25rem; margin-top:0.25rem;"><a href="/outreach/outreach-rookie-support">Rookie Support</a></li>
+			{#if showLink("/outreach/mentoring-teams")}
+				<li style="padding-left:1.25rem; margin-top:0.25rem;">
+				<a href="/outreach/mentoring-teams">Mentoring Teams</a>
+			</li>
+			{/if}
+			{#if showLink("/outreach/outreach-rookie-support")}
+				<li style="padding-left:1.25rem; margin-top:0.25rem;">
+				<a href="/outreach/outreach-rookie-support">Rookie Support</a>
+			</li>
+			{/if}
 		</ol>
+		{/if}
 
-		<p class="sub" style="color:var(--accent-green); font-family:var(--font-heading); font-weight:600; font-size: 1.1rem; margin-top: 1rem; margin-bottom: 0.25rem;">Documentation</p>
+		{#if showGroup(["/outreach/outreach-impact-essay", "/outreach/outreach-journal"])}
+		<p
+			class="sub"
+			style="color:var(--accent-green); font-family:var(--font-heading); font-weight:600; font-size: 1.1rem; margin-top: 1rem; margin-bottom: 0.25rem;"
+		>
+			Documentation
+		</p>
 		<ol style="padding:0; margin:0; list-style:none; color:var(--text-body);">
-			<li style="padding-left:1.25rem; margin-top:0.25rem;"><a href="/outreach/outreach-impact-essay">Impact Essay Tips</a></li>
-			<li style="padding-left:1.25rem; margin-top:0.25rem;"><a href="/outreach/outreach-journal">Keeping a Journal</a></li>
+			{#if showLink("/outreach/outreach-impact-essay")}
+				<li style="padding-left:1.25rem; margin-top:0.25rem;">
+				<a href="/outreach/outreach-impact-essay">Impact Essay Tips</a>
+			</li>
+			{/if}
+			{#if showLink("/outreach/outreach-journal")}
+				<li style="padding-left:1.25rem; margin-top:0.25rem;">
+				<a href="/outreach/outreach-journal">Keeping a Journal</a>
+			</li>
+			{/if}
 		</ol>
+		{/if}
 	</div>
 
 	<div style="width: 100%;">
@@ -80,7 +171,7 @@
 
 		<section class="filters-section">
 			<div class="container animate-fade-up" style="animation-delay:160ms">
-				<FilterBar category="outreach" bind:activeTags={activeTags} bind:searchQuery={searchQuery} />
+				<FilterBar category="outreach" bind:activeTags bind:searchQuery />
 			</div>
 		</section>
 
@@ -95,7 +186,13 @@
 				{:else}
 					<div class="empty animate-fade-up">
 						<p>No posts match your search.</p>
-						<button class="btn-reset" onclick={() => { searchQuery = ''; activeTags = []; }}>
+						<button
+							class="btn-reset"
+							onclick={() => {
+								searchQuery = '';
+								activeTags = [];
+							}}
+						>
 							Clear filters
 						</button>
 					</div>
@@ -111,8 +208,16 @@
 		background: var(--gradient-hero);
 		border-bottom: 1px solid var(--border-subtle);
 	}
-	.blog-header .container { display: flex; flex-direction: column; gap: 0.6rem; }
-	.sub { font-size: 0.85rem; font-family: var(--font-mono); color: var(--text-muted); }
+	.blog-header .container {
+		display: flex;
+		flex-direction: column;
+		gap: 0.6rem;
+	}
+	.sub {
+		font-size: 0.85rem;
+		font-family: var(--font-mono);
+		color: var(--text-muted);
+	}
 	.filters-section {
 		padding: 1.5rem 0;
 		border-bottom: 1px solid var(--border-subtle);
@@ -122,9 +227,23 @@
 		z-index: 10;
 		backdrop-filter: blur(12px);
 	}
-	.posts-section { padding: 2.5rem 0 5rem; }
-	.post-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.25rem; }
-	.empty { text-align: center; padding: 4rem 1rem; color: var(--text-muted); display: flex; flex-direction: column; align-items: center; gap: 1rem; }
+	.posts-section {
+		padding: 2.5rem 0 5rem;
+	}
+	.post-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+		gap: 1.25rem;
+	}
+	.empty {
+		text-align: center;
+		padding: 4rem 1rem;
+		color: var(--text-muted);
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 1rem;
+	}
 	.btn-reset {
 		padding: 0.5em 1.2em;
 		background: transparent;
@@ -135,5 +254,8 @@
 		cursor: pointer;
 		transition: all var(--transition-fast);
 	}
-	.btn-reset:hover { border-color: var(--text-primary); color: var(--text-primary); }
+	.btn-reset:hover {
+		border-color: var(--text-primary);
+		color: var(--text-primary);
+	}
 </style>

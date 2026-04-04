@@ -57,7 +57,10 @@
 		text-decoration: none;
 	}
 
-	.logo:hover { color: var(--text-primary); opacity: 0.8; }
+	.logo:hover {
+		color: var(--text-primary);
+		opacity: 0.8;
+	}
 
 	.logo-mark {
 		font-size: 1.2rem;

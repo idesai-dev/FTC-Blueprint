@@ -8,4 +8,5 @@ published: true
 ---
 
 # Common Practices
+
 Content coming soon...

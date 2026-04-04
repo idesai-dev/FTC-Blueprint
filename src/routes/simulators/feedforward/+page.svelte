@@ -5,7 +5,10 @@
 
 <svelte:head>
 	<title>Feedforward Tuning — Blueprint</title>
-	<meta name="description" content="An interactive tool for understanding and tuning feedforward control constants for FTC robots." />
+	<meta
+		name="description"
+		content="An interactive tool for understanding and tuning feedforward control constants for FTC robots."
+	/>
 </svelte:head>
 
 <section class="page">
@@ -14,7 +17,9 @@
 			<span class="badge">Advanced Tools</span>
 			<h1>Feedforward Tuning</h1>
 			<p class="subtitle">
-				Feedforward control predicts the motor output needed before errors even occur — reducing the burden on PID feedback and dramatically improving tracking accuracy in FTC drivetrains and mechanisms.
+				Feedforward control predicts the motor output needed before errors even occur — reducing the
+				burden on PID feedback and dramatically improving tracking accuracy in FTC drivetrains and
+				mechanisms.
 			</p>
 		</header>
 
@@ -27,14 +32,28 @@
 			<div class="grid-2">
 				<div class="card">
 					<h3>1. The Model</h3>
-					<p>The simulator runs a motor plant with realistic back-EMF and static friction. Your feedforward constants predict the required voltage at each moment; feedback only corrects what's left over. Switch between <strong>FF Only</strong>, <strong>PID Only</strong>, and <strong>FF + PID</strong> to compare their tracking error directly.</p>
+					<p>
+						The simulator runs a motor plant with realistic back-EMF and static friction. Your
+						feedforward constants predict the required voltage at each moment; feedback only
+						corrects what's left over. Switch between <strong>FF Only</strong>,
+						<strong>PID Only</strong>, and <strong>FF + PID</strong> to compare their tracking error directly.
+					</p>
 				</div>
 				<div class="card">
 					<h3>2. Tuning Guide</h3>
 					<ul>
-						<li><strong>kS:</strong> Voltage to overcome static friction. Start small — if the motor hesitates at rest, increase it.</li>
-						<li><strong>kV:</strong> Voltage per unit/s of velocity. Tune this first — it's the dominant term during cruise.</li>
-						<li><strong>kA:</strong> Voltage per unit/s² of acceleration. Helps during ramp-up/down; usually small.</li>
+						<li>
+							<strong>kS:</strong> Voltage to overcome static friction. Start small — if the motor hesitates
+							at rest, increase it.
+						</li>
+						<li>
+							<strong>kV:</strong> Voltage per unit/s of velocity. Tune this first — it's the dominant
+							term during cruise.
+						</li>
+						<li>
+							<strong>kA:</strong> Voltage per unit/s² of acceleration. Helps during ramp-up/down; usually
+							small.
+						</li>
 					</ul>
 				</div>
 			</div>
@@ -43,20 +62,31 @@
 				<div class="card">
 					<h3>3. The Equation</h3>
 					<p>The feedforward output is calculated as:</p>
-					<p style="font-family: var(--font-mono); font-size: 0.9rem; margin-top: 0.75rem; color: var(--text-primary);">
+					<p
+						style="font-family: var(--font-mono); font-size: 0.9rem; margin-top: 0.75rem; color: var(--text-primary);"
+					>
 						V = kS·sgn(v) + kV·v + kA·a
 					</p>
-					<p style="margin-top: 0.75rem;">Each term handles a different physical characteristic of your motor and mechanism.</p>
+					<p style="margin-top: 0.75rem;">
+						Each term handles a different physical characteristic of your motor and mechanism.
+					</p>
 				</div>
 				<div class="card">
 					<h3>4. FF vs PID</h3>
-					<p>PID reacts to errors <em>after</em> they happen. Feedforward <em>anticipates</em> the required output. Used together, FF handles the steady-state load while PID corrects small residual errors — giving you fast, stable, low-oscillation control.</p>
+					<p>
+						PID reacts to errors <em>after</em> they happen. Feedforward <em>anticipates</em> the required
+						output. Used together, FF handles the steady-state load while PID corrects small residual
+						errors — giving you fast, stable, low-oscillation control.
+					</p>
 				</div>
 			</div>
 
 			<div class="callout animate-fade-up" style="animation-delay: 300ms">
 				<h3>Want to implement this in code?</h3>
-				<p>Our feedforward guide covers the full theory and provides a Java implementation compatible with the FTC SDK and Road Runner.</p>
+				<p>
+					Our feedforward guide covers the full theory and provides a Java implementation compatible
+					with the FTC SDK and Road Runner.
+				</p>
 				<a href="/software/feed-forward" class="btn">View Feedforward Guide →</a>
 			</div>
 		</div>
@@ -113,7 +143,8 @@
 		color: var(--accent-cyan);
 	}
 
-	.card p, .card li {
+	.card p,
+	.card li {
 		color: var(--text-body);
 		font-size: 0.95rem;
 		line-height: 1.6;

@@ -2,7 +2,7 @@
 title: Android Studio Setup
 date: 2026-03-28
 description: Complete set up guide for Android Studio on both Windows and Mac.
-tags: [software, beginner, completed guide, rookie, video]
+tags: [software, beginner, completed, rookie, video]
 author: Ishaan Desai
 published: true
 ---
@@ -12,6 +12,7 @@ This guide will walk you through setting up Android Studio for your FTC Robot Co
 ## Windows Setup
 
 To install Android Studio on a Windows machine:
+
 1. Visit the [Android Studio Download page](https://developer.android.com/studio).
 2. Download the executable installer for Windows.
 3. Once downloaded, run the installer and ensure you check the options for "Android SDK" and "Android Virtual Device" if prompted.
@@ -22,6 +23,7 @@ To install Android Studio on a Windows machine:
 ## Mac Setup
 
 To install Android Studio on a macOS machine:
+
 1. Visit the [Android Studio Download page](https://developer.android.com/studio).
 2. Choose the download button for your processor type (Intel or Apple Silicon).
 3. Once downloaded, open the `.dmg` file and drag the Android Studio icon into the Applications folder.

@@ -1,471 +1,626 @@
 <script lang="ts">
-    import { page } from '$app/stores';
-    import ThemeToggle from './ThemeToggle.svelte';
-    import { cursorState, toggleCursor } from '$lib/stores/cursor.svelte';
-    import { goto } from '$app/navigation';    
-    const navLinks = [
-        { href: '/', label: 'Home' },
-        { href: '/complete-rookie-guide', label: 'Complete Rookie Guide' },
+	import { page } from '$app/stores';
+	import ThemeToggle from './ThemeToggle.svelte';
+	import { cursorState, toggleCursor } from '$lib/stores/cursor.svelte';
+	import { devModeState, setDevMode, initDevMode } from '$lib/stores/devMode.svelte';
+	import { goto } from '$app/navigation';
+	import toast from 'svelte-5-french-toast';
+	import { onMount } from 'svelte';
 
-        { href: '/software', label: 'Software' },
-        {
-            label: 'Simulators',
-            children: [
-                { href: '/simulators/pid', label: 'PID Simulator' },
-                { href: '/simulators/motionprofile', label: 'Motion Profiling' },
-                { href: '/simulators/feedforward', label: 'Feedforward' },
-                { href: '/simulators/pid-game', label: 'PID Learning Game' },
-                { href: '/simulators/pedro-visualizer', label: 'Pedro Visualizer' }
-            ]
-        },
-        { href: '/hardware', label: 'Hardware' },
-        { href: '/outreach', label: 'Outreach' },
-        { href: '/suggest', label: 'Suggest' },
-        { href: '/about', label: 'About' }
-    ];
+	onMount(() => {
+		initDevMode();
+		window.addEventListener('clearHeaderSearch', () => {
+			searchQuery = '';
+		});
+	});
 
-    let menuOpen = $state(false);
-    let searchQuery = $state('');
-    let simulatorsOpen = $state(false);
+	function handleHeaderInput(e: Event) {
+		if ($page.url.pathname === '/search') {
+			const val = (e.target as HTMLInputElement).value;
+			// Sync what they typed down to the main page!
+			searchQuery = ''; // Clear header bar
+			document.getElementById('main-search-input')?.focus();
+			// Dispatch event so main page can append/set this char
+			window.dispatchEvent(new CustomEvent('headerToMainSearchSync', { detail: val }));
+		}
+	}
 
-    function closeMenu() {
-        menuOpen = false;
-        simulatorsOpen = false;
-    }
+	function handleHeaderFocus() {
+		if ($page.url.pathname === '/search') {
+			document.getElementById('main-search-input')?.focus();
+		}
+	}
 
-    function handleSearch(e: KeyboardEvent) {
-        if (e.key === 'Enter' && searchQuery.trim()) {
-            goto(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
-            searchQuery = '';
-        }
-    }
+	let headerSearchInput = $state<HTMLInputElement | null>(null);
 
-    const isSimulatorActive = () =>
-        ['/simulators/pid', '/simulators/motionprofile', '/simulators/feedforward', '/simulators/pedro-visualizer'].some(
-            (path) => $page.url.pathname === path || $page.url.pathname.startsWith(`${path}/`)
-        );
+	function handleWindowKeydown(e: KeyboardEvent) {
+		if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+			e.preventDefault();
+			if ($page.url.pathname === '/search') {
+				document.getElementById('main-search-input')?.focus();
+			} else {
+				headerSearchInput?.focus();
+			}
+		}
+	}
+
+	const navLinks = [
+		{ href: '/', label: 'Home' },
+		{ href: '/complete-rookie-guide', label: 'Rookie Guide' },
+		{ href: '/software', label: 'Software' },
+		{
+			label: 'Simulators',
+			children: [
+				{ href: '/simulators/pid', label: 'PID Simulator' },
+				{ href: '/simulators/motionprofile', label: 'Motion Profiling' },
+				{ href: '/simulators/feedforward', label: 'Feedforward' },
+				{ href: '/simulators/pid-game', label: 'PID Learning Game' },
+				{ href: '/simulators/pedro-visualizer', label: 'Pedro Visualizer' },
+				{ href: '/simulators/mecanum', label: 'Mecanum Simulator' }
+			]
+		},
+		{ href: '/hardware', label: 'Hardware' },
+		{ href: '/outreach', label: 'Outreach' },
+		{ href: '/suggest', label: 'Suggest' },
+		{ href: '/about', label: 'About' }
+	];
+
+	let menuOpen = $state(false);
+	let searchQuery = $state('');
+	let simulatorsOpen = $state(false);
+
+	function closeMenu() {
+		menuOpen = false;
+		simulatorsOpen = false;
+	}
+
+	function handleSearch(e: KeyboardEvent) {
+		if (e.key === 'Enter' && searchQuery.trim()) {
+			const q = searchQuery.trim();
+			if (q === '/dev3432') {
+				setDevMode(true);
+				toast.success('Developer Mode Enabled');
+				searchQuery = '';
+				return;
+			}
+			if (q === '/reg3432') {
+				setDevMode(false);
+				toast.success('Regular Mode Enabled');
+				searchQuery = '';
+				return;
+			}
+			goto(`/search?q=${encodeURIComponent(q)}`);
+			searchQuery = '';
+		}
+	}
+
+	const isSimulatorActive = () =>
+		[
+			'/simulators/pid',
+			'/simulators/motionprofile',
+			'/simulators/feedforward',
+			'/simulators/pedro-visualizer',
+			'/simulators/mecanum'
+		].some((path) => $page.url.pathname === path || $page.url.pathname.startsWith(`${path}/`));
 </script>
 
+<svelte:window onkeydown={handleWindowKeydown} />
+
 <header class="header" class:scrolled={false}>
-    <div class="inner container container--wide">
-        <a href="/" class="logo" onclick={closeMenu}>
-            <span class="logo-mark">⬡</span>
-            <span class="logo-text">Blueprint</span>
-        </a>
+	<div class="inner container container--wide">
+		<a href="/" class="logo" onclick={closeMenu}>
+			<span class="logo-mark">⬡</span>
+			<span class="logo-text">Blueprint</span>
+		</a>
 
-        <nav class="nav" class:open={menuOpen} aria-label="Main navigation">
-            {#each navLinks as item}
-                {#if item.children}
-                    <div class="nav-dropdown" class:open={simulatorsOpen}>
-                        <button
-                            type="button"
-                            class="nav-link dropdown-toggle"
-                            class:active={isSimulatorActive()}
-                            aria-expanded={simulatorsOpen}
-                            aria-haspopup="true"
-                            onclick={() => (simulatorsOpen = !simulatorsOpen)}
-                        >
-                            {item.label}
-                            <span class="chevron">▾</span>
-                        </button>
+		<nav class="nav" class:open={menuOpen} aria-label="Main navigation">
+			{#each navLinks as item}
+				{#if item.children}
+					<!-- svelte-ignore a11y_no_static_element_interactions -->
+					<div
+						class="nav-dropdown"
+						class:open={simulatorsOpen}
+						onmouseenter={() => (simulatorsOpen = true)}
+						onmouseleave={() => (simulatorsOpen = false)}
+					>
+						<button
+							type="button"
+							class="nav-link dropdown-toggle"
+							class:active={isSimulatorActive()}
+							aria-expanded={simulatorsOpen}
+							aria-haspopup="true"
+							onclick={() => (simulatorsOpen = !simulatorsOpen)}
+						>
+							{item.label}
+							<span class="chevron">▾</span>
+						</button>
 
-                        <div class="dropdown-menu">
-                            {#each item.children as child}
-                                <a
-                                    href={child.href}
-                                    class="dropdown-link"
-                                    class:active={$page.url.pathname === child.href}
-                                    aria-current={$page.url.pathname === child.href ? 'page' : undefined}
-                                    onclick={closeMenu}
-                                >
-                                    {child.label}
-                                </a>
-                            {/each}
-                        </div>
-                    </div>
-                {:else}
-                    <a
-                        href={item.href}
-                        class="nav-link"
-                        class:active={$page.url.pathname === item.href || ($page.url.pathname.startsWith('/software') && item.href === '/software')}
-                        aria-current={$page.url.pathname === item.href ? 'page' : undefined}
-                        onclick={closeMenu}
-                    >
-                        {item.label}
-                    </a>
-                {/if}
-            {/each}
-        </nav>
+						<div class="dropdown-menu">
+							{#each item.children as child}
+								<a
+									href={child.href}
+									class="dropdown-link"
+									class:active={$page.url.pathname === child.href}
+									aria-current={$page.url.pathname === child.href ? 'page' : undefined}
+									onclick={closeMenu}
+								>
+									{child.label}
+								</a>
+							{/each}
+						</div>
+					</div>
+				{:else}
+					<a
+						href={item.href}
+						class="nav-link"
+						class:active={$page.url.pathname === item.href ||
+							($page.url.pathname.startsWith('/software') && item.href === '/software')}
+						aria-current={$page.url.pathname === item.href ? 'page' : undefined}
+						onclick={closeMenu}
+					>
+						{item.label}
+					</a>
+				{/if}
+			{/each}
+		</nav>
 
-        <div class="actions">
-            <div class="header-search-wrap">
-                <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
-                </svg>
-                <input
-                    type="text"
-                    placeholder="Global Search..."
-                    bind:value={searchQuery}
-                    onkeydown={handleSearch}
-                    class="header-search-input"
-                />
-            </div>
+		<div class="actions">
+			<div class="header-search-wrap">
+				<svg
+					class="search-icon"
+					width="16"
+					height="16"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="2.5"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+				>
+					<circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" />
+				</svg>
+				<input
+					bind:this={headerSearchInput}
+					type="text"
+					placeholder="Global Search..."
+					bind:value={searchQuery}
+					oninput={handleHeaderInput}
+					onkeydown={handleSearch}
+					onfocus={handleHeaderFocus}
+					class="header-search-input"
+				/>
+				{#if devModeState.active}
+					<span class="dev-badge">DEV</span>
+				{:else}
+					<span class="search-cmd">⌘K</span>
+				{/if}
+			</div>
 
-            <button
-                class="action-btn cursor-toggle"
-                class:active={cursorState.active}
-                onclick={toggleCursor}
-                title="Toggle Custom Cursor"
-            >
-                {#if cursorState.active}
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/>
-                    </svg>
-                {:else}
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="m3 3 7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/><path d="m13 13 6 6"/>
-                    </svg>
-                {/if}
-            </button>
+			<button
+				class="action-btn cursor-toggle"
+				class:active={cursorState.active}
+				onclick={toggleCursor}
+				title="Toggle Custom Cursor"
+			>
+				{#if cursorState.active}
+					<svg
+						width="18"
+						height="18"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+					>
+						<path d="m3 3 7.07 16.97 2.51-7.39 7.39-2.51L3 3z" /><path d="m13 13 6 6" />
+					</svg>
+				{:else}
+					<svg
+						width="18"
+						height="18"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+					>
+						<circle cx="12" cy="12" r="10" /><circle cx="12" cy="12" r="3" />
+					</svg>
+				{/if}
+			</button>
 
-            <ThemeToggle />
+			<ThemeToggle />
 
-            <button
-                class="menu-btn"
-                aria-label="Toggle menu"
-                aria-expanded={menuOpen}
-                onclick={() => (menuOpen = !menuOpen)}
-            >
-                <span class="bar" class:open={menuOpen}></span>
-                <span class="bar" class:open={menuOpen}></span>
-                <span class="bar" class:open={menuOpen}></span>
-            </button>
-        </div>
-    </div>
+			<button
+				class="menu-btn"
+				aria-label="Toggle menu"
+				aria-expanded={menuOpen}
+				onclick={() => (menuOpen = !menuOpen)}
+			>
+				<span class="bar" class:open={menuOpen}></span>
+				<span class="bar" class:open={menuOpen}></span>
+				<span class="bar" class:open={menuOpen}></span>
+			</button>
+		</div>
+	</div>
 </header>
 
 {#if menuOpen}
-    <div
-        class="backdrop"
-        role="button"
-        tabindex="-1"
-        aria-label="Close menu"
-        onclick={closeMenu}
-        onkeydown={(e) => e.key === 'Enter' && closeMenu()}
-    ></div>
+	<div
+		class="backdrop"
+		role="button"
+		tabindex="-1"
+		aria-label="Close menu"
+		onclick={closeMenu}
+		onkeydown={(e) => e.key === 'Enter' && closeMenu()}
+	></div>
 {/if}
 
 <style>
-    .header {
-        position: sticky;
-        top: 0;
-        z-index: 100;
-        height: var(--header-height);
-        background: rgba(21, 21, 21, 0.82);
-        backdrop-filter: blur(16px);
-        -webkit-backdrop-filter: blur(16px);
-        border-bottom: 1px solid var(--border-subtle);
-        transition: background var(--transition-slow), border-color var(--transition-slow);
-    }
+	.header {
+		position: sticky;
+		top: 0;
+		z-index: 100;
+		height: var(--header-height);
+		background: rgba(21, 21, 21, 0.82);
+		backdrop-filter: blur(16px);
+		-webkit-backdrop-filter: blur(16px);
+		border-bottom: 1px solid var(--border-subtle);
+		transition:
+			background var(--transition-slow),
+			border-color var(--transition-slow);
+	}
 
-    :global(html.light) .header {
-        background: rgba(240, 246, 248, 0.88);
-    }
+	:global(html.light) .header {
+		background: rgba(240, 246, 248, 0.88);
+	}
 
-    .inner {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        height: 100%;
-        gap: 1rem;
-    }
+	.inner {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		height: 100%;
+		gap: 1rem;
+	}
 
-    .logo {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        text-decoration: none;
-        color: var(--text-primary);
-        font-family: var(--font-sans);
-        font-weight: 700;
-        font-size: 1.15rem;
-        letter-spacing: -0.02em;
-        transition: opacity var(--transition-fast);
-    }
+	.logo {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		text-decoration: none;
+		color: var(--text-primary);
+		font-family: var(--font-sans);
+		font-weight: 700;
+		font-size: 1.15rem;
+		letter-spacing: -0.02em;
+		transition: opacity var(--transition-fast);
+	}
 
-    .logo:hover { opacity: 0.8; color: var(--text-primary); }
+	.logo:hover {
+		opacity: 0.8;
+		color: var(--text-primary);
+	}
 
-    .logo-mark {
-        font-size: 1.4rem;
-        background: var(--gradient-accent);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        line-height: 1;
-    }
+	.logo-mark {
+		font-size: 1.4rem;
+		background: var(--gradient-accent);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+		line-height: 1;
+	}
 
-    .nav {
-        display: flex;
-        align-items: center;
-        gap: 0.25rem;
-    }
+	.nav {
+		display: flex;
+		align-items: center;
+		gap: 0.25rem;
+	}
 
-    .nav-link {
-        position: relative;
-        padding: 0.4em 0.85em;
-        border-radius: var(--radius-sm);
-        font-family: var(--font-sans);
-        font-size: 0.9rem;
-        font-weight: 500;
-        color: var(--text-secondary);
-        text-decoration: none;
-        transition: color var(--transition-fast), background var(--transition-fast);
-    }
+	.nav-link {
+		position: relative;
+		padding: 0.4em 0.85em;
+		border-radius: var(--radius-sm);
+		font-family: var(--font-sans);
+		font-size: 0.9rem;
+		font-weight: 500;
+		color: var(--text-secondary);
+		text-decoration: none;
+		text-align: center;
+		transition:
+			color var(--transition-fast),
+			background var(--transition-fast);
+	}
 
-    .nav-link::after {
-        content: '';
-        position: absolute;
-        bottom: 2px;
-        left: 50%;
-        transform: translateX(-50%) scaleX(0);
-        width: 16px;
-        height: 2px;
-        background: var(--gradient-accent);
-        border-radius: 2px;
-        transition: transform var(--transition-base);
-    }
+	.nav-link::after {
+		content: '';
+		position: absolute;
+		bottom: 2px;
+		left: 50%;
+		transform: translateX(-50%) scaleX(0);
+		width: 16px;
+		height: 2px;
+		background: var(--gradient-accent);
+		border-radius: 2px;
+		transition: transform var(--transition-base);
+	}
 
-    .nav-link:hover {
-        color: var(--text-primary);
-        background: rgba(116, 215, 237, 0.06);
-    }
+	.nav-link:hover {
+		color: var(--text-primary);
+		background: rgba(116, 215, 237, 0.06);
+	}
 
-    .nav-link.active {
-        color: var(--text-primary);
-    }
+	.nav-link.active {
+		color: var(--text-primary);
+	}
 
-    .nav-link.active::after {
-        transform: translateX(-50%) scaleX(1);
-    }
+	.nav-link.active::after {
+		transform: translateX(-50%) scaleX(1);
+	}
 
-    .nav-dropdown {
-        position: relative;
-    }
+	.nav-dropdown {
+		position: relative;
+	}
 
-    .dropdown-toggle {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.35rem;
-        background: transparent;
-        border: none;
-        cursor: pointer;
-    }
+	.dropdown-toggle {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.35rem;
+		background: transparent;
+		border: none;
+		cursor: pointer;
+	}
 
-    .chevron {
-        font-size: 0.8rem;
-        transition: transform var(--transition-base);
-    }
+	.chevron {
+		font-size: 0.8rem;
+		transition: transform var(--transition-base);
+	}
 
-    .nav-dropdown.open .chevron {
-        transform: rotate(180deg);
-    }
+	.nav-dropdown.open .chevron {
+		transform: rotate(180deg);
+	}
 
-    .dropdown-menu {
-        position: absolute;
-        top: calc(100% + 0.4rem);
-        left: 0;
-        min-width: 220px;
-        padding: 0.5rem;
-        border: 1px solid var(--border);
-        border-radius: var(--radius-md);
-        background: var(--bg-secondary);
-        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
-        opacity: 0;
-        visibility: hidden;
-        transform: translateY(-6px);
-        transition: all var(--transition-base);
-        z-index: 120;
-    }
+	.dropdown-menu {
+		position: absolute;
+		top: calc(100% + 0.4rem);
+		left: 0;
+		min-width: 220px;
+		padding: 0.5rem;
+		border: 1px solid var(--border);
+		border-radius: var(--radius-md);
+		background: var(--bg-secondary);
+		box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
+		opacity: 0;
+		visibility: hidden;
+		transform: translateY(-6px);
+		transition: all var(--transition-base);
+		z-index: 120;
+	}
 
-    .nav-dropdown.open .dropdown-menu,
-    .nav-dropdown:hover .dropdown-menu,
-    .nav-dropdown:focus-within .dropdown-menu {
-        opacity: 1;
-        visibility: visible;
-        transform: translateY(0);
-    }
+	.nav-dropdown.open .dropdown-menu,
+	.nav-dropdown:hover .dropdown-menu,
+	.nav-dropdown:focus-within .dropdown-menu {
+		opacity: 1;
+		visibility: visible;
+		transform: translateY(0);
+	}
 
-    .dropdown-link {
-        display: block;
-        padding: 0.6rem 0.75rem;
-        border-radius: var(--radius-sm);
-        color: var(--text-secondary);
-        text-decoration: none;
-        transition: background var(--transition-fast), color var(--transition-fast);
-    }
+	.dropdown-link {
+		display: block;
+		padding: 0.6rem 0.75rem;
+		border-radius: var(--radius-sm);
+		color: var(--text-secondary);
+		text-decoration: none;
+		transition:
+			background var(--transition-fast),
+			color var(--transition-fast);
+	}
 
-    .dropdown-link:hover,
-    .dropdown-link.active,
-    .dropdown-link[aria-current='page'] {
-        color: var(--text-primary);
-        background: rgba(116, 215, 237, 0.08);
-    }
+	.dropdown-link:hover,
+	.dropdown-link.active,
+	.dropdown-link[aria-current='page'] {
+		color: var(--text-primary);
+		background: rgba(116, 215, 237, 0.08);
+	}
 
-    .actions {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-    }
+	.actions {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+	}
 
-    .header-search-wrap {
-        position: relative;
-        display: flex;
-        align-items: center;
-    }
+	.header-search-wrap {
+		position: relative;
+		display: flex;
+		align-items: center;
+	}
 
-    .header-search-wrap .search-icon {
-        position: absolute;
-        left: 0.75rem;
-        color: var(--text-muted);
-        pointer-events: none;
-    }
+	.header-search-wrap .search-icon {
+		position: absolute;
+		left: 0.75rem;
+		color: var(--text-muted);
+		pointer-events: none;
+	}
 
-    .header-search-input {
-        background: var(--bg-card);
-        border: 1px solid var(--border);
-        border-radius: var(--radius-pill);
-        padding: 0.45rem 1rem 0.45rem 2.2rem;
-        font-size: 0.85rem;
-        color: var(--text-primary);
-        width: 160px;
-        transition: all var(--transition-base);
-        outline: none;
-    }
+	.header-search-input {
+		background: var(--bg-card);
+		border: 1px solid var(--border);
+		border-radius: var(--radius-pill);
+		padding: 0.45rem 1rem 0.45rem 2.2rem;
+		font-size: 0.85rem;
+		color: var(--text-primary);
+		width: 200px;
+		transition: all var(--transition-base);
+		outline: none;
+	}
 
-    .header-search-input:focus {
-        width: 240px;
-        border-color: var(--text-primary);
-        box-shadow: var(--glow-cyan);
-    }
+	.header-search-input:focus {
+		width: 280px;
+		border-color: var(--text-primary);
+		box-shadow: var(--glow-cyan);
+	}
 
-    .action-btn {
-        width: 38px;
-        height: 38px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: var(--bg-card);
-        border: 1px solid var(--border);
-        border-radius: var(--radius-md);
-        color: var(--text-secondary);
-        cursor: pointer;
-        transition: all var(--transition-fast);
-    }
+	.dev-badge {
+		position: absolute;
+		right: 0.5rem;
+		top: 50%;
+		transform: translateY(-50%);
+		font-size: 0.6rem;
+		font-family: var(--font-mono);
+		font-weight: 700;
+		letter-spacing: 0.08em;
+		color: var(--bg);
+		background: var(--text-primary);
+		padding: 0.2em 0.5em;
+		border-radius: var(--radius-pill);
+		pointer-events: none;
+	}
 
-    .action-btn:hover {
-        border-color: var(--text-primary);
-        color: var(--text-primary);
-        background: var(--bg-card-hover);
-    }
+	.search-cmd {
+		position: absolute;
+		right: 0.5rem;
+		top: 50%;
+		transform: translateY(-50%);
+		font-family: var(--font-sans);
+		font-size: 0.65rem;
+		color: var(--text-muted);
+		background: var(--bg-secondary);
+		border: 1px solid var(--border);
+		padding: 0.15em 0.4em;
+		border-radius: 4px;
+		pointer-events: none;
+		opacity: 0.8;
+	}
 
-    .action-btn.active {
-        background: var(--accent-cyan-dim);
-        border-color: var(--text-primary);
-        color: var(--text-primary);
-    }
+	.action-btn {
+		width: 38px;
+		height: 38px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: var(--bg-card);
+		border: 1px solid var(--border);
+		border-radius: var(--radius-md);
+		color: var(--text-secondary);
+		cursor: pointer;
+		transition: all var(--transition-fast);
+	}
 
-    .menu-btn {
-        display: none;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        gap: 5px;
-        width: 38px;
-        height: 38px;
-        background: var(--bg-card);
-        border: 1px solid var(--border);
-        border-radius: var(--radius-md);
-        cursor: pointer;
-        padding: 0;
-    }
+	.action-btn:hover {
+		border-color: var(--text-primary);
+		color: var(--text-primary);
+		background: var(--bg-card-hover);
+	}
 
-    .bar {
-        display: block;
-        width: 18px;
-        height: 2px;
-        background: var(--text-primary);
-        border-radius: 2px;
-        transition: transform var(--transition-base), opacity var(--transition-base);
-    }
+	.action-btn.active {
+		background: var(--accent-cyan-dim);
+		border-color: var(--text-primary);
+		color: var(--text-primary);
+	}
 
-    .bar.open:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-    .bar.open:nth-child(2) { opacity: 0; }
-    .bar.open:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+	.menu-btn {
+		display: none;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		gap: 5px;
+		width: 38px;
+		height: 38px;
+		background: var(--bg-card);
+		border: 1px solid var(--border);
+		border-radius: var(--radius-md);
+		cursor: pointer;
+		padding: 0;
+	}
 
-    .backdrop {
-        position: fixed;
-        inset: 0;
-        z-index: 99;
-        background: rgba(0, 0, 0, 0.5);
-        backdrop-filter: blur(4px);
-    }
+	.bar {
+		display: block;
+		width: 18px;
+		height: 2px;
+		background: var(--text-primary);
+		border-radius: 2px;
+		transition:
+			transform var(--transition-base),
+			opacity var(--transition-base);
+	}
 
-    @media (max-width: 640px) {
-        .menu-btn { display: flex; }
+	.bar.open:nth-child(1) {
+		transform: translateY(7px) rotate(45deg);
+	}
+	.bar.open:nth-child(2) {
+		opacity: 0;
+	}
+	.bar.open:nth-child(3) {
+		transform: translateY(-7px) rotate(-45deg);
+	}
 
-        .nav {
-            position: fixed;
-            top: var(--header-height);
-            right: 0;
-            z-index: 100;
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 0.25rem;
-            width: 220px;
-            padding: 1rem;
-            background: var(--bg-secondary);
-            border-left: 1px solid var(--border);
-            border-bottom: 1px solid var(--border);
-            border-radius: 0 0 0 var(--radius-lg);
-            transform: translateX(100%);
-            transition: transform var(--transition-base);
-        }
+	.backdrop {
+		position: fixed;
+		inset: 0;
+		z-index: 99;
+		background: rgba(0, 0, 0, 0.5);
+		backdrop-filter: blur(4px);
+	}
 
-        .nav.open {
-            transform: translateX(0);
-        }
+	@media (max-width: 640px) {
+		.menu-btn {
+			display: flex;
+		}
 
-        .nav-link {
-            width: 100%;
-            padding: 0.6em 0.75em;
-        }
+		.nav {
+			position: fixed;
+			top: var(--header-height);
+			right: 0;
+			z-index: 100;
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 0.25rem;
+			width: 220px;
+			padding: 1rem;
+			background: var(--bg-secondary);
+			border-left: 1px solid var(--border);
+			border-bottom: 1px solid var(--border);
+			border-radius: 0 0 0 var(--radius-lg);
+			transform: translateX(100%);
+			transition: transform var(--transition-base);
+		}
 
-        .nav-dropdown {
-            width: 100%;
-        }
+		.nav.open {
+			transform: translateX(0);
+		}
 
-        .dropdown-toggle {
-            width: 100%;
-            justify-content: space-between;
-            padding: 0.6em 0.75em;
-        }
+		.nav-link {
+			width: 100%;
+			padding: 0.6em 0.75em;
+		}
 
-        .dropdown-menu {
-            position: static;
-            min-width: 0;
-            width: 100%;
-            margin-top: 0.25rem;
-            padding: 0.35rem 0 0 0.75rem;
-            border: none;
-            box-shadow: none;
-            background: transparent;
-            opacity: 1;
-            visibility: visible;
-            transform: none;
-        }
+		.nav-dropdown {
+			width: 100%;
+		}
 
-        .dropdown-link {
-            width: 100%;
-        }
-    }
+		.dropdown-toggle {
+			width: 100%;
+			justify-content: space-between;
+			padding: 0.6em 0.75em;
+		}
+
+		.dropdown-menu {
+			position: static;
+			min-width: 0;
+			width: 100%;
+			margin-top: 0.25rem;
+			padding: 0.35rem 0 0 0.75rem;
+			border: none;
+			box-shadow: none;
+			background: transparent;
+			opacity: 1;
+			visibility: visible;
+			transform: none;
+		}
+
+		.dropdown-link {
+			width: 100%;
+		}
+	}
 </style>

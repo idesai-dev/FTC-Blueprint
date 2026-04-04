@@ -8,4 +8,5 @@ published: true
 ---
 
 # Vision Opencv
+
 Content coming soon...

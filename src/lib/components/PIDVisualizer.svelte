@@ -12,10 +12,10 @@
 	let velocity = $state(0);
 	let integralSum = $state(0);
 	let lastError = $state(0);
-	
+
 	let history = $state<number[]>([]);
 	const maxHistory = 100;
-	
+
 	let isRunning = $state(true);
 
 	// Auto-reset state
@@ -30,14 +30,14 @@
 		const error = target - currentPos;
 		const derivative = error - lastError;
 		integralSum += error;
-		
+
 		// Anti-windup
 		if (Math.abs(error) < 0.1) integralSum = 0;
 		if (integralSum > 100) integralSum = 100;
 		if (integralSum < -100) integralSum = -100;
 
-		const output = (kp * error) + (ki * integralSum) + (kd * derivative);
-		
+		const output = kp * error + ki * integralSum + kd * derivative;
+
 		// Physics
 		velocity += output;
 		velocity *= 0.9; // Friction/Damping
@@ -50,17 +50,17 @@
 	}
 
 	onMount(() => {
-    const interval = setInterval(step, 40);
-    
-    // start default auto‑reset timer (5.5 s)
-    handleAutoResetInput();
+		const interval = setInterval(step, 40);
 
-    return () => {
-        clearInterval(interval);
-        if (autoResetTimer) clearInterval(autoResetTimer);
-        if (countdownTimer) clearInterval(countdownTimer);
-    };
-});
+		// start default auto‑reset timer (5.5 s)
+		handleAutoResetInput();
+
+		return () => {
+			clearInterval(interval);
+			if (autoResetTimer) clearInterval(autoResetTimer);
+			if (countdownTimer) clearInterval(countdownTimer);
+		};
+	});
 
 	function resetSim() {
 		currentPos = 0;
@@ -71,8 +71,14 @@
 	}
 
 	function handleAutoResetInput() {
-		if (autoResetTimer) { clearInterval(autoResetTimer); autoResetTimer = null; }
-		if (countdownTimer) { clearInterval(countdownTimer); countdownTimer = null; }
+		if (autoResetTimer) {
+			clearInterval(autoResetTimer);
+			autoResetTimer = null;
+		}
+		if (countdownTimer) {
+			clearInterval(countdownTimer);
+			countdownTimer = null;
+		}
 		countdown = null;
 
 		const seconds = parseFloat(autoResetSeconds);
@@ -98,12 +104,14 @@
 	const pad = 20;
 
 	let pathData = $derived(() => {
-		if (history.length < 2) return "";
-		return history.map((p, i) => {
-			const x = (i / (maxHistory - 1)) * (width - 2 * pad) + pad;
-			const y = height - ((p / 150) * (height - 2 * pad) + pad);
-			return `${i === 0 ? 'M' : 'L'} ${x} ${y}`;
-		}).join(" ");
+		if (history.length < 2) return '';
+		return history
+			.map((p, i) => {
+				const x = (i / (maxHistory - 1)) * (width - 2 * pad) + pad;
+				const y = height - ((p / 150) * (height - 2 * pad) + pad);
+				return `${i === 0 ? 'M' : 'L'} ${x} ${y}`;
+			})
+			.join(' ');
 	});
 </script>
 
@@ -134,28 +142,43 @@
 	<div class="visual-area">
 		<svg {width} {height} viewBox="0 0 {width} {height}">
 			<!-- Grid -->
-			<line x1={pad} y1={height-pad} x2={width-pad} y2={height-pad} stroke="var(--border)" stroke-width="1" />
-			<line x1={pad} y1={pad} x2={pad} y2={height-pad} stroke="var(--border)" stroke-width="1" />
-			
+			<line
+				x1={pad}
+				y1={height - pad}
+				x2={width - pad}
+				y2={height - pad}
+				stroke="var(--border)"
+				stroke-width="1"
+			/>
+			<line x1={pad} y1={pad} x2={pad} y2={height - pad} stroke="var(--border)" stroke-width="1" />
+
 			<!-- Target Line -->
-			<line 
-				x1={pad} y1={height - ((target / 150) * (height - 2 * pad) + pad)} 
-				x2={width-pad} y2={height - ((target / 150) * (height - 2 * pad) + pad)} 
-				stroke="var(--accent-green)" 
-				stroke-dasharray="4 4" 
+			<line
+				x1={pad}
+				y1={height - ((target / 150) * (height - 2 * pad) + pad)}
+				x2={width - pad}
+				y2={height - ((target / 150) * (height - 2 * pad) + pad)}
+				stroke="var(--accent-green)"
+				stroke-dasharray="4 4"
 				opacity="0.5"
 			/>
-			
+
 			<!-- Response Path -->
-			<path d={pathData()} fill="none" stroke="var(--accent-cyan)" stroke-width="2.5" stroke-linejoin="round" />
-			
+			<path
+				d={pathData()}
+				fill="none"
+				stroke="var(--accent-cyan)"
+				stroke-width="2.5"
+				stroke-linejoin="round"
+			/>
+
 			<!-- Robot Indicator -->
 			{#if history.length > 0}
-				<circle 
-					cx={( (history.length - 1) / (maxHistory - 1)) * (width - 2 * pad) + pad} 
-					cy={height - ((currentPos / 150) * (height - 2 * pad) + pad)} 
-					r="5" 
-					fill="var(--accent-cyan)" 
+				<circle
+					cx={((history.length - 1) / (maxHistory - 1)) * (width - 2 * pad) + pad}
+					cy={height - ((currentPos / 150) * (height - 2 * pad) + pad)}
+					r="5"
+					fill="var(--accent-cyan)"
 					style="filter: drop-shadow(0 0 4px var(--accent-cyan))"
 				/>
 			{/if}
@@ -260,7 +283,7 @@
 	.auto-reset-input::-webkit-inner-spin-button {
 		-webkit-appearance: none;
 	}
-	.auto-reset-input[type=number] {
+	.auto-reset-input[type='number'] {
 		-moz-appearance: textfield;
 		appearance: textfield;
 	}
@@ -322,7 +345,7 @@
 		font-weight: 600;
 	}
 
-	input[type="range"] {
+	input[type='range'] {
 		width: 100%;
 		accent-color: var(--accent-cyan);
 		cursor: pointer;
@@ -335,7 +358,13 @@
 		text-align: center;
 	}
 
-	.warning { color: var(--accent-yellow); }
-	.tip { color: var(--text-muted); }
-	.success { color: var(--accent-green); }
+	.warning {
+		color: var(--accent-yellow);
+	}
+	.tip {
+		color: var(--text-muted);
+	}
+	.success {
+		color: var(--accent-green);
+	}
 </style>

@@ -42,9 +42,9 @@
 </script>
 
 {#if active}
-	<div 
-		class="custom-cursor" 
-		class:hovering 
+	<div
+		class="custom-cursor"
+		class:hovering
 		style="transform: translate3d({x}px, {y}px, 0);"
 		aria-hidden="true"
 	>
@@ -80,7 +80,9 @@
 		margin: -2px 0 0 -2px;
 		background: #fff;
 		border-radius: 50%;
-		transition: transform 0.2s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.2s ease-in-out;
+		transition:
+			transform 0.2s cubic-bezier(0.23, 1, 0.32, 1),
+			opacity 0.2s ease-in-out;
 	}
 
 	.cursor-outer {
@@ -91,7 +93,9 @@
 		height: 100%;
 		border: 1.25px solid #fff;
 		border-radius: 50%;
-		transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1), border-color 0.3s ease-in-out;
+		transition:
+			transform 0.3s cubic-bezier(0.23, 1, 0.32, 1),
+			border-color 0.3s ease-in-out;
 	}
 
 	.hovering .cursor-inner {
@@ -116,12 +120,22 @@
 	}
 
 	@keyframes pulse-cursor {
-		0% { transform: scale(1); opacity: 0.5; }
-		100% { transform: scale(1.3); opacity: 0; }
+		0% {
+			transform: scale(1);
+			opacity: 0.5;
+		}
+		100% {
+			transform: scale(1.3);
+			opacity: 0;
+		}
 	}
 
 	@media (max-width: 1024px) {
-		.custom-cursor { display: none; }
-		:global(body.custom-cursor-active *) { cursor: auto !important; }
+		.custom-cursor {
+			display: none;
+		}
+		:global(body.custom-cursor-active *) {
+			cursor: auto !important;
+		}
 	}
 </style>

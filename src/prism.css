@@ -1,6 +1,6 @@
 /* Prism.js Tomorrow Night Eighties theme */
-code[class*="language-"],
-pre[class*="language-"] {
+code[class*='language-'],
+pre[class*='language-'] {
 	color: #ccc;
 	background: none;
 	font-family: var(--font-mono);
@@ -23,21 +23,21 @@ pre[class*="language-"] {
 }
 
 /* Code blocks */
-pre[class*="language-"] {
+pre[class*='language-'] {
 	padding: 1em;
-	margin: .5em 0;
+	margin: 0.5em 0;
 	overflow: auto;
 }
 
-:not(pre) > code[class*="language-"],
-pre[class*="language-"] {
+:not(pre) > code[class*='language-'],
+pre[class*='language-'] {
 	background: transparent;
 }
 
 /* Inline code */
-:not(pre) > code[class*="language-"] {
-	padding: .1em;
-	border-radius: .3em;
+:not(pre) > code[class*='language-'] {
+	padding: 0.1em;
+	border-radius: 0.3em;
 	white-space: normal;
 }
 
@@ -116,11 +116,27 @@ pre[class*="language-"] {
 }
 
 /* Light mode overrides */
-:global(html.light) .token.comment { color: #8e908c; }
-:global(html.light) .token.keyword { color: #8959a8; }
-:global(html.light) .token.string { color: #718c00; }
-:global(html.light) .token.function { color: #4271ae; }
-:global(html.light) .token.number { color: #f5871f; }
-:global(html.light) .token.class-name { color: #c82829; }
-:global(html.light) .token.operator { color: #3e999f; }
-:global(html.light) .token.punctuation { color: #4d4d4c; }
+:global(html.light) .token.comment {
+	color: #8e908c;
+}
+:global(html.light) .token.keyword {
+	color: #8959a8;
+}
+:global(html.light) .token.string {
+	color: #718c00;
+}
+:global(html.light) .token.function {
+	color: #4271ae;
+}
+:global(html.light) .token.number {
+	color: #f5871f;
+}
+:global(html.light) .token.class-name {
+	color: #c82829;
+}
+:global(html.light) .token.operator {
+	color: #3e999f;
+}
+:global(html.light) .token.punctuation {
+	color: #4d4d4c;
+}

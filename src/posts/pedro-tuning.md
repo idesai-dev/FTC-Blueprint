@@ -14,25 +14,30 @@ Tuning is the most critical part of setting up Pedro Pathing. A well-tuned robot
 ## The Tuning Process
 
 ### 1. Drivetrain Tuning
+
 - **Max Velocity:** Find the maximum speed your robot can achieve while maintaining control.
 - **Acceleration:** Find the maximum acceleration the robot should use for smooth movements.
 
 ### 2. Odometry Calibration
+
 - **Encoder Resolution:** Ensure your odometry pods are providing the correct number of pulses per unit of distance.
 - **Track Width:** Precisely measure the physical distance between your tracking wheels.
 
 ### 3. PID and Feedforward Tuning
+
 - **Follower PID:** Tune the PID controllers within Pedro to maintain path accuracy.
-- **Feedforward Constants:** Find the *K_s*, *K_v*, and *K_a* values for your drivetrain motors.
+- **Feedforward Constants:** Find the _K_s_, _K_v_, and _K_a_ values for your drivetrain motors.
 
 ## Using Panels
-Pedro Pathing includes a built-in dashboard for real-time tuning and visualization. 
+
+Pedro Pathing includes a built-in dashboard for real-time tuning and visualization.
 
 1.  Connect to your robot's Control Hub via Wi-Fi.
 2.  Open the Pedro Dashboard in your web browser.
 3.  Use the tuning tools to adjust constants and see the robot's performance live.
 
 ## Common Issues
+
 - **Overshooting:** Increase K_d or decrease K_p in your follower PID.
 - **Inconsistent Paths:** Check your odometry hardware for any mechanical issues.
 - **Slow Response:** Increase your K_p or K_v values.

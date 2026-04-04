@@ -2,21 +2,21 @@
 	import { onMount } from 'svelte';
 
 	// Profile parameters
-	let maxVel   = $state(80);   // units/s
-	let maxAccel = $state(40);   // units/s²
-	let distance = $state(200);  // units
+	let maxVel = $state(80); // units/s
+	let maxAccel = $state(40); // units/s²
+	let distance = $state(200); // units
 
 	// Playback
-	let isRunning  = $state(false);
-	let simTime    = $state(0);    // seconds elapsed
-	let position   = $state(0);
-	let velocity   = $state(0);
-	let accel      = $state(0);
+	let isRunning = $state(false);
+	let simTime = $state(0); // seconds elapsed
+	let position = $state(0);
+	let velocity = $state(0);
+	let accel = $state(0);
 
-	const DT        = 0.02;  // 20ms timestep
-	const GRAPH_W   = 560;
-	const GRAPH_H   = 160;
-	const PAD       = 36;
+	const DT = 0.02; // 20ms timestep
+	const GRAPH_W = 560;
+	const GRAPH_H = 160;
+	const PAD = 36;
 
 	// ── Trapezoid profile math ──────────────────────────────────────────────
 	type Profile = {
@@ -30,8 +30,8 @@
 	};
 
 	function buildProfile(dist: number, vMax: number, aMax: number): Profile {
-		const accelTime  = vMax / aMax;
-		const accelDist  = 0.5 * aMax * accelTime * accelTime;
+		const accelTime = vMax / aMax;
+		const accelDist = 0.5 * aMax * accelTime * accelTime;
 
 		let peakVel: number;
 		let accelT: number;
@@ -40,25 +40,25 @@
 
 		if (2 * accelDist > dist) {
 			// Triangular (can't reach vMax)
-			peakVel    = Math.sqrt(aMax * dist);
-			accelT     = peakVel / aMax;
+			peakVel = Math.sqrt(aMax * dist);
+			accelT = peakVel / aMax;
 			cruiseDist = 0;
 			cruiseTime = 0;
 		} else {
-			peakVel    = vMax;
-			accelT     = accelTime;
+			peakVel = vMax;
+			accelT = accelTime;
 			cruiseDist = dist - 2 * accelDist;
 			cruiseTime = cruiseDist / vMax;
 		}
 
 		return {
-			accelTime:  accelT,
+			accelTime: accelT,
 			cruiseTime,
-			decelTime:  accelT,
-			totalTime:  2 * accelT + cruiseTime,
+			decelTime: accelT,
+			totalTime: 2 * accelT + cruiseTime,
 			peakVel,
-			accelDist:  0.5 * aMax * accelT * accelT,
-			cruiseDist,
+			accelDist: 0.5 * aMax * accelT * accelT,
+			cruiseDist
 		};
 	}
 
@@ -87,7 +87,7 @@
 		profile: Profile,
 		accessor: (s: ReturnType<typeof sampleProfile>) => number,
 		yMax: number,
-		yMin = 0,
+		yMin = 0
 	): string {
 		const steps = 200;
 		const pts: string[] = [];
@@ -102,9 +102,9 @@
 		return pts.join(' ');
 	}
 
-	let velCurve   = $derived(buildCurve(profile, s => s.vel, maxVel));
-	let accelCurve = $derived(buildCurve(profile, s => s.acc, maxAccel, -maxAccel));
-	let posCurve   = $derived(buildCurve(profile, s => s.pos, distance));
+	let velCurve = $derived(buildCurve(profile, (s) => s.vel, maxVel));
+	let accelCurve = $derived(buildCurve(profile, (s) => s.acc, maxAccel, -maxAccel));
+	let posCurve = $derived(buildCurve(profile, (s) => s.pos, distance));
 
 	// ── Playback dot position ───────────────────────────────────────────────
 	let dotX = $derived(() => {
@@ -139,7 +139,7 @@
 			const s = sampleProfile(simTime, profile, maxAccel);
 			position = s.pos;
 			velocity = s.vel;
-			accel    = s.acc;
+			accel = s.acc;
 			if (simTime >= profile.totalTime + 0.1) {
 				stopSim();
 			}
@@ -147,16 +147,19 @@
 	}
 
 	function stopSim() {
-		if (intervalId) { clearInterval(intervalId); intervalId = null; }
+		if (intervalId) {
+			clearInterval(intervalId);
+			intervalId = null;
+		}
 		isRunning = false;
 	}
 
 	function resetSim() {
 		stopSim();
-		simTime  = 0;
+		simTime = 0;
 		position = 0;
 		velocity = 0;
-		accel    = 0;
+		accel = 0;
 	}
 
 	onMount(() => () => stopSim());
@@ -170,7 +173,10 @@
 		<div class="title-block">
 			<span class="label">SIMULATION</span>
 			<h1>Motion Profiling</h1>
-			<p class="subtitle">Trapezoidal velocity profiles for smooth, controlled movement — the foundation of FTC autonomous routines.</p>
+			<p class="subtitle">
+				Trapezoidal velocity profiles for smooth, controlled movement — the foundation of FTC
+				autonomous routines.
+			</p>
 		</div>
 		<div class="stat-row">
 			<div class="stat">
@@ -229,44 +235,125 @@
 		<svg width={GRAPH_W} height={GRAPH_H} viewBox="0 0 {GRAPH_W} {GRAPH_H}" class="graph">
 			<defs>
 				<linearGradient id="vel-fill" x1="0" y1="0" x2="0" y2="1">
-					<stop offset="0%" stop-color="var(--accent-cyan)" stop-opacity="0.25"/>
-					<stop offset="100%" stop-color="var(--accent-cyan)" stop-opacity="0"/>
+					<stop offset="0%" stop-color="var(--accent-cyan)" stop-opacity="0.25" />
+					<stop offset="100%" stop-color="var(--accent-cyan)" stop-opacity="0" />
 				</linearGradient>
 			</defs>
 			<!-- Grid lines -->
 			{#each [0, 0.25, 0.5, 0.75, 1] as frac}
-				<line x1={PAD} y1={PAD + frac * (GRAPH_H - 2*PAD)} x2={GRAPH_W - PAD} y2={PAD + frac * (GRAPH_H - 2*PAD)}
-					stroke="var(--border)" stroke-width="1" opacity="0.5" stroke-dasharray="3 4"/>
-				<text x={PAD - 4} y={PAD + frac * (GRAPH_H - 2*PAD) + 4} text-anchor="end"
-					fill="var(--text-muted)" font-size="9" font-family="var(--font-mono)">
-					{((1-frac) * maxVel).toFixed(0)}
+				<line
+					x1={PAD}
+					y1={PAD + frac * (GRAPH_H - 2 * PAD)}
+					x2={GRAPH_W - PAD}
+					y2={PAD + frac * (GRAPH_H - 2 * PAD)}
+					stroke="var(--border)"
+					stroke-width="1"
+					opacity="0.5"
+					stroke-dasharray="3 4"
+				/>
+				<text
+					x={PAD - 4}
+					y={PAD + frac * (GRAPH_H - 2 * PAD) + 4}
+					text-anchor="end"
+					fill="var(--text-muted)"
+					font-size="9"
+					font-family="var(--font-mono)"
+				>
+					{((1 - frac) * maxVel).toFixed(0)}
 				</text>
 			{/each}
 			<!-- Fill -->
-			<path d="{velCurve} L {PAD + (GRAPH_W - 2*PAD)} {GRAPH_H - PAD} L {PAD} {GRAPH_H - PAD} Z"
-				fill="url(#vel-fill)" />
+			<path
+				d="{velCurve} L {PAD + (GRAPH_W - 2 * PAD)} {GRAPH_H - PAD} L {PAD} {GRAPH_H - PAD} Z"
+				fill="url(#vel-fill)"
+			/>
 			<!-- Curve -->
-			<path d={velCurve} fill="none" stroke="var(--accent-cyan)" stroke-width="2.5" stroke-linejoin="round"/>
+			<path
+				d={velCurve}
+				fill="none"
+				stroke="var(--accent-cyan)"
+				stroke-width="2.5"
+				stroke-linejoin="round"
+			/>
 			<!-- Phase markers -->
 			{#if profile.totalTime > 0}
-				{@const x1 = PAD + (profile.accelTime / profile.totalTime) * (GRAPH_W - 2*PAD)}
-				{@const x2 = PAD + ((profile.accelTime + profile.cruiseTime) / profile.totalTime) * (GRAPH_W - 2*PAD)}
-				<line x1={x1} y1={PAD} x2={x1} y2={GRAPH_H - PAD} stroke="var(--border)" stroke-dasharray="4 3" opacity="0.6"/>
-				<line x1={x2} y1={PAD} x2={x2} y2={GRAPH_H - PAD} stroke="var(--border)" stroke-dasharray="4 3" opacity="0.6"/>
-				<text x={PAD + 4} y={PAD + 10} fill="var(--text-muted)" font-size="8" font-family="var(--font-mono)">ACCEL</text>
+				{@const x1 = PAD + (profile.accelTime / profile.totalTime) * (GRAPH_W - 2 * PAD)}
+				{@const x2 =
+					PAD +
+					((profile.accelTime + profile.cruiseTime) / profile.totalTime) * (GRAPH_W - 2 * PAD)}
+				<line
+					{x1}
+					y1={PAD}
+					x2={x1}
+					y2={GRAPH_H - PAD}
+					stroke="var(--border)"
+					stroke-dasharray="4 3"
+					opacity="0.6"
+				/>
+				<line
+					x1={x2}
+					y1={PAD}
+					{x2}
+					y2={GRAPH_H - PAD}
+					stroke="var(--border)"
+					stroke-dasharray="4 3"
+					opacity="0.6"
+				/>
+				<text
+					x={PAD + 4}
+					y={PAD + 10}
+					fill="var(--text-muted)"
+					font-size="8"
+					font-family="var(--font-mono)">ACCEL</text
+				>
 				{#if profile.cruiseTime > 0.05}
-					<text x={(x1 + x2)/2} y={PAD + 10} text-anchor="middle" fill="var(--text-muted)" font-size="8" font-family="var(--font-mono)">CRUISE</text>
+					<text
+						x={(x1 + x2) / 2}
+						y={PAD + 10}
+						text-anchor="middle"
+						fill="var(--text-muted)"
+						font-size="8"
+						font-family="var(--font-mono)">CRUISE</text
+					>
 				{/if}
-				<text x={GRAPH_W - PAD - 4} y={PAD + 10} text-anchor="end" fill="var(--text-muted)" font-size="8" font-family="var(--font-mono)">DECEL</text>
+				<text
+					x={GRAPH_W - PAD - 4}
+					y={PAD + 10}
+					text-anchor="end"
+					fill="var(--text-muted)"
+					font-size="8"
+					font-family="var(--font-mono)">DECEL</text
+				>
 			{/if}
 			<!-- Playback dot -->
 			{#if simTime > 0 && simTime <= profile.totalTime}
-				<line x1={dotX()} y1={PAD} x2={dotX()} y2={GRAPH_H - PAD} stroke="var(--accent-cyan)" stroke-width="1" opacity="0.5"/>
-				<circle cx={dotX()} cy={velDotY()} r="5" fill="var(--accent-cyan)" style="filter: drop-shadow(0 0 5px var(--accent-cyan))"/>
+				<line
+					x1={dotX()}
+					y1={PAD}
+					x2={dotX()}
+					y2={GRAPH_H - PAD}
+					stroke="var(--accent-cyan)"
+					stroke-width="1"
+					opacity="0.5"
+				/>
+				<circle
+					cx={dotX()}
+					cy={velDotY()}
+					r="5"
+					fill="var(--accent-cyan)"
+					style="filter: drop-shadow(0 0 5px var(--accent-cyan))"
+				/>
 			{/if}
 			<!-- Axes -->
-			<line x1={PAD} y1={GRAPH_H-PAD} x2={GRAPH_W-PAD} y2={GRAPH_H-PAD} stroke="var(--border)" stroke-width="1"/>
-			<line x1={PAD} y1={PAD} x2={PAD} y2={GRAPH_H-PAD} stroke="var(--border)" stroke-width="1"/>
+			<line
+				x1={PAD}
+				y1={GRAPH_H - PAD}
+				x2={GRAPH_W - PAD}
+				y2={GRAPH_H - PAD}
+				stroke="var(--border)"
+				stroke-width="1"
+			/>
+			<line x1={PAD} y1={PAD} x2={PAD} y2={GRAPH_H - PAD} stroke="var(--border)" stroke-width="1" />
 		</svg>
 	</section>
 
@@ -276,25 +363,68 @@
 			<svg width={GRAPH_W} height={GRAPH_H} viewBox="0 0 {GRAPH_W} {GRAPH_H}" class="graph">
 				<defs>
 					<linearGradient id="pos-fill" x1="0" y1="0" x2="0" y2="1">
-						<stop offset="0%" stop-color="var(--accent-green)" stop-opacity="0.2"/>
-						<stop offset="100%" stop-color="var(--accent-green)" stop-opacity="0"/>
+						<stop offset="0%" stop-color="var(--accent-green)" stop-opacity="0.2" />
+						<stop offset="100%" stop-color="var(--accent-green)" stop-opacity="0" />
 					</linearGradient>
 				</defs>
 				{#each [0, 0.5, 1] as frac}
-					<line x1={PAD} y1={PAD + frac*(GRAPH_H-2*PAD)} x2={GRAPH_W-PAD} y2={PAD + frac*(GRAPH_H-2*PAD)}
-						stroke="var(--border)" stroke-width="1" opacity="0.4" stroke-dasharray="3 4"/>
-					<text x={PAD-4} y={PAD + frac*(GRAPH_H-2*PAD)+4} text-anchor="end"
-						fill="var(--text-muted)" font-size="9" font-family="var(--font-mono)">
-						{((1-frac)*distance).toFixed(0)}
+					<line
+						x1={PAD}
+						y1={PAD + frac * (GRAPH_H - 2 * PAD)}
+						x2={GRAPH_W - PAD}
+						y2={PAD + frac * (GRAPH_H - 2 * PAD)}
+						stroke="var(--border)"
+						stroke-width="1"
+						opacity="0.4"
+						stroke-dasharray="3 4"
+					/>
+					<text
+						x={PAD - 4}
+						y={PAD + frac * (GRAPH_H - 2 * PAD) + 4}
+						text-anchor="end"
+						fill="var(--text-muted)"
+						font-size="9"
+						font-family="var(--font-mono)"
+					>
+						{((1 - frac) * distance).toFixed(0)}
 					</text>
 				{/each}
-				<path d="{posCurve} L {GRAPH_W-PAD} {GRAPH_H-PAD} L {PAD} {GRAPH_H-PAD} Z" fill="url(#pos-fill)"/>
-				<path d={posCurve} fill="none" stroke="var(--accent-green)" stroke-width="2.5" stroke-linejoin="round"/>
+				<path
+					d="{posCurve} L {GRAPH_W - PAD} {GRAPH_H - PAD} L {PAD} {GRAPH_H - PAD} Z"
+					fill="url(#pos-fill)"
+				/>
+				<path
+					d={posCurve}
+					fill="none"
+					stroke="var(--accent-green)"
+					stroke-width="2.5"
+					stroke-linejoin="round"
+				/>
 				{#if simTime > 0 && simTime <= profile.totalTime}
-					<circle cx={dotX()} cy={posDotY()} r="5" fill="var(--accent-green)" style="filter: drop-shadow(0 0 5px var(--accent-green))"/>
+					<circle
+						cx={dotX()}
+						cy={posDotY()}
+						r="5"
+						fill="var(--accent-green)"
+						style="filter: drop-shadow(0 0 5px var(--accent-green))"
+					/>
 				{/if}
-				<line x1={PAD} y1={GRAPH_H-PAD} x2={GRAPH_W-PAD} y2={GRAPH_H-PAD} stroke="var(--border)" stroke-width="1"/>
-				<line x1={PAD} y1={PAD} x2={PAD} y2={GRAPH_H-PAD} stroke="var(--border)" stroke-width="1"/>
+				<line
+					x1={PAD}
+					y1={GRAPH_H - PAD}
+					x2={GRAPH_W - PAD}
+					y2={GRAPH_H - PAD}
+					stroke="var(--border)"
+					stroke-width="1"
+				/>
+				<line
+					x1={PAD}
+					y1={PAD}
+					x2={PAD}
+					y2={GRAPH_H - PAD}
+					stroke="var(--border)"
+					stroke-width="1"
+				/>
 			</svg>
 		</section>
 
@@ -302,20 +432,60 @@
 			<div class="card-label">ACCELERATION</div>
 			<svg width={GRAPH_W} height={GRAPH_H} viewBox="0 0 {GRAPH_W} {GRAPH_H}" class="graph">
 				{#each [-1, 0, 1] as frac}
-					{@const y = PAD + ((1 - (frac+1)/2)) * (GRAPH_H - 2*PAD)}
-					<line x1={PAD} y1={y} x2={GRAPH_W-PAD} y2={y}
-						stroke={frac === 0 ? "var(--border)" : "var(--border)"} stroke-width={frac===0?1.5:1} opacity="0.5" stroke-dasharray={frac===0?"":"3 4"}/>
-					<text x={PAD-4} y={y+4} text-anchor="end"
-						fill="var(--text-muted)" font-size="9" font-family="var(--font-mono)">
+					{@const y = PAD + (1 - (frac + 1) / 2) * (GRAPH_H - 2 * PAD)}
+					<line
+						x1={PAD}
+						y1={y}
+						x2={GRAPH_W - PAD}
+						y2={y}
+						stroke={frac === 0 ? 'var(--border)' : 'var(--border)'}
+						stroke-width={frac === 0 ? 1.5 : 1}
+						opacity="0.5"
+						stroke-dasharray={frac === 0 ? '' : '3 4'}
+					/>
+					<text
+						x={PAD - 4}
+						y={y + 4}
+						text-anchor="end"
+						fill="var(--text-muted)"
+						font-size="9"
+						font-family="var(--font-mono)"
+					>
 						{(frac * maxAccel).toFixed(0)}
 					</text>
 				{/each}
-				<path d={accelCurve} fill="none" stroke="var(--accent-yellow)" stroke-width="2.5" stroke-linejoin="round"/>
+				<path
+					d={accelCurve}
+					fill="none"
+					stroke="var(--accent-yellow)"
+					stroke-width="2.5"
+					stroke-linejoin="round"
+				/>
 				{#if simTime > 0 && simTime <= profile.totalTime}
-					<circle cx={dotX()} cy={accelDotY()} r="5" fill="var(--accent-yellow)" style="filter: drop-shadow(0 0 5px var(--accent-yellow))"/>
+					<circle
+						cx={dotX()}
+						cy={accelDotY()}
+						r="5"
+						fill="var(--accent-yellow)"
+						style="filter: drop-shadow(0 0 5px var(--accent-yellow))"
+					/>
 				{/if}
-				<line x1={PAD} y1={GRAPH_H-PAD} x2={GRAPH_W-PAD} y2={GRAPH_H-PAD} stroke="var(--border)" stroke-width="1"/>
-				<line x1={PAD} y1={PAD} x2={PAD} y2={GRAPH_H-PAD} stroke="var(--border)" stroke-width="1"/>
+				<line
+					x1={PAD}
+					y1={GRAPH_H - PAD}
+					x2={GRAPH_W - PAD}
+					y2={GRAPH_H - PAD}
+					stroke="var(--border)"
+					stroke-width="1"
+				/>
+				<line
+					x1={PAD}
+					y1={PAD}
+					x2={PAD}
+					y2={GRAPH_H - PAD}
+					stroke="var(--border)"
+					stroke-width="1"
+				/>
 			</svg>
 		</section>
 	</div>
@@ -326,15 +496,39 @@
 		<div class="controls-grid">
 			<div class="control-group">
 				<label for="dist-range">Distance <span>{distance} u</span></label>
-				<input id="dist-range" type="range" min="20" max="500" step="5" bind:value={distance} oninput={resetSim}/>
+				<input
+					id="dist-range"
+					type="range"
+					min="20"
+					max="500"
+					step="5"
+					bind:value={distance}
+					oninput={resetSim}
+				/>
 			</div>
 			<div class="control-group">
 				<label for="vel-range">Max Velocity <span>{maxVel} u/s</span></label>
-				<input id="vel-range" type="range" min="5" max="200" step="5" bind:value={maxVel} oninput={resetSim}/>
+				<input
+					id="vel-range"
+					type="range"
+					min="5"
+					max="200"
+					step="5"
+					bind:value={maxVel}
+					oninput={resetSim}
+				/>
 			</div>
 			<div class="control-group">
 				<label for="accel-range">Max Accel <span>{maxAccel} u/s²</span></label>
-				<input id="accel-range" type="range" min="5" max="150" step="5" bind:value={maxAccel} oninput={resetSim}/>
+				<input
+					id="accel-range"
+					type="range"
+					min="5"
+					max="150"
+					step="5"
+					bind:value={maxAccel}
+					oninput={resetSim}
+				/>
 			</div>
 		</div>
 		<div class="btn-row">
@@ -359,28 +553,40 @@
 				<span class="phase-dot cyan"></span>
 				<div>
 					<strong>Acceleration Phase</strong>
-					<p>Motor ramps up at max acceleration until reaching peak velocity. Duration = v_max / a_max.</p>
+					<p>
+						Motor ramps up at max acceleration until reaching peak velocity. Duration = v_max /
+						a_max.
+					</p>
 				</div>
 			</div>
 			<div class="explainer-item">
 				<span class="phase-dot green"></span>
 				<div>
 					<strong>Cruise Phase</strong>
-					<p>Constant velocity. Only present if distance is large enough — short moves produce a triangular profile.</p>
+					<p>
+						Constant velocity. Only present if distance is large enough — short moves produce a
+						triangular profile.
+					</p>
 				</div>
 			</div>
 			<div class="explainer-item">
 				<span class="phase-dot yellow"></span>
 				<div>
 					<strong>Deceleration Phase</strong>
-					<p>Mirror of acceleration — motor decelerates at the same rate to arrive at the target with zero velocity.</p>
+					<p>
+						Mirror of acceleration — motor decelerates at the same rate to arrive at the target with
+						zero velocity.
+					</p>
 				</div>
 			</div>
 			<div class="explainer-item">
 				<span class="phase-dot red"></span>
 				<div>
 					<strong>Triangular Profile</strong>
-					<p>When distance is too short to reach max velocity, the profile becomes a triangle. Peak vel = √(a_max × dist).</p>
+					<p>
+						When distance is too short to reach max velocity, the profile becomes a triangle. Peak
+						vel = √(a_max × dist).
+					</p>
 				</div>
 			</div>
 		</div>
@@ -464,7 +670,7 @@
 		border: 1px solid var(--border);
 		border-radius: var(--radius-lg);
 		padding: 1.25rem;
-		box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+		box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
 	}
 
 	.card-label {
@@ -476,7 +682,9 @@
 	}
 
 	/* Track */
-	.track-container { margin-bottom: 1rem; }
+	.track-container {
+		margin-bottom: 1rem;
+	}
 
 	.track-bg {
 		position: relative;
@@ -489,7 +697,11 @@
 
 	.track-fill {
 		height: 100%;
-		background: linear-gradient(90deg, var(--accent-cyan) 0%, color-mix(in srgb, var(--accent-cyan) 60%, var(--accent-green)) 100%);
+		background: linear-gradient(
+			90deg,
+			var(--accent-cyan) 0%,
+			color-mix(in srgb, var(--accent-cyan) 60%, var(--accent-green)) 100%
+		);
 		border-radius: 6px;
 		transition: width 0.02s linear;
 	}
@@ -508,7 +720,9 @@
 		height: 100%;
 		border-radius: 50%;
 		background: var(--accent-cyan);
-		box-shadow: 0 0 8px var(--accent-cyan), 0 0 16px var(--accent-cyan);
+		box-shadow:
+			0 0 8px var(--accent-cyan),
+			0 0 16px var(--accent-cyan);
 	}
 
 	.track-labels {
@@ -545,9 +759,15 @@
 		font-weight: 600;
 	}
 
-	.ls-value.accent-cyan   { color: var(--accent-cyan); }
-	.ls-value.accent-yellow { color: var(--accent-yellow); }
-	.ls-value.accent-green  { color: var(--accent-green); }
+	.ls-value.accent-cyan {
+		color: var(--accent-cyan);
+	}
+	.ls-value.accent-yellow {
+		color: var(--accent-yellow);
+	}
+	.ls-value.accent-green {
+		color: var(--accent-green);
+	}
 
 	/* Graphs */
 	.graph {
@@ -593,7 +813,7 @@
 		font-weight: 600;
 	}
 
-	input[type="range"] {
+	input[type='range'] {
 		width: 100%;
 		accent-color: var(--accent-cyan);
 		cursor: pointer;
@@ -620,7 +840,9 @@
 		border-color: var(--accent-cyan);
 	}
 
-	.btn-primary:hover { filter: brightness(1.15); }
+	.btn-primary:hover {
+		filter: brightness(1.15);
+	}
 
 	.btn-secondary {
 		background: var(--bg-secondary);
@@ -628,7 +850,10 @@
 		border-color: var(--border);
 	}
 
-	.btn-secondary:hover { color: var(--text-primary); background: var(--bg-card-hover); }
+	.btn-secondary:hover {
+		color: var(--text-primary);
+		background: var(--bg-card-hover);
+	}
 
 	.btn-danger {
 		background: transparent;
@@ -636,7 +861,9 @@
 		border-color: var(--accent-red, #f87171);
 	}
 
-	.btn-danger:hover { background: rgba(248,113,113,0.1); }
+	.btn-danger:hover {
+		background: rgba(248, 113, 113, 0.1);
+	}
 
 	/* Explainer */
 	.explainer-grid {
@@ -659,10 +886,21 @@
 		flex-shrink: 0;
 	}
 
-	.phase-dot.cyan   { background: var(--accent-cyan); box-shadow: 0 0 6px var(--accent-cyan); }
-	.phase-dot.green  { background: var(--accent-green); box-shadow: 0 0 6px var(--accent-green); }
-	.phase-dot.yellow { background: var(--accent-yellow); box-shadow: 0 0 6px var(--accent-yellow); }
-	.phase-dot.red    { background: var(--accent-red, #f87171); }
+	.phase-dot.cyan {
+		background: var(--accent-cyan);
+		box-shadow: 0 0 6px var(--accent-cyan);
+	}
+	.phase-dot.green {
+		background: var(--accent-green);
+		box-shadow: 0 0 6px var(--accent-green);
+	}
+	.phase-dot.yellow {
+		background: var(--accent-yellow);
+		box-shadow: 0 0 6px var(--accent-yellow);
+	}
+	.phase-dot.red {
+		background: var(--accent-red, #f87171);
+	}
 
 	.explainer-item strong {
 		display: block;
@@ -679,8 +917,14 @@
 	}
 
 	@media (max-width: 520px) {
-		.graphs-row { grid-template-columns: 1fr; }
-		.explainer-grid { grid-template-columns: 1fr; }
-		.stat-row { gap: 1rem; }
+		.graphs-row {
+			grid-template-columns: 1fr;
+		}
+		.explainer-grid {
+			grid-template-columns: 1fr;
+		}
+		.stat-row {
+			gap: 1rem;
+		}
 	}
 </style>
