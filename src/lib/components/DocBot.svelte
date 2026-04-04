@@ -44,7 +44,7 @@
 	}
 
 	async function loadBlueprintDocs() {
-		const sources = ['/posts', '/software', '/hardware', '/outreach'];
+		const sources = ['/software', '/hardware', '/outreach'];
 
 		const collected: DocItem[] = [];
 

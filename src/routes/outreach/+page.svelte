@@ -59,10 +59,8 @@
 	<meta name="description" content="All Outreach guides and prints published on Blueprint." />
 </svelte:head>
 
-<div style="display: flex; width:100%; justify-content:flex-end;">
-	<div
-		style="width:24vw; background-color:var(--sidebar-bg); border-right:2px solid var(--border); padding:1rem;"
-	>
+<div class="directory-container">
+	<div class="sidebar">
 		<h3>Blueprint Guide</h3>
 		<br />
 
@@ -156,7 +154,7 @@
 		{/if}
 	</div>
 
-	<div style="width: 100%;">
+	<div class="content-feed">
 		<section class="blog-header">
 			<div class="container">
 				<div class="animate-fade-up">
@@ -203,6 +201,35 @@
 </div>
 
 <style>
+	.directory-container {
+		display: flex;
+		flex-direction: column;
+		width: 100%;
+	}
+
+	.sidebar {
+		display: none;
+	}
+
+	.content-feed {
+		width: 100%;
+	}
+
+	@media (min-width: 860px) {
+		.directory-container {
+			flex-direction: row;
+			justify-content: flex-end;
+		}
+
+		.sidebar {
+			display: block;
+			width: 24vw;
+			background-color: var(--sidebar-bg);
+			border-right: 2px solid var(--border);
+			padding: 1rem;
+		}
+	}
+
 	.blog-header {
 		padding: 4rem 0 1.5rem;
 		background: var(--gradient-hero);

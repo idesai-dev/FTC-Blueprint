@@ -2,16 +2,23 @@
 	import { page } from '$app/stores';
 	import ThemeToggle from './ThemeToggle.svelte';
 	import { cursorState, toggleCursor } from '$lib/stores/cursor.svelte';
-	import { devModeState, setDevMode, initDevMode } from '$lib/stores/devMode.svelte';
+	import { devModeState, setDevMode, initDevMode, setPreviewMode } from '$lib/stores/devMode.svelte';
 	import { goto } from '$app/navigation';
 	import toast from 'svelte-5-french-toast';
 	import { onMount } from 'svelte';
 
+	let isSandboxChild = $state(false);
+
 	onMount(() => {
 		initDevMode();
+		isSandboxChild = window.location.search.includes('sandbox=true');
+		
 		window.addEventListener('clearHeaderSearch', () => {
 			searchQuery = '';
 		});
+		if (typeof navigator !== 'undefined' && /Win|Linux/.test(navigator.userAgent)) {
+			isMac = false;
+		}
 	});
 
 	function handleHeaderInput(e: Event) {
@@ -32,6 +39,7 @@
 	}
 
 	let headerSearchInput = $state<HTMLInputElement | null>(null);
+	let isMac = $state(true);
 
 	function handleWindowKeydown(e: KeyboardEvent) {
 		if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
@@ -66,8 +74,8 @@
 				{ href: '/simulators/mecanum', label: 'Mecanum Simulator' }
 			]
 		},
-		{ href: '/hardware', label: 'Hardware', devOnly: true },
-		{ href: '/outreach', label: 'Outreach', devOnly: false },
+		{ href: '/hardware', label: 'Hardware'},
+		{ href: '/outreach', label: 'Outreach', devOnly: true },
 		{ href: '/suggest', label: 'Suggest' },
 		{ href: '/about', label: 'About' }
 	];
@@ -95,8 +103,9 @@
 		simulatorsOpen = false;
 	}
 
-	function handleSearch(e: KeyboardEvent) {
-		if (e.key === 'Enter' && searchQuery.trim()) {
+	function handleSearchSubmit(e: Event) {
+		e.preventDefault();
+		if (searchQuery.trim()) {
 			const q = searchQuery.trim();
 			if (q === '/dev3432') {
 				setDevMode(true);
@@ -141,8 +150,8 @@
 					<div
 						class="nav-dropdown"
 						class:open={simulatorsOpen}
-						onmouseenter={() => (simulatorsOpen = true)}
-						onmouseleave={() => (simulatorsOpen = false)}
+						onmouseenter={() => { if (typeof window !== 'undefined' && window.innerWidth > 1024) simulatorsOpen = true; }}
+						onmouseleave={() => { if (typeof window !== 'undefined' && window.innerWidth > 1024) simulatorsOpen = false; }}
 					>
 						<button
 							type="button"
@@ -186,7 +195,7 @@
 		</nav>
 
 		<div class="actions">
-			<div class="header-search-wrap">
+			<form class="header-search-wrap" onsubmit={handleSearchSubmit}>
 				<svg
 					class="search-icon"
 					width="16"
@@ -202,20 +211,39 @@
 				</svg>
 				<input
 					bind:this={headerSearchInput}
-					type="text"
+					type="search"
 					placeholder="Global Search..."
 					bind:value={searchQuery}
 					oninput={handleHeaderInput}
-					onkeydown={handleSearch}
 					onfocus={handleHeaderFocus}
 					class="header-search-input"
 				/>
 				{#if devModeState.active}
 					<span class="dev-badge">DEV</span>
 				{:else}
-					<span class="search-cmd">⌘K</span>
+					<span class="search-cmd">{isMac ? '⌘K' : 'Ctrl K'}</span>
 				{/if}
-			</div>
+			</form>
+
+			<a href="/search" class="action-btn mobile-search-btn" aria-label="Search" title="Search">
+				<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+					<circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" />
+				</svg>
+			</a>
+
+			{#if devModeState.active && !isSandboxChild}
+				<div class="viewport-toggle">
+					<button class="view-btn" class:active={devModeState.previewMode === 'desktop'} onclick={() => setPreviewMode('desktop')} title="Desktop View">
+						<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+					</button>
+					<button class="view-btn" class:active={devModeState.previewMode === 'tablet'} onclick={() => setPreviewMode('tablet')} title="Tablet View">
+						<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+					</button>
+					<button class="view-btn" class:active={devModeState.previewMode === 'mobile'} onclick={() => setPreviewMode('mobile')} title="Mobile View">
+						<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+					</button>
+				</div>
+			{/if}
 
 			<button
 				class="action-btn cursor-toggle"
@@ -457,6 +485,40 @@
 		align-items: center;
 	}
 
+	.viewport-toggle {
+		display: flex;
+		align-items: center;
+		background: var(--bg-hover);
+		border-radius: var(--radius-md);
+		border: 1px solid var(--border-subtle);
+		padding: 0.15rem;
+		gap: 0.1rem;
+	}
+	
+	.view-btn {
+		background: transparent;
+		border: none;
+		border-radius: var(--radius-sm);
+		color: var(--text-muted);
+		width: 30px;
+		height: 30px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		cursor: pointer;
+		transition: all var(--transition-fast);
+	}
+	
+	.view-btn:hover {
+		color: var(--text-secondary);
+	}
+	
+	.view-btn.active {
+		background: var(--bg-card);
+		color: var(--text-primary);
+		box-shadow: 0 2px 4px rgba(0,0,0,0.06);
+	}
+
 	.header-search-wrap .search-icon {
 		position: absolute;
 		left: 0.75rem;
@@ -528,6 +590,10 @@
 		transition: all var(--transition-fast);
 	}
 
+	.mobile-search-btn {
+		display: none !important;
+	}
+
 	.action-btn:hover {
 		border-color: var(--text-primary);
 		color: var(--text-primary);
@@ -584,15 +650,23 @@
 		backdrop-filter: blur(4px);
 	}
 
-	@media (max-width: 640px) {
+	@media (max-width: 1024px) {
 		.menu-btn {
 			display: flex;
+		}
+
+		.cursor-toggle {
+			display: none;
+		}
+
+		.header-search-input {
+			width: 320px;
 		}
 
 		.nav {
 			position: fixed;
 			top: var(--header-height);
-			right: 0;
+			left: 0;
 			z-index: 100;
 			flex-direction: column;
 			align-items: flex-start;
@@ -600,10 +674,10 @@
 			width: 220px;
 			padding: 1rem;
 			background: var(--bg-secondary);
-			border-left: 1px solid var(--border);
+			border-right: 1px solid var(--border);
 			border-bottom: 1px solid var(--border);
-			border-radius: 0 0 0 var(--radius-lg);
-			transform: translateX(100%);
+			border-radius: 0 0 var(--radius-lg) 0;
+			transform: translateX(-100%);
 			transition: transform var(--transition-base);
 		}
 
@@ -635,13 +709,29 @@
 			border: none;
 			box-shadow: none;
 			background: transparent;
+			transform: none;
+			/* hide by default */
+			display: none;
+		}
+
+		.nav-dropdown.open .dropdown-menu {
+			display: block;
 			opacity: 1;
 			visibility: visible;
-			transform: none;
 		}
 
 		.dropdown-link {
 			width: 100%;
+		}
+	}
+
+	@media (max-width: 640px) {
+		.header-search-wrap {
+			display: none;
+		}
+
+		.mobile-search-btn {
+			display: flex !important;
 		}
 	}
 </style>

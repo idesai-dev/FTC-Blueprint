@@ -100,6 +100,7 @@ html.light {
 html {
 	scroll-behavior: smooth;
 	font-size: 16px;
+	overflow-x: hidden;
 }
 
 body {
@@ -108,11 +109,29 @@ body {
 	color: var(--text-body);
 	line-height: 1.7;
 	min-height: 100vh;
+	width: 100%;
+	overflow-x: hidden;
 	transition:
 		background-color var(--transition-slow),
 		color var(--transition-slow);
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
+}
+
+/* Base responsive constraints */
+img, video, svg, iframe {
+	max-width: 100%;
+	height: auto;
+}
+
+/* Prevent text overflow issues */
+p, h1, h2, h3, h4, h5, h6, li, a {
+	overflow-wrap: break-word;
+	word-wrap: break-word;
+}
+
+code {
+	word-break: break-word;
 }
 
 /* ---------- Typography ---------- */
