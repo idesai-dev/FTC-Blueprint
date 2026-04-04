@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { slide } from 'svelte/transition';
+	import { devModeState } from '$lib/stores/devMode.svelte';
 
 	let {
 		activeTags = $bindable(),
@@ -14,6 +15,7 @@
 	let isExpanded = $state(false);
 	let difficulty = $state('all');
 	let videoTutorial = $state('all');
+	let completion = $state('all');
 
 	function toggleFilter() {
 		isExpanded = !isExpanded;
@@ -25,6 +27,14 @@
 		if (difficulty !== 'all') tags.push(difficulty);
 		if (videoTutorial === 'yes') tags.push('video');
 		else if (videoTutorial === 'no') tags.push('novideo');
+		
+		if (devModeState.active && completion !== 'all') {
+			if (completion === 'completed') tags.push('completed');
+			else if (completion === 'coming_soon') tags.push('coming soon');
+		} else if (!devModeState.active && completion !== 'all') {
+			completion = 'all';
+		}
+		
 		activeTags = tags;
 	});
 </script>
@@ -117,6 +127,29 @@
 					<polyline points="6 9 12 15 18 9"></polyline>
 				</svg>
 			</div>
+
+			{#if devModeState.active}
+				<div class="select-wrapper">
+					<select bind:value={completion} aria-label="Completion Status">
+						<option value="all">Status: All</option>
+						<option value="completed">Completed</option>
+						<option value="coming_soon">Coming Soon</option>
+					</select>
+					<svg
+						class="dropdown-icon"
+						width="12"
+						height="12"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2.5"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+					>
+						<polyline points="6 9 12 15 18 9"></polyline>
+					</svg>
+				</div>
+			{/if}
 		</div>
 	{/if}
 </div>

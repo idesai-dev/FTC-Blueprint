@@ -44,9 +44,16 @@
 		}
 	}
 
-	const navLinks = [
+	type NavLink = {
+		label: string;
+		href?: string;
+		devOnly?: boolean;
+		children?: NavLink[];
+	};
+
+	const navLinks: NavLink[] = [
 		{ href: '/', label: 'Home' },
-		{ href: '/complete-rookie-guide', label: 'Rookie Guide' },
+		{ href: '/complete-rookie-guide', label: 'Rookie Guide', devOnly: true },
 		{ href: '/software', label: 'Software' },
 		{
 			label: 'Simulators',
@@ -59,11 +66,25 @@
 				{ href: '/simulators/mecanum', label: 'Mecanum Simulator' }
 			]
 		},
-		{ href: '/hardware', label: 'Hardware' },
-		{ href: '/outreach', label: 'Outreach' },
+		{ href: '/hardware', label: 'Hardware', devOnly: true },
+		{ href: '/outreach', label: 'Outreach', devOnly: false },
 		{ href: '/suggest', label: 'Suggest' },
 		{ href: '/about', label: 'About' }
 	];
+
+	const visibleNavLinks = $derived(
+		navLinks
+			.filter((item) => !item.devOnly || devModeState.active)
+			.map((item) => {
+				if (item.children) {
+					return {
+						...item,
+						children: item.children.filter((child) => !child.devOnly || devModeState.active)
+					};
+				}
+				return item;
+			})
+	);
 
 	let menuOpen = $state(false);
 	let searchQuery = $state('');
@@ -114,7 +135,7 @@
 		</a>
 
 		<nav class="nav" class:open={menuOpen} aria-label="Main navigation">
-			{#each navLinks as item}
+			{#each visibleNavLinks as item}
 				{#if item.children}
 					<!-- svelte-ignore a11y_no_static_element_interactions -->
 					<div
