@@ -9,6 +9,10 @@ on:
 jobs:
   build-deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
 
     steps:
       - name: Checkout
@@ -26,8 +30,6 @@ jobs:
       - name: Build
         run: npm run build
         env:
-          VITE_GEMINI_API_KEY: ${{ secrets.VITE_GEMINI_API_KEY }}
-          VITE_GITHUB_TOKEN: ${{ secrets.VITE_GITHUB_TOKEN }}
           VITE_GITHUB_OWNER: idesai-dev
           VITE_GITHUB_REPO: FTC-Blueprint
 

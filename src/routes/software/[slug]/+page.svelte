@@ -6,8 +6,11 @@
 	import SectionSidebar from '$lib/components/sectionSidebar.svelte';
 	import SoftwareLeftSidebar from '$lib/components/SoftwareLeftSidebar.svelte';
 	import MarkdownEditor from '$lib/components/MarkdownEditor.svelte';
+	import { devModeState } from '$lib/stores/devMode.svelte';
 	import { page } from '$app/stores';
 	import { onMount, tick } from 'svelte';
+
+	let editor: ReturnType<typeof MarkdownEditor> | null = null;
 
 	let { data }: { data: { content: Component; meta: PostMeta } } = $props();
 	const slug = $derived($page.params.slug);
@@ -86,11 +89,16 @@
 				</p>
 			{/if}
 
-			{#if data.meta.tags && data.meta.tags.filter((t) => t.toLowerCase() !== 'completed').length > 0}
+			{#if data.meta.tags && data.meta.tags.filter((t) => t.toLowerCase() !== 'completed').length > 0 || devModeState.active}
 				<div class="post-tags animate-fade-up" style="animation-delay:240ms">
-					{#each data.meta.tags.filter((t) => t.toLowerCase() !== 'completed') as tag, i}
+					{#each data.meta.tags?.filter((t) => t.toLowerCase() !== 'completed') ?? [] as tag, i}
 						<span class="tag {tagColor(tag)}">{tag}</span>
 					{/each}
+					{#if devModeState.active}
+						<button class="tag-add-circle" onclick={() => editor?.open(true)} title="Edit tags">
+							+
+						</button>
+					{/if}
 				</div>
 			{/if}
 
@@ -138,7 +146,7 @@
 	</div>
 </article>
 
-<MarkdownEditor slug={$page.params.slug ?? ''} section="software" />
+<MarkdownEditor bind:this={editor} slug={$page.params.slug ?? ''} section="software" />
 
 <style>
 	/* Progress Bar */
@@ -244,7 +252,17 @@
 		display: flex;
 		flex-wrap: wrap;
 		gap: 0.4rem;
+		align-items: center;
 	}
+
+	.tag-add-circle {
+		display: inline-flex; align-items: center; justify-content: center;
+		width: 22px; height: 22px; border-radius: 50%;
+		background: rgba(116, 215, 237, 0.1); border: 1px dashed rgba(116, 215, 237, 0.5);
+		color: var(--accent-cyan); font-size: 1rem; font-weight: normal; font-family: var(--font-sans);
+		cursor: pointer; transition: all 0.2s; padding-bottom: 2px;
+	}
+	.tag-add-circle:hover { background: rgba(116, 215, 237, 0.2); border-color: var(--accent-cyan); transform: scale(1.05); }
 
 	.title-rule {
 		height: 2px;
