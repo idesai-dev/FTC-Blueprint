@@ -106,9 +106,6 @@
 <!-- Hero -->
 <section class="hero">
 	<div class="hero-bg" aria-hidden="true">
-		<div class="orb orb-1"></div>
-		<div class="orb orb-2"></div>
-		<div class="grid-overlay"></div>
 
 		<!-- Hexagon decoration: left half peeks from right edge -->
 		<div class="hex-wrap" aria-hidden="true">
@@ -196,17 +193,17 @@
 		position: fixed;
 		top: 0;
 		left: 0;
-		width: 480px;
-		height: 480px;
-		margin-left: -240px;
-		margin-top: -240px;
+		width: 240px;
+		height: 240px;
+		margin-left: -120px;
+		margin-top: -120px;
 		border-radius: 50%;
 		pointer-events: none;
 		z-index: 9999;
 		background: radial-gradient(
 			circle,
-			rgba(116, 215, 237, 0.055) 0%,
-			rgba(126, 255, 160, 0.025) 45%,
+			rgba(116, 215, 237, 0.05) 0%,
+			rgba(126, 255, 160, 0.02) 45%,
 			transparent 70%
 		);
 		will-change: transform;
@@ -225,46 +222,6 @@
 		position: absolute;
 		inset: 0;
 		pointer-events: none;
-	}
-
-	.orb {
-		position: absolute;
-		border-radius: 50%;
-		filter: blur(80px);
-		animation: pulse-glow 6s ease-in-out infinite;
-	}
-
-	.orb-1 {
-		width: 500px;
-		height: 500px;
-		background: radial-gradient(circle, rgba(116, 215, 237, 0.12) 0%, transparent 70%);
-		top: -100px;
-		right: -100px;
-	}
-
-	.orb-2 {
-		width: 400px;
-		height: 400px;
-		background: radial-gradient(circle, rgba(126, 255, 160, 0.08) 0%, transparent 70%);
-		bottom: -50px;
-		left: 5%;
-		animation-delay: 3s;
-	}
-
-	.grid-overlay {
-		position: absolute;
-		inset: 0;
-		background-image:
-			linear-gradient(rgba(116, 215, 237, 0.03) 1px, transparent 1px),
-			linear-gradient(90deg, rgba(116, 215, 237, 0.03) 1px, transparent 1px);
-		background-size: 60px 60px;
-		mask-image: linear-gradient(
-			to bottom,
-			transparent 0%,
-			rgba(0, 0, 0, 0.5) 20%,
-			rgba(0, 0, 0, 0.5) 80%,
-			transparent 100%
-		);
 	}
 
 	/* Hexagon decoration */
