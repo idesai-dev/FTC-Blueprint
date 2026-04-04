@@ -1,42 +1,47 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	let isSubmitting = $state(false);
+	let submitText = $state('Send Suggestion');
 
-	onMount(() => {
-		const form = document.getElementById('form') as HTMLFormElement | null;
-		if (!form) return;
+	async function handleSubmit(e: Event) {
+		e.preventDefault();
+		if (isSubmitting) return;
 
-		form.addEventListener('submit', async (e: SubmitEvent) => {
-			e.preventDefault();
+		isSubmitting = true;
+		submitText = 'Sending...';
 
-			const formData = new FormData(form);
-			const object = Object.fromEntries(formData.entries());
-			const json = JSON.stringify(object);
+		const form = e.target as HTMLFormElement;
+		const formData = new FormData(form);
+		const object = Object.fromEntries(formData.entries());
+		const json = JSON.stringify(object);
 
-			try {
-				const response = await fetch('https://api.web3forms.com/submit', {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json',
-						Accept: 'application/json'
-					},
-					body: json
-				});
+		try {
+			const response = await fetch('https://api.web3forms.com/submit', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					Accept: 'application/json'
+				},
+				body: json
+			});
 
-				await response.json();
+			await response.json();
 
-				if (response.ok) {
-					window.location.href =
-						'https://ftcblueprint.com/success?msg=Suggestion%20Sent%21&from=suggest';
-				} else {
-					window.location.href = `https://ftcblueprint.com/failure?msg=Suggestion%20Failed%21&from=suggest&code=${response.status}`;
-				}
-			} catch (error) {
-				console.error(error);
-				window.location.href =
-					'https://ftcblueprint.com/failure?msg=Suggestion%20Failed%21&from=suggest&code=network';
+			if (response.ok) {
+				submitText = 'Sent!';
+				form.reset();
+			} else {
+				submitText = 'Error!';
 			}
-		});
-	});
+		} catch (error) {
+			console.error(error);
+			submitText = 'Error!';
+		}
+
+		setTimeout(() => {
+			submitText = 'Send Suggestion';
+			isSubmitting = false;
+		}, 3000);
+	}
 </script>
 
 <div class="suggestion-container animate-fade-up">
@@ -45,7 +50,7 @@
 		<p>Have an idea for a guide or a tip? Let us know!</p>
 	</div>
 
-	<form method="POST" class="suggestion-form" id="form">
+	<form method="POST" class="suggestion-form" id="form" onsubmit={handleSubmit}>
 		<input type="hidden" name="access_key" value="75203397-0013-44ac-bc8b-b7477ce9a056" />
 
 		<div class="form-group">
@@ -70,8 +75,8 @@
 			></textarea>
 		</div>
 
-		<button type="submit" class="submit-btn" id="submitBtn">
-			<span style="color: var(--bg);">Send Suggestion</span>
+		<button type="submit" class="submit-btn" id="submitBtn" disabled={isSubmitting}>
+			<span style="color: var(--bg);">{submitText}</span>
 			<svg
 				width="16"
 				height="16"
