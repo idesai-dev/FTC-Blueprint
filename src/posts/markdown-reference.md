@@ -1,13 +1,13 @@
 ---
-title: Writing in Markdown — A Quick Reference
+title: Writing in Markdown - A Quick Reference
 date: 2026-03-20
-description: A practical guide to markdown syntax — headings, code blocks, tables, blockquotes, and more.
+description: A practical guide to markdown syntax â headings, code blocks, tables, blockquotes, and more.
 tags: [software, beginner]
 author: Blueprint
 published: true
 ---
 
-# Writing in Markdown — A Quick Reference
+# Writing in Markdown - A Quick Reference
 
 Markdown is plain text that renders as formatted HTML. It's fast to write, beginner to read, and version-control friendly. Here's a reference for everything you need.
 
@@ -17,9 +17,9 @@ Headers consist of information that is not shown to the public user, but instead
 
 ```markdown
 ---
-title: Writing in Markdown — A Quick Reference
+title: Writing in Markdown â A Quick Reference
 date: 2026-03-20
-description: A practical guide to markdown syntax — headings, code blocks, tables, blockquotes, and more.
+description: A practical guide to markdown syntax â headings, code blocks, tables, blockquotes, and more.
 tags: [markdown, beginner, formatting]
 author: Blueprint
 published: true
@@ -29,13 +29,13 @@ published: true
 ## Headings
 
 ```markdown
-# H1 — Page title
+# H1 â Page title
 
-## H2 — Section
+## H2 â Section
 
-### H3 — Subsection
+### H3 â Subsection
 
-#### H4 — Detail
+#### H4 â Detail
 ```
 
 ## Text Formatting
@@ -121,13 +121,13 @@ def fibonacci(n):
 
 ```code
 > "The best writing is rewriting."
-> — E.B. White
+> â E.B. White
 ```
 
 which renders as:
 
 > "The best writing is rewriting."
-> — E.B. White
+> â E.B. White
 
 Blockquotes are useful for callouts, quotes, or emphasis.
 
