@@ -3,7 +3,7 @@ title: Android Studio Setup
 date: 2026-03-28
 description: Complete set up guide for Android Studio on both Windows and Mac.
 tags: [software, beginner, completed, rookie, video]
-author: Ishaan Desai
+author: Ishaan Desaie
 published: true
 ---
 
