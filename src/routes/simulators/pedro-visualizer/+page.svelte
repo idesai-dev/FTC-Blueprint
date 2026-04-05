@@ -163,6 +163,8 @@
 
 	.visualizer-wrap {
 		margin-bottom: 2rem;
+		margin-left: -4rem;
+		margin-right: -4rem;
 	}
 
 	.iframe-shell {
@@ -401,6 +403,11 @@
 	}
 
 	@media (max-width: 820px) {
+		.visualizer-wrap {
+			margin-left: -1.5rem;
+			margin-right: -1.5rem;
+		}
+
 		.pedro-iframe {
 			height: 78vh;
 			min-height: 620px;
@@ -408,6 +415,11 @@
 	}
 
 	@media (max-width: 520px) {
+		.visualizer-wrap {
+			margin-left: -1rem;
+			margin-right: -1rem;
+		}
+
 		.iframe-topbar {
 			flex-direction: column;
 			align-items: flex-start;
