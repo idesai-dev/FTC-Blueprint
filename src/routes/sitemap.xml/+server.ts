@@ -15,6 +15,7 @@ export async function GET() {
 		'/outreach',
 		'/about',
 		'/suggest',
+		'/editor',
 		'/simulators/pid',
 		'/simulators/feedforward',
 		'/simulators/motionprofile',

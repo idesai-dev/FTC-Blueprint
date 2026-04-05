@@ -118,6 +118,7 @@
 		},
 		{ href: '/hardware', label: 'Hardware'},
 		{ href: '/outreach', label: 'Outreach' },
+		{ href: '/editor', label: 'Editor', devOnly: true },
 		{ href: '/suggest', label: 'Suggest' },
 		{ href: '/about', label: 'About' }
 	];
