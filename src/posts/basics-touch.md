@@ -22,27 +22,30 @@ The touch sensor is a simple digital switch. It returns a boolean value: either 
 
 <br>
 
-## 1. Initialization
+To use a touch sensor as a digital input, use the `DigitalChannel` class.
 
 ```java
-TouchSensor touchSensor = hardwareMap.get(TouchSensor.class, "touchSensor");
+import com.qualcomm.robotcore.hardware.DigitalChannel;
+
+DigitalChannel touchSensor = hardwareMap.get(DigitalChannel.class, "touchSensor");
+// Important: Set the mode to INPUT
+touchSensor.setMode(DigitalChannel.Mode.INPUT);
 ```
 
 <br>
 
-## 2. Basic Usage
-
-The most common method is `isPressed()`.
+The `getState()` method returns the current electrical state. For most FTC sensors (like the REV Touch Sensor), **`false`** means the sensor is pressed (grounded), and **`true`** means it is open.
 
 ```java
-if (touchSensor.isPressed()) {
+if (touchSensor.getState() == false) {
     telemetry.addData("Touch", "IS PRESSED");
-    // e.g., stop a motor
-    liftMotor.setPower(0);
 } else {
     telemetry.addData("Touch", "Not Pressed");
 }
 ```
+
+> [!TIP]
+> Use `!touchSensor.getState()` to get a "logic high" when the button is pressed.
 
 <br>
 
@@ -51,7 +54,7 @@ If you have a lift or an arm, you can place a touch sensor at the extreme end of
 2. **Reset the encoder** to zero to ensure your software stays calibrated.
 
 ```java
-if (limitSwitch.isPressed()) {
+if (limitSwitch.getState() == false) {
     // Stop and reset encoder once it hits the bottom
     slideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     slideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -83,26 +86,28 @@ lastState = currentState;
 
 <br>
 
-This example shows how to use the Touch Sensor as a limit switch for a simple motor-based lift, ensuring it doesn't crash into the bottom.
+This example shows how to use a `DigitalChannel` as a limit switch for a simple motor-based lift.
 
 ```java
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.TouchSensor;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-@TeleOp(name = "Touch Sensor Limit Example", group = "Sensor")
+@TeleOp(name = "Digital Limit Switch Example", group = "Sensor")
 public class TouchSensorExample extends LinearOpMode {
 
-    private TouchSensor limitSwitch;
+    private DigitalChannel limitSwitch;
     private DcMotor liftMotor;
 
     @Override
     public void runOpMode() {
         // 1. Initialize hardware
-        limitSwitch = hardwareMap.get(TouchSensor.class, "touchSensor");
+        limitSwitch = hardwareMap.get(DigitalChannel.class, "touchSensor");
+        limitSwitch.setMode(DigitalChannel.Mode.INPUT);
+        
         liftMotor = hardwareMap.get(DcMotor.class, "liftMotor");
 
         telemetry.addData("Status", "Initialized");
@@ -115,14 +120,13 @@ public class TouchSensorExample extends LinearOpMode {
             double liftPower = -gamepad1.left_stick_y;
 
             // 3. Limit Switch Logic:
-            // If the sensor is pressed AND we are trying to go DOWN (negative power)
-            if (limitSwitch.isPressed() && liftPower < 0) {
+            // State is 'false' when the sensor is pressed
+            boolean isPressed = !limitSwitch.getState(); 
+
+            if (isPressed && liftPower < 0) {
                  liftMotor.setPower(0);
-                 
-                 // Optional: Reset encoder when we hit the limit
                  liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                  liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                 
                  telemetry.addData("Limit", "LIFT AT BOTTOM");
             } else {
                  liftMotor.setPower(liftPower);
@@ -131,7 +135,7 @@ public class TouchSensorExample extends LinearOpMode {
 
             // 4. Telemetry output
             telemetry.addData("Lift Power", "%.2f", liftPower);
-            telemetry.addData("Switch Pressed", limitSwitch.isPressed());
+            telemetry.addData("Switch Pressed", isPressed);
             telemetry.update();
         }
     }

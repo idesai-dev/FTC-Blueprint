@@ -22,28 +22,25 @@ The color sensor (most common being the REV Color/Range Sensor) allows your robo
 
 <br>
 
-## 1. Initialization
-
-Add the color sensor to your hardware map.
+Add the sensor to your hardware map using the `NormalizedColorSensor` class. This interface is recommended because it provides consistent values (0.0 to 1.0) regardless of the sensor's internal resolution.
 
 ```java
-ColorSensor colorSensor = hardwareMap.get(ColorSensor.class, "colorSensor");
+import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
+import com.qualcomm.robotcore.hardware.NormalizedRGBA;
+
+NormalizedColorSensor colorSensor = hardwareMap.get(NormalizedColorSensor.class, "colorSensor");
 ```
 
 <br>
 
-## 2. Reading Raw RGB Values
-
-The simplest way to use the sensor is to read the individual Red, Green, and Blue channels.
+Read the colors into a `NormalizedRGBA` object.
 
 ```java
-int red = colorSensor.red();
-int green = colorSensor.green();
-int blue = colorSensor.blue();
+NormalizedRGBA colors = colorSensor.getNormalizedColors();
 
-telemetry.addData("Red", red);
-telemetry.addData("Green", green);
-telemetry.addData("Blue", blue);
+telemetry.addData("Red", "%.3f", colors.red);
+telemetry.addData("Green", "%.3f", colors.green);
+telemetry.addData("Blue", "%.3f", colors.blue);
 ```
 
 <br>
@@ -63,14 +60,11 @@ if (red > blue && red > green) {
 <br>
 
 For more reliable color detection, it's recommended to convert your RGB values into **HSV** (Hue, Saturation, Value).
-- **Hue:** Represents the "color" itself (0-360 degrees). It is much less sensitive to brightness than raw RGB.
-- **Saturation:** How "intense" the color is.
-- **Value:** The brightness of the color.
 
 ```java
 float hsvValues[] = {0F, 0F, 0F};
-// Convert RGB to HSV. The * 8 is a common scaling factor for REV sensors.
-Color.RGBToHSV(colorSensor.red() * 8, colorSensor.green() * 8, colorSensor.blue() * 8, hsvValues);
+NormalizedRGBA colors = colorSensor.getNormalizedColors();
+Color.colorToHSV(colors.toColor(), hsvValues);
 
 telemetry.addData("Hue", hsvValues[0]);
 ```
@@ -95,28 +89,25 @@ telemetry.addData("Distance (cm)", "%.2f", distance);
 
 <br>
 
-This example shows how to use the Color Sensor to detect if a "Red" vs "Blue" object is in front of the robot using HSV for better reliability.
-
 ```java
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
+import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import android.graphics.Color;
 
-@TeleOp(name = "Color Sensor Example", group = "Sensor")
+@TeleOp(name = "Normalized Color Sensor Example", group = "Sensor")
 public class ColorSensorExample extends LinearOpMode {
 
-    private ColorSensor colorSensor;
+    private NormalizedColorSensor colorSensor;
 
     @Override
     public void runOpMode() {
-        // 1. Initialize hardware
-        // Note: We name it 'colorSensor' in the hardware map
-        colorSensor = hardwareMap.get(ColorSensor.class, "colorSensor");
+        colorSensor = hardwareMap.get(NormalizedColorSensor.class, "colorSensor");
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -124,31 +115,29 @@ public class ColorSensorExample extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
-            // 2. Read values and convert to HSV
-            float hsvValues[] = {0F, 0F, 0F};
-            Color.RGBToHSV(colorSensor.red() * 8, colorSensor.green() * 8, colorSensor.blue() * 8, hsvValues);
+            // 1. Get normalized colors (0.0 to 1.0)
+            NormalizedRGBA colors = colorSensor.getNormalizedColors();
             
-            // Also read distance!
+            // 2. Convert to HSV
+            float hsvValues[] = {0F, 0F, 0F};
+            Color.colorToHSV(colors.toColor(), hsvValues);
+            
+            // 3. Read distance
             double dist = ((DistanceSensor) colorSensor).getDistance(DistanceUnit.CM);
 
-            // 3. Logic for detection (using Hue)
+            // 4. Detection Logic
             String detected = "NONE";
-            
-            // Only detect if something is close enough (e.g. < 5cm)
             if (dist < 5.0) {
                 if (hsvValues[0] < 30 || hsvValues[0] > 330) {
                     detected = "RED";
                 } else if (hsvValues[0] > 200 && hsvValues[0] < 260) {
                     detected = "BLUE";
-                } else if (hsvValues[0] > 40 && hsvValues[0] < 80) {
-                    detected = "YELLOW";
                 }
             }
 
-            // 4. Telemetry output
-            telemetry.addData("Object Detected", detected);
-            telemetry.addData("Distance (cm)", "%.1f", dist);
+            telemetry.addData("Object", detected);
             telemetry.addData("Hue", "%.1f", hsvValues[0]);
+            telemetry.addData("Distance (cm)", "%.1f", dist);
             telemetry.update();
         }
     }
