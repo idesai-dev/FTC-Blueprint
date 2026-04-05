@@ -144,7 +144,7 @@
 
 	<div class="container hero-content animate-fade-up">
 		<div class="eyebrow">
-			<span class="tag tag--cyan">Est. 2026</span>
+			<span class="tag tag--cyan">{__APP_VERSION__}</span>
 		</div>
 		<h1>
 			FTC<br />

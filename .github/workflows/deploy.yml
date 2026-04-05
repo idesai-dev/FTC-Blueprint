@@ -41,8 +41,16 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Set and Output Version
+        run: |
+          VERSION="v0.2.${{ github.run_number }}"
+          echo "VITE_APP_VERSION=$VERSION" >> $GITHUB_ENV
+          echo "🚀 Deploying version: $VERSION"
+
       - name: Build
         run: npm run build
+        env:
+          VITE_APP_VERSION: v0.2.${{ github.run_number }}
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
