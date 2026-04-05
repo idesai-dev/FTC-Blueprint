@@ -17,7 +17,8 @@ export default defineConfig({
 			hour12: true, 
 			month: 'short', 
 			day: 'numeric', 
-			year: 'numeric' 
+			year: 'numeric',
+			timeZone: 'America/Chicago'
 		}))
 	}
 });
