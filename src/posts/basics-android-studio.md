@@ -3,11 +3,13 @@ title: Android Studio Setup
 date: 2026-03-28
 description: Complete set up guide for Android Studio on both Windows and Mac.
 tags: [software, beginner, completed, rookie, video]
-author: Ishaan Desaie
+author: Ishaan Desaiiii
 published: true
 ---
 
 This guide will walk you through setting up Android Studio for your FTC Robot Controller projects. It is essential to get your development environment properly installed and configured to begin writing and deploying Opmode code.
+
+![Screenshot 2026-03-28 at 10.42.29 PM.png](/images/posts/basics-android-studio/1775351941063_screenshot_2026-03-28_at_10.42.29_pm.png)
 
 ## Windows Setup
 
