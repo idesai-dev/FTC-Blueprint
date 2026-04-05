@@ -7,7 +7,7 @@
 		"dev": "vite dev",
 		"build": "vite build",
 		"p": "vite preview",
-		"deploy": "npm run build && echo \"✅ Build successful. Push to main to trigger GitHub Actions deployment.\"",
+		"deploy": "npm run build && echo \"✅ Build successful (v$(node -p \"require('./package.json').version\")). Push to main to trigger GitHub Actions deployment.\"",
 		"prepare": "svelte-kit sync || echo ''",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
