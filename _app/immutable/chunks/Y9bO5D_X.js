@@ -1,0 +1,1 @@
+import"./Zg-WHt8I.js";import"./D-35LkCP.js";const t={title:"Distance Sensor",date:"2026-01-01T00:00:00.000Z",description:"How to use the distance sensor in FTC",published:!0,tags:["completed","software"]},{title:a,date:o,description:n,published:d,tags:c}=t;function r(e){}export{r as default,t as metadata};
