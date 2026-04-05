@@ -5,15 +5,9 @@
 	import { setupCopyButtons } from '$lib/utils/codeCopyButton';
 	import SectionSidebar from '$lib/components/sectionSidebar.svelte';
 	import SoftwareLeftSidebar from '$lib/components/SoftwareLeftSidebar.svelte';
-	import MarkdownEditor from '$lib/components/MarkdownEditor.svelte';
-	import { devModeState } from '$lib/stores/devMode.svelte';
-	import { page } from '$app/stores';
-	import { onMount, tick } from 'svelte';
-
-	let editor: ReturnType<typeof MarkdownEditor> | null = null;
+	import { onMount } from 'svelte';
 
 	let { data }: { data: { content: Component; meta: PostMeta } } = $props();
-	const slug = $derived($page.params.slug);
 
 	// Progress Bar
 	let scrollPercent = $state(0);
@@ -89,16 +83,11 @@
 				</p>
 			{/if}
 
-			{#if data.meta.tags && data.meta.tags.filter((t) => t.toLowerCase() !== 'completed').length > 0 || devModeState.active}
+			{#if data.meta.tags && data.meta.tags.filter((t) => t.toLowerCase() !== 'completed').length > 0}
 				<div class="post-tags animate-fade-up" style="animation-delay:240ms">
-					{#each data.meta.tags?.filter((t) => t.toLowerCase() !== 'completed') ?? [] as tag, i}
+					{#each data.meta.tags?.filter((t) => t.toLowerCase() !== 'completed') ?? [] as tag}
 						<span class="tag {tagColor(tag)}">{tag}</span>
 					{/each}
-					{#if devModeState.active}
-						<button class="tag-add-circle" onclick={() => editor?.open(true)} title="Edit tags">
-							+
-						</button>
-					{/if}
 				</div>
 			{/if}
 
@@ -158,7 +147,7 @@
 	</div>
 </article>
 
-<MarkdownEditor bind:this={editor} slug={$page.params.slug ?? ''} section="software" />
+
 
 <style>
 	/* Progress Bar */
