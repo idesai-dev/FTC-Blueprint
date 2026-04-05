@@ -13,7 +13,7 @@
 	--border: #dcd6c5;
 	--border-subtle: #e8e2d2;
 
-	--bg-code: #576467;
+	--bg-code: #3f3f3f;
 	--sidebar-bg: rgba(140, 130, 110, 0.1);
 
 	--text-primary: #1a1a1a;
@@ -64,7 +64,7 @@ html.dark {
 	--border: #2a2a2a;
 	--border-subtle: #2d2d2d;
 
-	--bg-code: #282828;
+	--bg-code: #1f1f1f;
 	--sidebar-bg: var(--bg-card-hover);
 
 	--text-primary: #74d7ed;
@@ -314,8 +314,9 @@ a {
 	border-bottom: none;
 }
 
-:global(.prose pre) {
-	background: #1a1a1a !important; /* Premium dark pop */
+:global(.prose pre),
+:global(.prose pre[class*='language-']) {
+	background: var(--bg-code) !important;
 	border: 1px solid var(--border-subtle);
 	border-radius: var(--radius-md);
 	padding: 1.5rem 2rem;
@@ -326,7 +327,6 @@ a {
 }
 
 :global(html.light) :global(.prose pre) {
-	background: #f2eee3 !important; /* Premium dark beige pop */
 	border-color: #dcd6c5;
 	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 }
