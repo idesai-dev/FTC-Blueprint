@@ -2,7 +2,7 @@
 title: Intakes
 date: 2026-04-03
 description: Designing effective intake mechanisms for game elements.
-tags: [completed, hardware, intermediate]
+tags: [hardware, intermediate]
 author: Blueprint
 published: true
 ---

@@ -2,7 +2,7 @@
 title: Arms
 date: 2026-04-03
 description: Building articulated arm mechanisms for FTC robots.
-tags: ["completed", "hardware", "intermediate"]
+tags: ["hardware", "intermediate"]
 author: Blueprint
 published: false
 ---

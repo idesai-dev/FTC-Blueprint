@@ -7,6 +7,6 @@ author:
 published: false
 ---
 
-Start writing here...
+Hi there!
 
-<img src="/images/posts/test-test/1775416395114_gemini-svg.svg" alt="gemini svg" style="width: 240px; margin: 0 auto; display: block; border-radius: 8px;" />
+<img src="/images/posts/test-test/1775416395114_gemini-svg.svg" alt="gemini svg" style="width: 200px; margin: 0 auto; display: block; border-radius: 8px;" />
