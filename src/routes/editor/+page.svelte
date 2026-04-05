@@ -2,6 +2,7 @@
 	import { onMount, tick } from 'svelte';
 	import { marked } from 'marked';
 	import { fade } from 'svelte/transition';
+	import { dev, browser } from '$app/environment';
 
 	// ─── Types ───────────────────────────────────────────────────────────────────
 	interface PostMeta {
@@ -97,9 +98,15 @@
 
 	// ─── Load posts list ──────────────────────────────────────────────────────────
 	async function loadPosts() {
-		const r = await fetch('/api/list-posts');
-		const data = await r.json();
-		posts = data.posts ?? [];
+		if (!browser) return;
+		if (dev) {
+			const r = await fetch('/api/list-posts');
+			const data = await r.json();
+			posts = data.posts ?? [];
+		} else {
+			const stored = localStorage.getItem('blueprint_posts');
+			posts = stored ? JSON.parse(stored) : [];
+		}
 	}
 
 	// ─── Open a post ─────────────────────────────────────────────────────────────
@@ -111,13 +118,19 @@
 		rawContent = '';
 		saveStatus = 'idle';
 		try {
-			const r = await fetch(`/api/get-local?slug=${encodeURIComponent(slug)}`);
-			if (!r.ok) throw new Error(await r.text());
-			const d = await r.json();
-			rawContent = d.content;
+			if (dev) {
+				const r = await fetch(`/api/get-local?slug=${encodeURIComponent(slug)}`);
+				if (!r.ok) throw new Error(await r.text());
+				const d = await r.json();
+				rawContent = d.content;
+			} else {
+				const content = localStorage.getItem(`blueprint_post_${slug}`);
+				if (content === null) throw new Error('Post not found in storage');
+				rawContent = content;
+			}
 			parseFM(rawContent);
 		} catch (e) {
-			saveMsg = 'Failed to load file';
+			saveMsg = e instanceof Error ? e.message : 'Failed to load file';
 			saveStatus = 'error';
 		} finally {
 			loadingFile = false;
@@ -180,14 +193,23 @@
 		saveMsg = 'Saving…';
 		const finalContent = buildRaw();
 		try {
-			const r = await fetch('/api/save-local', {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ slug: activeSlug, content: finalContent })
-			});
-			if (!r.ok) throw new Error(await r.text());
+			if (dev) {
+				const r = await fetch('/api/save-local', {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({ slug: activeSlug, content: finalContent })
+				});
+				if (!r.ok) throw new Error(await r.text());
+			} else {
+				localStorage.setItem(`blueprint_post_${activeSlug}`, finalContent);
+				// Update index if needed
+				const entry = posts.find(p => p.slug === activeSlug);
+				if (entry) {
+					entry.meta = { ...fm };
+					localStorage.setItem('blueprint_posts', JSON.stringify(posts));
+				}
+			}
 			rawContent = finalContent;
-			// Refresh post list entry
 			await loadPosts();
 			saveStatus = 'saved';
 			saveMsg = 'Saved ✓';
@@ -247,19 +269,27 @@
 		uploadingImage = true;
 		try {
 			const reader = new FileReader();
-			const base64Data = await new Promise<string>((resolve) => {
-				reader.onload = () => resolve((reader.result as string).split(',')[1]);
+			const fullDataUrl = await new Promise<string>((resolve) => {
+				reader.onload = () => resolve(reader.result as string);
 				reader.readAsDataURL(file);
 			});
-			const safeName = file.name.replace(/[^a-z0-9._-]/gi, '_').toLowerCase();
-			const uniqueName = `${Date.now()}_${safeName}`;
-			const r = await fetch('/api/upload-file', {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ slug: activeSlug, fileName: uniqueName, base64Data })
-			});
-			const d = await r.json();
-			pendingImageUrl = d.url || '';
+
+			if (dev) {
+				const base64Data = fullDataUrl.split(',')[1];
+				const safeName = file.name.replace(/[^a-z0-9._-]/gi, '_').toLowerCase();
+				const uniqueName = `${Date.now()}_${safeName}`;
+				const r = await fetch('/api/upload-file', {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({ slug: activeSlug, fileName: uniqueName, base64Data })
+				});
+				const d = await r.json();
+				pendingImageUrl = d.url || '';
+			} else {
+				// In production, just use the Data URL directly
+				pendingImageUrl = fullDataUrl;
+			}
+			
 			imageAlt = file.name.replace(/\.[^/.]+$/, '').replace(/[_-]/g, ' ');
 			showImageDialog = true;
 		} catch {
@@ -312,19 +342,49 @@
 	// ─── New post ──────────────────────────────────────────────────────────────────
 	async function createPost() {
 		newPostError = '';
-		if (!newPostSlug.trim()) { newPostError = 'Slug required'; return; }
+		const slug = newPostSlug.trim();
+		if (!slug || !/^[a-z0-9-]+$/.test(slug)) {
+			newPostError = 'Invalid slug — use only lowercase letters, numbers, and hyphens.';
+			return;
+		}
+		
 		try {
-			const r = await fetch('/api/create-post', {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ slug: newPostSlug.trim() })
-			});
-			const d = await r.json();
-			if (!r.ok) { newPostError = d.message || 'Error'; return; }
+			if (dev) {
+				const r = await fetch('/api/create-post', {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({ slug })
+				});
+				const d = await r.json();
+				if (!r.ok) { newPostError = d.message || 'Error'; return; }
+			} else {
+				if (posts.some(p => p.slug === slug)) {
+					newPostError = 'A post with that slug already exists.';
+					return;
+				}
+				const today = new Date().toISOString().slice(0, 10);
+				const title = slug.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+				const stub = `---
+title: ${title}
+date: ${today}
+description: 
+tags: []
+author: 
+published: false
+---
+
+Start writing here...
+`;
+				localStorage.setItem(`blueprint_post_${slug}`, stub);
+				const newEntry: PostEntry = { slug, meta: { title, date: today, tags: [], published: false } };
+				posts = [newEntry, ...posts];
+				localStorage.setItem('blueprint_posts', JSON.stringify(posts));
+			}
+			
 			await loadPosts();
 			showNewPostDialog = false;
 			newPostSlug = '';
-			openPost(d.slug);
+			openPost(slug);
 		} catch {
 			newPostError = 'Network error';
 		}

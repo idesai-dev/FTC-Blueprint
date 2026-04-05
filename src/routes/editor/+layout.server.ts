@@ -1,3 +1,3 @@
-// This route must never be prerendered — it only exists during `npm run dev`.
-export const prerender = false;
+// This route can be prerendered for production use as a temporary editor.
+export const prerender = true;
 export const ssr = false;
