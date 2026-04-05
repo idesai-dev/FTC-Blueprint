@@ -2,7 +2,7 @@
 title: Types of OpModes
 date: 2026-03-28
 description: The core differences between an OpMode and a LinearOpMode with Java examples.
-tags: [software, beginner, video]
+tags: [completed, software, beginner, video]
 author: Ishaan Desai
 published: true
 ---

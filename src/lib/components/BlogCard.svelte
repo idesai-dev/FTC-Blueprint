@@ -2,10 +2,15 @@
 	import { formatDate, tagColor } from '$lib/utils/posts';
 	import type { Post } from '$lib/utils/posts';
 
-	let { post, basePath = '/software' }: { post: Post; basePath?: string } = $props();
+	let { post, basePath }: { post: Post; basePath?: string } = $props();
+
+	const resolvedBasePath = $derived(
+		basePath || 
+		`/${(post.meta.tags?.find(t => ['software', 'hardware', 'outreach'].includes(t.toLowerCase())) || 'software').toLowerCase()}`
+	);
 </script>
 
-<a href="{basePath}/{post.slug}" class="card animate-fade-up" aria-label="Read {post.meta.title}">
+<a href="{resolvedBasePath}/{post.slug}" class="card animate-fade-up" aria-label="Read {post.meta.title}">
 	<div class="card-inner">
 		<div class="card-meta">
 			<time class="date" datetime={post.meta.date}>{formatDate(post.meta.date)}</time>

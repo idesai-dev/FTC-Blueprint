@@ -2,7 +2,7 @@
 title: PID Control
 date: 2026-03-28
 description: A comprehensive guide to proportional, integral, and derivative control in FTC.
-tags: [software, intermediate, control, completed]
+tags: [completed, software, intermediate, control, completed]
 author: Ishaan Desai
 published: true
 ---

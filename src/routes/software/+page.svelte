@@ -4,6 +4,7 @@
 	import { tagColor } from '$lib/utils/posts';
 	import Collapsible from '$lib/components/Collapsible.svelte';
 	import FilterBar from '$lib/components/FilterBar.svelte';
+	import SoftwareLeftSidebar from '$lib/components/SoftwareLeftSidebar.svelte';
 	import { devModeState, initDevMode } from '$lib/stores/devMode.svelte';
 	import { onMount } from 'svelte';
 
@@ -66,283 +67,7 @@
 	<meta name="description" content="All Prints and posts published on Blueprint." />
 </svelte:head>
 <div class="directory-container">
-	<div class="sidebar">
-		<h3>Blueprint Guide</h3>
-		<br />
-
-		{#if showGroup(["/software/pedro-introduction", "/software/pedro-tuning", "/software/pedro-making-an-auto", "/software/pedro-localization", "/software/roadrunner-introduction", "/software/roadrunner-how-to-tune", "/software/roadrunner-actions", "/software/roadrunner-making-an-auto", "/software/roadrunner-localization", "/software/roadrunner-meepmeep", "/software/encoder-autonomous-introduction", "/software/encoder-autonomous-drivetrain-functions", "/software/encoder-autonomous-subsystem-functions"])}
-		<p
-			class="sub"
-			style="color:var(--accent-green); font-family:var(--font-heading); font-weight:600; font-size: 1.1rem; margin-top: 1rem; margin-bottom: 0.25rem;"
-		>
-			Autonomous
-		</p>
-		<ol style="padding:0; margin:0; list-style:none; color:var(--text-body);">
-			{#if showGroup(["/software/pedro-introduction", "/software/pedro-tuning", "/software/pedro-making-an-auto", "/software/pedro-localization"])}
-			<li style="padding-left:1.25rem; margin-top:0.25rem;">
-				<Collapsible title="Pedro" titleColor="var(--text-primary)" childColor="var(--text-body)">
-					<ol style="padding-left:1.5rem;" type="1">
-						{#if showLink("/software/pedro-introduction")}
-				<li><a href="/software/pedro-introduction">Introduction</a></li>
-			{/if}
-						{#if showLink("/software/pedro-tuning")}
-				<li><a href="/software/pedro-tuning">How to Tune</a></li>
-			{/if}
-						{#if showLink("/software/pedro-making-an-auto")}
-				<li><a href="/software/pedro-making-an-auto">Making an Auto</a></li>
-			{/if}
-						{#if showLink("/software/pedro-localization")}
-				<li><a href="/software/pedro-localization">Localization</a></li>
-			{/if}
-					</ol>
-				</Collapsible>
-			</li>
-			{/if}
-			{#if showGroup(["/software/roadrunner-introduction", "/software/roadrunner-how-to-tune", "/software/roadrunner-actions", "/software/roadrunner-making-an-auto", "/software/roadrunner-localization", "/software/roadrunner-meepmeep"])}
-			<li style="padding-left:1.25rem; margin-top:0.25rem;">
-				<Collapsible
-					title="Roadrunner"
-					titleColor="var(--text-primary)"
-					childColor="var(--text-body)"
-				>
-					<ol style="padding-left:1.5rem;" type="1">
-						{#if showLink("/software/roadrunner-introduction")}
-				<li><a href="/software/roadrunner-introduction">Introduction</a></li>
-			{/if}
-						{#if showLink("/software/roadrunner-how-to-tune")}
-				<li><a href="/software/roadrunner-how-to-tune">How to Tune</a></li>
-			{/if}
-						{#if showLink("/software/roadrunner-actions")}
-				<li><a href="/software/roadrunner-actions">Actions</a></li>
-			{/if}
-						{#if showLink("/software/roadrunner-making-an-auto")}
-				<li><a href="/software/roadrunner-making-an-auto">Making an Auto</a></li>
-			{/if}
-						{#if showLink("/software/roadrunner-localization")}
-				<li><a href="/software/roadrunner-localization">Localization</a></li>
-			{/if}
-						{#if showLink("/software/roadrunner-meepmeep")}
-				<li><a href="/software/roadrunner-meepmeep">MeepMeep</a></li>
-			{/if}
-					</ol>
-				</Collapsible>
-			</li>
-			{/if}
-			{#if showGroup(["/software/encoder-autonomous-introduction", "/software/encoder-autonomous-drivetrain-functions", "/software/encoder-autonomous-subsystem-functions"])}
-			<li style="padding-left:1.25rem; margin-top:0.25rem;">
-				<Collapsible
-					title="Encoder Based"
-					titleColor="var(--text-primary)"
-					childColor="var(--text-body)"
-				>
-					<ol style="padding-left:1.5rem;" type="1">
-						{#if showLink("/software/encoder-autonomous-introduction")}
-				<li><a href="/software/encoder-autonomous-introduction">Introduction</a></li>
-			{/if}
-						{#if showLink("/software/encoder-autonomous-drivetrain-functions")}
-				<li>
-							<a href="/software/encoder-autonomous-drivetrain-functions">Drivetrain Functions</a>
-						</li>
-			{/if}
-						{#if showLink("/software/encoder-autonomous-subsystem-functions")}
-				<li>
-							<a href="/software/encoder-autonomous-subsystem-functions">Subsystem Functions</a>
-						</li>
-			{/if}
-					</ol>
-				</Collapsible>
-			</li>
-			{/if}
-		</ol>
-		{/if}
-
-		{#if showGroup(["/software/teleop-introduction", "/software/teleop-beginner", "/software/teleop-fsm", "/software/basics-types-of-opmodes", "/software/mecanum-drivetrain"])}
-		<p
-			class="sub"
-			style="color:var(--accent-green); font-family:var(--font-heading); font-weight:600; font-size: 1.1rem; margin-top: 1rem; margin-bottom: 0.25rem;"
-		>
-			TeleOp
-		</p>
-		<ol style="padding:0; margin:0; list-style:none; color:var(--text-body);">
-			{#if showGroup(["/software/teleop-introduction", "/software/teleop-beginner", "/software/teleop-fsm"])}
-			<li style="padding-left:1.25rem; margin-top:0.25rem;">
-				<Collapsible title="TeleOp" titleColor="var(--text-primary)" childColor="var(--text-body)">
-					<ol style="padding-left:1.5rem;" type="1">
-						{#if showLink("/software/teleop-introduction")}
-				<li><a href="/software/teleop-introduction">Introduction</a></li>
-			{/if}
-						{#if showLink("/software/teleop-beginner")}
-				<li><a href="/software/teleop-beginner">Beginner</a></li>
-			{/if}
-						{#if showLink("/software/teleop-fsm")}
-				<li><a href="/software/teleop-fsm">FSM</a></li>
-			{/if}
-					</ol>
-				</Collapsible>
-			</li>
-			{/if}
-			{#if showLink("/software/basics-types-of-opmodes")}
-				<li style="padding-left:1.25rem; margin-top:0.25rem;">
-				<a href="/software/basics-types-of-opmodes">Types of OpModes</a>
-			</li>
-			{/if}
-			{#if showLink("/software/mecanum-drivetrain")}
-				<li style="padding-left:1.25rem; margin-top:0.25rem;">
-				<a href="/software/mecanum-drivetrain">Mecanum Drivetrain</a>
-			</li>
-			{/if}
-		</ol>
-		{/if}
-
-		{#if showGroup(["/software/pid-control", "/software/feed-forward", "/software/motion-profiling"])}
-		<p
-			class="sub"
-			style="color:var(--accent-green); font-family:var(--font-heading); font-weight:600; font-size: 1.1rem; margin-top: 1rem; margin-bottom: 0.25rem;"
-		>
-			Control
-		</p>
-		<ol style="padding:0; margin:0; list-style:none; color:var(--text-body);">
-			{#if showLink("/software/pid-control")}
-				<li style="padding-left:1.25rem; margin-top:0.25rem;">
-				<a href="/software/pid-control">PID Control</a>
-			</li>
-			{/if}
-			{#if showLink("/software/feed-forward")}
-				<li style="padding-left:1.25rem; margin-top:0.25rem;">
-				<a href="/software/feed-forward">Feedforward</a>
-			</li>
-			{/if}
-			{#if showLink("/software/motion-profiling")}
-				<li style="padding-left:1.25rem; margin-top:0.25rem;">
-				<a href="/software/motion-profiling">Motion Profiling</a>
-			</li>
-			{/if}
-		</ol>
-		{/if}
-
-		{#if showGroup(["/software/vision-opencv", "/software/vision-limelight", "/software/vision-april-tag", "/software/vision-object-detection", "/software/vision-relocalization-metatag2", "/software/pinpoint-odometry-computer", "/software/basics-distance", "/software/basics-color", "/software/basics-touch", "/software/basics-imu"])}
-		<p
-			class="sub"
-			style="color:var(--accent-green); font-family:var(--font-heading); font-weight:600; font-size: 1.1rem; margin-top: 1rem; margin-bottom: 0.25rem;"
-		>
-			Sensors
-		</p>
-		<ol style="padding:0; margin:0; list-style:none; color:var(--text-body);">
-			{#if showGroup(["/software/vision-opencv", "/software/vision-limelight", "/software/vision-april-tag", "/software/vision-object-detection", "/software/vision-relocalization-metatag2"])}
-			<li style="padding-left:1.25rem; margin-top:0.25rem;">
-				<Collapsible title="Vision" titleColor="var(--text-primary)" childColor="var(--text-body)">
-					<ol style="padding-left:1.5rem;" type="1">
-						{#if showLink("/software/vision-opencv")}
-				<li><a href="/software/vision-opencv">OpenCV</a></li>
-			{/if}
-						{#if showLink("/software/vision-limelight")}
-				<li><a href="/software/vision-limelight">Limelight</a></li>
-			{/if}
-						{#if showLink("/software/vision-april-tag")}
-				<li><a href="/software/vision-april-tag">April Tag Detection</a></li>
-			{/if}
-						{#if showLink("/software/vision-object-detection")}
-				<li><a href="/software/vision-object-detection">Object Detection</a></li>
-			{/if}
-						{#if showLink("/software/vision-relocalization-metatag2")}
-				<li>
-							<a href="/software/vision-relocalization-metatag2">Relocalization with MetaTag2</a>
-						</li>
-			{/if}
-					</ol>
-				</Collapsible>
-			</li>
-			{/if}
-			{#if showLink("/software/pinpoint-odometry-computer")}
-				<li style="padding-left:1.25rem; margin-top:0.25rem;">
-				<a href="/software/pinpoint-odometry-computer">Pinpoint</a>
-			</li>
-			{/if}
-			{#if showLink("/software/basics-distance")}
-				<li style="padding-left:1.25rem; margin-top:0.25rem;">
-				<a href="/software/basics-distance">Distance</a>
-			</li>
-			{/if}
-			{#if showLink("/software/basics-color")}
-				<li style="padding-left:1.25rem; margin-top:0.25rem;">
-				<a href="/software/basics-color">Color</a>
-			</li>
-			{/if}
-			{#if showLink("/software/basics-touch")}
-				<li style="padding-left:1.25rem; margin-top:0.25rem;">
-				<a href="/software/basics-touch">Touch</a>
-			</li>
-			{/if}
-			{#if showLink("/software/basics-imu")}
-				<li style="padding-left:1.25rem; margin-top:0.25rem;">
-				<a href="/software/basics-imu">IMU</a>
-			</li>
-			{/if}
-		</ol>
-		{/if}
-
-		{#if showGroup(["/software/basics-android-studio", "/software/basics-wiring", "/software/basics-motors-servos"])}
-		<p
-			class="sub"
-			style="color:var(--accent-green); font-family:var(--font-heading); font-weight:600; font-size: 1.1rem; margin-top: 1rem; margin-bottom: 0.25rem;"
-		>
-			Basics
-		</p>
-		<ol style="padding:0; margin:0; list-style:none; color:var(--text-body);">
-			{#if showLink("/software/basics-android-studio")}
-				<li style="padding-left:1.25rem; margin-top:0.25rem;">
-				<a href="/software/basics-android-studio">Android Studio Setup</a>
-			</li>
-			{/if}
-			{#if showLink("/software/basics-wiring")}
-				<li style="padding-left:1.25rem; margin-top:0.25rem;">
-				<a href="/software/basics-wiring">Wiring and Configuration</a>
-			</li>
-			{/if}
-			{#if showLink("/software/basics-motors-servos")}
-				<li style="padding-left:1.25rem; margin-top:0.25rem;">
-				<a href="/software/basics-motors-servos">Motors and Servos</a>
-			</li>
-			{/if}
-		</ol>
-		{/if}
-
-		{#if showGroup(["/software/sloth-load", "/software/common-practices", "/software/bulkreads", "/software/mecanum-drivetrain", "/software/markdown-reference"])}
-		<p
-			class="sub"
-			style="color:var(--accent-green); font-family:var(--font-heading); font-weight:600; font-size: 1.1rem; margin-top: 1rem; margin-bottom: 0.25rem;"
-		>
-			Miscellaneous
-		</p>
-		<ol style="padding:0; margin:0; list-style:none; color:var(--text-body);">
-			{#if showLink("/software/sloth-load")}
-				<li style="padding-left:1.25rem; margin-top:0.25rem;">
-				<a href="/software/sloth-load">Sloth</a>
-			</li>
-			{/if}
-			{#if showLink("/software/common-practices")}
-				<li style="padding-left:1.25rem; margin-top:0.25rem;">
-				<a href="/software/common-practices">Common practices</a>
-			</li>
-			{/if}
-			{#if showLink("/software/bulkreads")}
-				<li style="padding-left:1.25rem; margin-top:0.25rem;">
-				<a href="/software/bulkreads">Bulkreads</a>
-			</li>
-			{/if}
-			{#if showLink("/software/mecanum-drivetrain")}
-				<li style="padding-left:1.25rem; margin-top:0.25rem;">
-				<a href="/software/mecanum-drivetrain">Mecanum Drivetrain</a>
-			</li>
-			{/if}
-			{#if showLink("/software/markdown-reference")}
-				<li style="padding-left:1.25rem; margin-top:0.25rem;">
-				<a href="/software/markdown-reference">Markdown Reference</a>
-			</li>
-			{/if}
-		</ol>
-		{/if}
-	</div>
+	<SoftwareLeftSidebar mode="section" />
 	<div class="content-feed">
 		<section class="blog-header">
 			<div class="container">
@@ -396,28 +121,21 @@
 		display: flex;
 		flex-direction: column;
 		width: 100%;
-	}
-
-	.sidebar {
-		display: none;
+		gap: 3rem;
+		max-width: var(--container-wide);
+		margin: 0 auto;
+		padding: 0 1.5rem;
 	}
 
 	.content-feed {
 		width: 100%;
 	}
 
-	@media (min-width: 860px) {
+	@media (min-width: 1101px) {
 		.directory-container {
 			flex-direction: row;
-			justify-content: flex-end;
-		}
-
-		.sidebar {
-			display: block;
-			width: 24vw;
-			background-color: var(--sidebar-bg);
-			border-right: 2px solid var(--border);
-			padding: 1rem;
+			justify-content: flex-start;
+			padding: 0 2rem;
 		}
 	}
 
@@ -443,11 +161,12 @@
 	.filters-section {
 		padding: 1.5rem 0;
 		border-bottom: 1px solid var(--border-subtle);
-		background: var(--bg-secondary);
+		background: rgba(30, 30, 30, 0.8);
 		position: sticky;
 		top: var(--header-height);
 		z-index: 10;
-		backdrop-filter: blur(12px);
+		backdrop-filter: blur(8px);
+		-webkit-backdrop-filter: blur(8px);
 	}
 
 	/* Posts */

@@ -99,7 +99,8 @@
 				{ href: '/simulators/feedforward', label: 'Feedforward' },
 				{ href: '/simulators/pid-game', label: 'PID Learning Game' },
 				{ href: '/simulators/pedro-visualizer', label: 'Pedro Visualizer' },
-				{ href: '/simulators/mecanum', label: 'Mecanum Simulator' }
+				{ href: '/simulators/mecanum', label: 'Mecanum Simulator' },
+				{ href: '/simulators/model-converter', label: 'Model Converter', devOnly: true }
 			]
 		},
 		{ href: '/hardware', label: 'Hardware'},
@@ -343,10 +344,11 @@
 		top: 0;
 		z-index: 100;
 		height: var(--header-height);
-		background: rgba(21, 21, 21, 0.82);
-		backdrop-filter: blur(16px);
-		-webkit-backdrop-filter: blur(16px);
+		background: rgba(21, 21, 21, 0.75);
+		backdrop-filter: blur(8px);
+		-webkit-backdrop-filter: blur(8px);
 		border-bottom: 1px solid var(--border-subtle);
+		will-change: transform, opacity;
 		transition:
 			background var(--transition-slow),
 			border-color var(--transition-slow);

@@ -2,7 +2,7 @@
 title: Keeping a Journal
 date: 2026-04-03
 description: How to maintain an effective engineering journal for outreach documentation.
-tags: [outreach, beginner]
+tags: [completed, outreach, beginner]
 author: Blueprint
 published: true
 ---

@@ -4,6 +4,7 @@
 	import { tagColor } from '$lib/utils/posts';
 	import Collapsible from '$lib/components/Collapsible.svelte';
 	import FilterBar from '$lib/components/FilterBar.svelte';
+	import HardwareLeftSidebar from '$lib/components/HardwareLeftSidebar.svelte';
 	import { devModeState, initDevMode } from '$lib/stores/devMode.svelte';
 	import { onMount } from 'svelte';
 
@@ -64,114 +65,7 @@
 </svelte:head>
 
 <div class="directory-container">
-	<div class="sidebar">
-		<h3>Blueprint Guide</h3>
-		<br />
-
-		{#if showGroup(["/hardware/hardware-drivetrain-overview", "/hardware/hardware-mecanum-wheels", "/hardware/hardware-tank-drive"])}
-		<p
-			class="sub"
-			style="color:var(--accent-green); font-family:var(--font-heading); font-weight:600; font-size: 1.1rem; margin-top: 1rem; margin-bottom: 0.25rem;"
-		>
-			Drivetrain
-		</p>
-		<ol style="padding:0; margin:0; list-style:none; color:var(--text-body);">
-			{#if showLink("/hardware/hardware-drivetrain-overview")}
-				<li style="padding-left:1.25rem; margin-top:0.25rem;">
-				<a href="/hardware/hardware-drivetrain-overview">Drivetrain Overview</a>
-			</li>
-			{/if}
-			{#if showLink("/hardware/hardware-mecanum-wheels")}
-				<li style="padding-left:1.25rem; margin-top:0.25rem;">
-				<a href="/hardware/hardware-mecanum-wheels">Mecanum Wheels</a>
-			</li>
-			{/if}
-			{#if showLink("/hardware/hardware-tank-drive")}
-				<li style="padding-left:1.25rem; margin-top:0.25rem;">
-				<a href="/hardware/hardware-tank-drive">Tank Drive</a>
-			</li>
-			{/if}
-		</ol>
-		{/if}
-
-		{#if showGroup(["/hardware/hardware-linear-slides", "/hardware/hardware-arms", "/hardware/hardware-intakes", "/hardware/hardware-claws"])}
-		<p
-			class="sub"
-			style="color:var(--accent-green); font-family:var(--font-heading); font-weight:600; font-size: 1.1rem; margin-top: 1rem; margin-bottom: 0.25rem;"
-		>
-			Mechanisms
-		</p>
-		<ol style="padding:0; margin:0; list-style:none; color:var(--text-body);">
-			{#if showLink("/hardware/hardware-linear-slides")}
-				<li style="padding-left:1.25rem; margin-top:0.25rem;">
-				<a href="/hardware/hardware-linear-slides">Linear Slides</a>
-			</li>
-			{/if}
-			{#if showLink("/hardware/hardware-arms")}
-				<li style="padding-left:1.25rem; margin-top:0.25rem;">
-				<a href="/hardware/hardware-arms">Arms</a>
-			</li>
-			{/if}
-			{#if showLink("/hardware/hardware-intakes")}
-				<li style="padding-left:1.25rem; margin-top:0.25rem;">
-				<a href="/hardware/hardware-intakes">Intakes</a>
-			</li>
-			{/if}
-			{#if showLink("/hardware/hardware-claws")}
-				<li style="padding-left:1.25rem; margin-top:0.25rem;">
-				<a href="/hardware/hardware-claws">Claws & End Effectors</a>
-			</li>
-			{/if}
-		</ol>
-		{/if}
-
-		{#if showGroup(["/hardware/hardware-control-hub", "/hardware/hardware-motors-servos-guide", "/hardware/hardware-wiring-best-practices"])}
-		<p
-			class="sub"
-			style="color:var(--accent-green); font-family:var(--font-heading); font-weight:600; font-size: 1.1rem; margin-top: 1rem; margin-bottom: 0.25rem;"
-		>
-			Electronics
-		</p>
-		<ol style="padding:0; margin:0; list-style:none; color:var(--text-body);">
-			{#if showLink("/hardware/hardware-control-hub")}
-				<li style="padding-left:1.25rem; margin-top:0.25rem;">
-				<a href="/hardware/hardware-control-hub">Control Hub</a>
-			</li>
-			{/if}
-			{#if showLink("/hardware/hardware-motors-servos-guide")}
-				<li style="padding-left:1.25rem; margin-top:0.25rem;">
-				<a href="/hardware/hardware-motors-servos-guide">Motors & Servos Guide</a>
-			</li>
-			{/if}
-			{#if showLink("/hardware/hardware-wiring-best-practices")}
-				<li style="padding-left:1.25rem; margin-top:0.25rem;">
-				<a href="/hardware/hardware-wiring-best-practices">Wiring Best Practices</a>
-			</li>
-			{/if}
-		</ol>
-		{/if}
-
-		{#if showGroup(["/hardware/hardware-cad-intro", "/hardware/hardware-design-principles"])}
-		<p
-			class="sub"
-			style="color:var(--accent-green); font-family:var(--font-heading); font-weight:600; font-size: 1.1rem; margin-top: 1rem; margin-bottom: 0.25rem;"
-		>
-			CAD & Design
-		</p>
-		<ol style="padding:0; margin:0; list-style:none; color:var(--text-body);">
-			{#if showLink("/hardware/hardware-cad-intro")}
-				<li style="padding-left:1.25rem; margin-top:0.25rem;">
-				<a href="/hardware/hardware-cad-intro">CAD Introduction</a>
-			</li>
-			{/if}
-			{#if showLink("/hardware/hardware-design-principles")}
-				<li style="padding-left:1.25rem; margin-top:0.25rem;">
-				<a href="/hardware/hardware-design-principles">Design Principles</a>
-			</li>
-			{/if}
-		</ol>
-		{/if}
-	</div>
+	<HardwareLeftSidebar mode="section" />
 
 	<div class="content-feed">
 		<section class="blog-header">
@@ -226,28 +120,21 @@
 		display: flex;
 		flex-direction: column;
 		width: 100%;
-	}
-
-	.sidebar {
-		display: none;
+		gap: 3rem;
+		max-width: var(--container-wide);
+		margin: 0 auto;
+		padding: 0 1.5rem;
 	}
 
 	.content-feed {
 		width: 100%;
 	}
 
-	@media (min-width: 860px) {
+	@media (min-width: 1101px) {
 		.directory-container {
 			flex-direction: row;
-			justify-content: flex-end;
-		}
-
-		.sidebar {
-			display: block;
-			width: 24vw;
-			background-color: var(--sidebar-bg);
-			border-right: 2px solid var(--border);
-			padding: 1rem;
+			justify-content: flex-start;
+			padding: 0 2rem;
 		}
 	}
 
@@ -269,11 +156,12 @@
 	.filters-section {
 		padding: 1.5rem 0;
 		border-bottom: 1px solid var(--border-subtle);
-		background: var(--bg-secondary);
+		background: rgba(30, 30, 30, 0.8);
 		position: sticky;
 		top: var(--header-height);
 		z-index: 10;
-		backdrop-filter: blur(12px);
+		backdrop-filter: blur(8px);
+		-webkit-backdrop-filter: blur(8px);
 	}
 	.posts-section {
 		padding: 2.5rem 0 5rem;

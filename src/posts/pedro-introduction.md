@@ -2,7 +2,7 @@
 title: Pedro Pathing Introduction
 date: 2026-03-28
 description: A powerful path-following library for FTC.
-tags: [software, intermediate, autonomous]
+tags: [completed, software, intermediate, autonomous]
 author: Ishaan Desai
 published: true
 ---

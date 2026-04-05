@@ -2,7 +2,7 @@
 title: Pedro Pathing: How to Tune
 date: 2026-03-28
 description: Step-by-step guide to tuning your robot for Pedro Pathing.
-tags: [software, intermediate]
+tags: [completed, software, intermediate]
 author: Ishaan Desai
 published: true
 ---

@@ -2,7 +2,7 @@
 title: Bulk Reads
 date: 2026-03-28
 description: Optimizing your FTC robot's control loop with LynxModule bulk reading.
-tags: [software, intermediate, performance]
+tags: [completed, software, intermediate, performance]
 author: Ishaan Desai
 published: true
 ---

@@ -41,6 +41,7 @@
 	];
 
 	let isOpen = $state(false);
+	let isOnlyTags = $state(false);
 	let activeTab = $state<'editor' | 'preview'>('editor');
 	let content = $state('');
 	let status = $state<'idle' | 'loading' | 'saving' | 'success' | 'error'>('idle');
@@ -263,6 +264,7 @@
 	export async function open(autoOpenTags: boolean = false) {
 		isMobile = browser && window.innerWidth < 768;
 		isOpen = true;
+		isOnlyTags = autoOpenTags;
 		tagPopoverOpen = autoOpenTags;
 		activeTab = 'editor';
 		await fetchRawContent();
@@ -270,6 +272,7 @@
 
 	function close() {
 		isOpen = false;
+		isOnlyTags = false;
 		tagPopoverOpen = false;
 		status = 'idle';
 		statusMsg = '';
@@ -321,7 +324,7 @@
 
 			status = 'success';
 			statusMsg = 'Saved & deploying… live in ~60s';
-			setTimeout(() => { status = 'idle'; statusMsg = ''; }, 7000);
+			setTimeout(() => { if (status === 'success') { status = 'idle'; statusMsg = ''; } }, 7000);
 		} catch (e: unknown) {
 			status = 'error';
 			statusMsg = e instanceof Error ? e.message : 'Unknown error';
@@ -360,133 +363,189 @@
 		<!-- svelte-ignore a11y_click_events_have_key_events -->
 		<!-- svelte-ignore a11y_no_static_element_interactions -->
 		<div class="editor-overlay" transition:fade={{ duration: 150 }} onclick={(e) => { if (e.target === e.currentTarget) close(); }}>
-			<div class="editor-panel" transition:fly={{ y: 40, duration: 250 }}>
-
-				<!-- Mobile warning banner -->
-				{#if isMobile}
-					<div class="mobile-warning">
-						Editor not recommended on mobile — some features may not work correctly.
-					</div>
-				{/if}
-
-				<!-- Header -->
-				<div class="editor-header">
-					<div class="editor-title">
-						<span class="editor-badge">DEV</span>
-						<span class="editor-filename">{filePath}</span>
+			{#if isOnlyTags}
+				<div class="tag-modal" transition:fly={{ y: 20, duration: 250 }}>
+					<div class="tag-modal-header">
+						<div class="tag-modal-title">
+							<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-cyan)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+								<path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" /><line x1="7" y1="7" x2="7.01" y2="7" />
+							</svg>
+							Update Tags
+						</div>
+						<button class="close-btn" onclick={close}>✕</button>
 					</div>
 
-					<!-- Tags inline -->
-					<div class="tags-inline">
-						{#each currentTags as tag}
-							<span class="tag-chip-sm">
-								{tag}
-								<button class="tag-chip-x" onclick={() => removeTag(tag)} aria-label="Remove {tag}">×</button>
-							</span>
-						{/each}
-						<div class="tag-popover-wrap">
-							<button class="tag-add-circle" onclick={() => (tagPopoverOpen = !tagPopoverOpen)} title="Add tag">+</button>
-							{#if tagPopoverOpen}
-								<div class="tag-popover" transition:fade={{ duration: 100 }}>
-									<div class="tag-popover-search-row">
-										<!-- svelte-ignore a11y_autofocus -->
-										<input
-											class="tag-popover-input"
-											bind:value={tagSearch}
-											placeholder="Search or add…"
-											autofocus
-											onkeydown={(e) => {
-												if (e.key === 'Enter') addCustomTag();
-												if (e.key === 'Escape') tagPopoverOpen = false;
-											}}
-										/>
-										<button class="tag-popover-add" onclick={addCustomTag}>Add</button>
-									</div>
-									<div class="tag-popover-presets">
-										{#each filteredPresets as preset}
-											<button
-												class="preset-tag-sm"
-												class:active={currentTags.some(t => t.toLowerCase() === preset.label.toLowerCase())}
-												style="--tc: {preset.color}"
-												onclick={() => toggleTag(preset.label)}
-											>{preset.label}</button>
-										{/each}
-									</div>
-								</div>
-							{/if}
+					<div class="tag-modal-body">
+						<div class="current-tags-grid">
+							{#each currentTags as tag}
+								<span class="tag-chip">
+									{tag}
+									<button class="tag-chip-x" onclick={() => removeTag(tag)}>×</button>
+								</span>
+							{/each}
+						</div>
+
+						<div class="tag-input-wrapper">
+							<input
+								class="tag-modal-input"
+								bind:value={tagSearch}
+								placeholder="Add a custom tag..."
+								onkeydown={(e) => e.key === 'Enter' && addCustomTag()}
+							/>
+							<button class="tag-modal-add-btn" onclick={addCustomTag}>Add</button>
+						</div>
+
+						<div class="presets-label">Quick Select</div>
+						<div class="tag-modal-presets">
+							{#each filteredPresets as preset}
+								<button
+									class="preset-tag-btn"
+									class:active={currentTags.some(t => t.toLowerCase() === preset.label.toLowerCase())}
+									style="--tc: {preset.color}"
+									onclick={() => toggleTag(preset.label)}
+								>{preset.label}</button>
+							{/each}
 						</div>
 					</div>
 
-					<!-- Right controls -->
-					<div class="header-right">
-						<div class="tab-row">
-							<button class="tab-btn" class:active={activeTab === 'editor'} onclick={() => activeTab = 'editor'}>Editor</button>
-							<button class="tab-btn" class:active={activeTab === 'preview'} onclick={() => activeTab = 'preview'}>Preview</button>
-							<label class="tab-btn upload-label">
-								Upload File
-								<input type="file" accept="image/*, .glb, .gltf" class="hidden" onchange={handleFileSelect} />
-							</label>
-						</div>
-						<div class="editor-actions">
-							{#if statusMsg}<span class="status-msg {status}">{statusMsg}</span>{/if}
-							<button class="save-btn" onclick={save} disabled={status === 'saving' || status === 'loading'}>
-								Save &amp; Deploy <kbd>⌘S</kbd>
+					<div class="tag-modal-footer">
+						{#if statusMsg}<span class="status-msg {status}">{statusMsg}</span>{/if}
+						<div class="footer-actions">
+							<button class="cancel-btn" onclick={close}>Cancel</button>
+							<button class="save-tags-btn" onclick={save} disabled={status === 'saving' || status === 'loading'}>
+								{status === 'saving' ? 'Saving...' : 'Save Changes'}
 							</button>
-							<button class="close-btn" onclick={close} aria-label="Close editor">✕</button>
 						</div>
 					</div>
 				</div>
-
-				<!-- Body -->
-				<div class="editor-body">
-					{#if status === 'loading'}
-						<div class="editor-loading"><span class="spinner large"></span><p>Loading file…</p></div>
-					{:else if status === 'error' && !content}
-						<div class="editor-error">
-							<p>{statusMsg}</p>
-							<button class="retry-btn" onclick={fetchRawContent}>Retry</button>
-						</div>
-					{:else if activeTab === 'editor'}
-						<div class="textarea-container">
-							<textarea
-								class="editor-textarea"
-								bind:this={editorEl}
-								bind:value={content}
-								onkeydown={handleKeydown}
-								onpaste={handlePaste}
-								ondrop={handleDrop}
-								ondragover={(e) => e.preventDefault()}
-								spellcheck={false}
-								placeholder="Write markdown… paste or drop images directly"
-							></textarea>
-							{#if isImageUploading}
-								<div class="upload-overlay" transition:fade>
-									<span class="spinner large"></span>
-									<p>Uploading image…</p>
-								</div>
-							{/if}
-						</div>
-					{:else}
-						<div class="preview-container">
-							<div class="markdown-body">
-								{@html sanitize(marked.parse(
-									content.replace(/\/images\/posts\//g,
-										`https://raw.githubusercontent.com/${GITHUB_OWNER}/${GITHUB_REPO}/main/static/images/posts/`)
-								) as string)}
-							</div>
+			{:else}
+				<div class="editor-panel" transition:fly={{ y: 40, duration: 250 }}>
+					<!-- Mobile warning banner -->
+					{#if isMobile}
+						<div class="mobile-warning">
+							Editor not recommended on mobile — some features may not work correctly.
 						</div>
 					{/if}
-				</div>
 
-				<!-- Footer -->
-				<div class="editor-footer">
-					<span>Markdown · Paste/drop images · Esc closes</span>
-					<span class="footer-right">
-						<span class="pat-set">Embedded token active ✓</span>
-						<span>Repo: <code>{GITHUB_OWNER}/{GITHUB_REPO}</code></span>
-					</span>
+					<!-- Header -->
+					<div class="editor-header">
+						<div class="editor-title">
+							<span class="editor-badge">DEV</span>
+							<span class="editor-filename">{filePath}</span>
+						</div>
+
+						<!-- Tags inline -->
+						<div class="tags-inline">
+							{#each currentTags as tag}
+								<span class="tag-chip-sm">
+									{tag}
+									<button class="tag-chip-x" onclick={() => removeTag(tag)} aria-label="Remove {tag}">×</button>
+								</span>
+							{/each}
+							<div class="tag-popover-wrap">
+								<button class="tag-add-circle" onclick={() => (tagPopoverOpen = !tagPopoverOpen)} title="Add tag">+</button>
+								{#if tagPopoverOpen}
+									<div class="tag-popover" transition:fade={{ duration: 100 }}>
+										<div class="tag-popover-search-row">
+											<!-- svelte-ignore a11y_autofocus -->
+											<input
+												class="tag-popover-input"
+												bind:value={tagSearch}
+												placeholder="Search or add…"
+												autofocus
+												onkeydown={(e) => {
+													if (e.key === 'Enter') addCustomTag();
+													if (e.key === 'Escape') tagPopoverOpen = false;
+												}}
+											/>
+											<button class="tag-popover-add" onclick={addCustomTag}>Add</button>
+										</div>
+										<div class="tag-popover-presets">
+											{#each filteredPresets as preset}
+												<button
+													class="preset-tag-sm"
+													class:active={currentTags.some(t => t.toLowerCase() === preset.label.toLowerCase())}
+													style="--tc: {preset.color}"
+													onclick={() => toggleTag(preset.label)}
+												>{preset.label}</button>
+											{/each}
+										</div>
+									</div>
+								{/if}
+							</div>
+						</div>
+
+						<!-- Right controls -->
+						<div class="header-right">
+							<div class="tab-row">
+								<button class="tab-btn" class:active={activeTab === 'editor'} onclick={() => activeTab = 'editor'}>Editor</button>
+								<button class="tab-btn" class:active={activeTab === 'preview'} onclick={() => activeTab = 'preview'}>Preview</button>
+								<label class="tab-btn upload-label">
+									Upload File
+									<input type="file" accept="image/*, .glb, .gltf" class="hidden" onchange={handleFileSelect} />
+								</label>
+							</div>
+							<div class="editor-actions">
+								{#if statusMsg}<span class="status-msg {status}">{statusMsg}</span>{/if}
+								<button class="save-btn" onclick={save} disabled={status === 'saving' || status === 'loading'}>
+									Save &amp; Deploy <kbd>⌘S</kbd>
+								</button>
+								<button class="close-btn" onclick={close} aria-label="Close editor">✕</button>
+							</div>
+						</div>
+					</div>
+
+					<!-- Body -->
+					<div class="editor-body">
+						{#if status === 'loading'}
+							<div class="editor-loading"><span class="spinner large"></span><p>Loading file…</p></div>
+						{:else if status === 'error' && !content}
+							<div class="editor-error">
+								<p>{statusMsg}</p>
+								<button class="retry-btn" onclick={fetchRawContent}>Retry</button>
+							</div>
+						{:else if activeTab === 'editor'}
+							<div class="textarea-container">
+								<textarea
+									class="editor-textarea"
+									bind:this={editorEl}
+									bind:value={content}
+									onkeydown={handleKeydown}
+									onpaste={handlePaste}
+									ondrop={handleDrop}
+									ondragover={(e) => e.preventDefault()}
+									spellcheck={false}
+									placeholder="Write markdown… paste or drop images directly"
+								></textarea>
+								{#if isImageUploading}
+									<div class="upload-overlay" transition:fade>
+										<span class="spinner large"></span>
+										<p>Uploading image…</p>
+									</div>
+								{/if}
+							</div>
+						{:else}
+							<div class="preview-container">
+								<div class="markdown-body">
+									{@html sanitize(marked.parse(
+										content.replace(/\/images\/posts\//g,
+											`https://raw.githubusercontent.com/${GITHUB_OWNER}/${GITHUB_REPO}/main/static/images/posts/`)
+									) as string)}
+								</div>
+							</div>
+						{/if}
+					</div>
+
+					<!-- Footer -->
+					<div class="editor-footer">
+						<span>Markdown · Paste/drop images · Esc closes</span>
+						<span class="footer-right">
+							<span class="pat-set">Embedded token active ✓</span>
+							<span>Repo: <code>{GITHUB_OWNER}/{GITHUB_REPO}</code></span>
+						</span>
+					</div>
 				</div>
-			</div>
+			{/if}
 		</div>
 	{/if}
 {/if}
@@ -516,6 +575,63 @@
 		border-radius: var(--radius-lg); display: flex; flex-direction: column;
 		overflow: hidden; box-shadow: 0 32px 64px rgba(0,0,0,0.5);
 	}
+
+	/* Tag Modal Specific */
+	.tag-modal {
+		width: 100%; max-width: 440px; background: var(--bg-secondary); border: 1px solid var(--border);
+		border-radius: var(--radius-lg); display: flex; flex-direction: column; overflow: hidden;
+		box-shadow: 0 32px 64px rgba(0,0,0,0.6);
+	}
+	.tag-modal-header {
+		display: flex; align-items: center; justify-content: space-between;
+		padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); background: var(--bg-card);
+	}
+	.tag-modal-title {
+		display: flex; align-items: center; gap: 0.75rem; font-weight: 700; font-size: 1.1rem; color: var(--text-primary);
+	}
+	.tag-modal-body { padding: 1.5rem; display: flex; flex-direction: column; gap: 1.5rem; }
+	.current-tags-grid { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+	.tag-chip {
+		display: flex; align-items: center; gap: 0.4rem;
+		background: rgba(116, 215, 237, 0.1); border: 1px solid var(--accent-cyan);
+		color: var(--accent-cyan); padding: 0.3rem 0.75rem; border-radius: 999px; font-size: 0.82rem;
+	}
+	.tag-chip-x {
+		background: none; border: none; color: inherit; cursor: pointer;
+		font-size: 0.85rem; padding: 0; line-height: 1; opacity: 0.65;
+	}
+	.tag-chip-x:hover { opacity: 1; }
+
+	.tag-input-wrapper { display: flex; gap: 0.5rem; }
+	.tag-modal-input {
+		flex: 1; background: var(--bg-card); border: 1px solid var(--border);
+		border-radius: 8px; padding: 0.65rem 0.85rem; color: var(--text-primary); font-size: 0.9rem; outline: none;
+	}
+	.tag-modal-input:focus { border-color: var(--accent-cyan); }
+	.tag-modal-add-btn {
+		background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px;
+		padding: 0 1rem; color: var(--text-primary); font-weight: 600; font-size: 0.85rem; cursor: pointer;
+	}
+	.presets-label { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: -0.75rem; }
+	.tag-modal-presets { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+	.preset-tag-btn {
+		background: var(--bg-card); border: 1px solid var(--border); padding: 0.4rem 0.85rem;
+		border-radius: 999px; font-size: 0.78rem; color: var(--text-secondary); cursor: pointer; transition: all 0.2s;
+	}
+	.preset-tag-btn:hover { border-color: var(--tc); color: var(--tc); transform: translateY(-1px); }
+	.preset-tag-btn.active { border-color: var(--tc); background: var(--tc); color: #000; font-weight: 600; }
+
+	.tag-modal-footer {
+		padding: 1.25rem 1.5rem; background: var(--bg-card); border-top: 1px solid var(--border);
+		display: flex; flex-direction: column; gap: 1rem;
+	}
+	.footer-actions { display: flex; gap: 0.75rem; justify-content: flex-end; }
+	.cancel-btn { background: none; border: 1px solid var(--border); border-radius: 8px; padding: 0.55rem 1.25rem; font-size: 0.85rem; color: var(--text-secondary); cursor: pointer; }
+	.save-tags-btn {
+		background: var(--accent-green); color: #000; border: none; border-radius: 8px;
+		padding: 0.55rem 1.5rem; font-weight: 700; font-size: 0.85rem; cursor: pointer;
+	}
+	.save-tags-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
 	/* Mobile warning */
 	.mobile-warning {
@@ -548,12 +664,7 @@
 		color: var(--accent-green); padding: 0.12rem 0.5rem; border-radius: 999px;
 		font-size: 0.73rem; white-space: nowrap;
 	}
-	.tag-chip-x {
-		background: none; border: none; color: inherit; cursor: pointer;
-		font-size: 0.85rem; padding: 0; line-height: 1; opacity: 0.65;
-	}
-	.tag-chip-x:hover { opacity: 1; }
-
+	
 	.tag-popover-wrap { position: relative; }
 	.tag-add-circle {
 		width: 20px; height: 20px; border-radius: 50%;
@@ -652,21 +763,7 @@
 		font-family: var(--font-mono); font-size: 0.68rem; color: var(--text-muted); gap: 1rem;
 	}
 	.footer-right { display: flex; align-items: center; gap: 0.5rem; }
-	.pat-label { color: var(--text-muted); }
-	.token-input {
-		background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 4px;
-		padding: 0.18rem 0.45rem; color: var(--text-primary); font-size: 0.68rem; outline: none; width: 190px;
-	}
-	.token-input:focus { border-color: var(--accent-cyan); }
-	.pat-save-btn {
-		background: var(--accent-green); border: none; border-radius: 4px;
-		padding: 0.18rem 0.6rem; font-weight: 700; font-size: 0.68rem; cursor: pointer; color: #111;
-	}
 	.pat-set { color: var(--accent-green); }
-	.pat-clear-btn {
-		background: none; border: 1px solid var(--border); border-radius: 4px;
-		padding: 0.18rem 0.6rem; font-size: 0.68rem; color: var(--text-muted); cursor: pointer;
-	}
 
 	.status-msg { font-size: 0.78rem; max-width: 320px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 	.status-msg.error { color: #f87171; }

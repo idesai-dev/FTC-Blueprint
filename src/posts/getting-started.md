@@ -2,7 +2,7 @@
 title: Getting Started
 date: 2026-03-28
 description: Getting Started with FTC
-tags: [rookie guide, beginner]
+tags: [completed, rookie guide, beginner]
 author: Ishaan Desai
 published: true
 ---

@@ -38,10 +38,26 @@
 
 	import { devModeState } from '$lib/stores/devMode.svelte';
 
-	let currentPath = $derived($page.url.pathname);
-	let completedPaths = $derived($page.data.completedPaths || []);
+	let { mode = 'article' } = $props();
 
-	let visibleGroups = $derived(
+	let currentPath = $derived($page.url.pathname);
+	
+	function getCompletedPaths() {
+		if ($page.data.completedPaths) return $page.data.completedPaths;
+		if ($page.data.posts) {
+			return $page.data.posts.map((p: any) => {
+				const sectionTag = p.meta.tags?.find((t: string) => 
+					['software', 'hardware', 'outreach'].includes(t.toLowerCase())
+				);
+				return `/${(sectionTag || 'hardware').toLowerCase()}/${p.slug}`;
+			});
+		}
+		return [currentPath];
+	}
+
+	let completedPaths = $derived(getCompletedPaths());
+
+	let baseGroups = $derived(
 		groups
 			.map((group) => {
 				const visibleLinks = group.links.filter(
@@ -52,14 +68,21 @@
 			.filter((group) => group.links.length > 0)
 	);
 
+	// Context-aware visible groups
+	let visibleGroups = $derived(
+		mode === 'article'
+			? baseGroups.filter((group) => group.links.some((link) => link.href === currentPath))
+			: baseGroups
+	);
+
 	let activeGroup = $derived(
-		visibleGroups.find((group) => group.links.some((link) => link.href === currentPath))
+		baseGroups.find((group) => group.links.some((link) => link.href === currentPath))
 	);
 	import { fade } from 'svelte/transition';
 	let mobileOpen = $state(false);
 </script>
 
-{#if activeGroup}
+{#if visibleGroups.length > 0}
 	<!-- svelte-ignore a11y_click_events_have_key_events -->
 	<!-- svelte-ignore a11y_no_static_element_interactions -->
 	{#if mobileOpen}
@@ -68,23 +91,33 @@
 
 	<nav class="left-sidebar" class:mobile-open={mobileOpen} aria-label="Section navigation">
 		<div class="sidebar-header-mobile">
-			<p class="sidebar-label">{activeGroup.title}</p>
 			<button class="close-sidebar-btn" onclick={() => (mobileOpen = false)}>✕</button>
+			<p class="sidebar-label">{activeGroup ? activeGroup.title : 'Navigation'}</p>
 		</div>
-		<ul class="sidebar-list">
-			{#each activeGroup.links as { href, label }}
-				<li class="sidebar-item">
-					<a
-						{href}
-						class="sidebar-link"
-						class:active={currentPath === href}
-						onclick={() => (mobileOpen = false)}
-					>
-						{label}
-					</a>
-				</li>
+		<div class="sidebar-scroll">
+			{#each visibleGroups as group}
+				{#if mode === 'section'}
+					<p class="sidebar-label">{group.title}</p>
+				{/if}
+				<ul class="sidebar-list">
+					{#each group.links as { href, label }}
+						<li class="sidebar-item">
+							<a
+								{href}
+								class="sidebar-link"
+								class:active={currentPath === href}
+								onclick={() => (mobileOpen = false)}
+							>
+								{label}
+							</a>
+						</li>
+					{/each}
+				</ul>
+				{#if mode === 'section'}
+					<div class="sidebar-divider"></div>
+				{/if}
 			{/each}
-		</ul>
+		</div>
 	</nav>
 	
 	<button 
@@ -95,8 +128,8 @@
 	>
 		<div class="bot-icon-wrap">
 			<svg
-				width="24"
-				height="24"
+				width="20"
+				height="20"
 				viewBox="0 0 24 24"
 				fill="none"
 				stroke="currentColor"
@@ -108,9 +141,6 @@
 				<line x1="4" y1="6" x2="20" y2="6"></line>
 				<line x1="4" y1="18" x2="20" y2="18"></line>
 			</svg>
-			{#if !mobileOpen}
-				<span class="bot-pulse"></span>
-			{/if}
 		</div>
 	</button>
 {/if}
@@ -130,6 +160,23 @@
 		scrollbar-color: var(--border) transparent;
 	}
 
+	.sidebar-scroll {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+	}
+
+	.sidebar-header-mobile {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		margin-bottom: 0.5rem;
+	}
+
+	.close-sidebar-btn {
+		display: none;
+	}
+
 	.sidebar-label {
 		font-family: var(--font-sans);
 		font-size: 0.72rem;
@@ -141,9 +188,9 @@
 		border: 1px solid var(--border-subtle);
 		border-radius: var(--radius-sm);
 		padding: 0.35rem 0.6rem;
-		margin-bottom: 0.85rem;
 		display: inline-block;
 		box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+		margin-bottom: 0.5rem;
 	}
 
 	.sidebar-list {
@@ -152,12 +199,9 @@
 		margin: 0;
 		display: flex;
 		flex-direction: column;
-		gap: 0.5rem;
+		gap: 0.4rem;
 		padding-right: 1rem;
-	}
-
-	.sidebar-item {
-		display: block;
+		margin-bottom: 1rem;
 	}
 
 	.sidebar-link {
@@ -168,9 +212,7 @@
 		text-decoration: none;
 		border-radius: var(--radius-sm);
 		padding: 0.35rem 0.5rem;
-		transition:
-			color var(--transition-fast),
-			background-color var(--transition-fast);
+		transition: all var(--transition-fast);
 		line-height: 1.4;
 	}
 
@@ -183,6 +225,13 @@
 		color: var(--accent-green);
 		background: rgba(126, 255, 160, 0.07);
 		font-weight: 500;
+	}
+
+	.sidebar-divider {
+		height: 1px;
+		background: var(--border-subtle);
+		margin: 0.5rem 1rem 1rem 0;
+		opacity: 0.5;
 	}
 
 	.mobile-toggle-fab {
@@ -198,54 +247,39 @@
 			display: flex;
 			align-items: center;
 			justify-content: center;
+			gap: 0.5rem;
 			position: fixed;
 			bottom: 1.5rem;
 			left: 1.5rem;
-			width: 60px;
-			height: 60px;
+			width: auto;
+			padding: 0 1.25rem;
+			height: 54px;
 			background: var(--bg-card);
 			border: 1px solid var(--border);
-			border-radius: 50%;
+			border-radius: var(--radius-pill);
 			color: var(--text-primary);
 			cursor: pointer;
-			box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3), var(--glow-cyan);
+			box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4), var(--glow-cyan);
 			z-index: 1000;
 			transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 		}
 
-		.mobile-toggle-fab:hover {
-			transform: scale(1.05) translateY(-4px);
-			border-color: var(--text-primary);
-			background: var(--bg-card-hover);
+		.mobile-toggle-fab::after {
+			content: 'DOCS';
+			font-family: var(--font-sans);
+			font-size: 0.85rem;
+			font-weight: 700;
+			letter-spacing: 0.05em;
 		}
 
-		.mobile-toggle-fab.active {
-			transform: rotate(90deg);
-			background: var(--bg-card);
+		.mobile-toggle-fab:hover {
+			transform: scale(1.05) translateY(-2px);
 			border-color: var(--accent-cyan);
 		}
 
-		.bot-icon-wrap {
-			position: relative;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			color: var(--accent-cyan);
-		}
-
-		.bot-pulse {
-			position: absolute;
-			inset: -8px;
-			border: 2px solid var(--accent-cyan);
-			border-radius: 50%;
-			opacity: 0;
-			animation: pulse-ring 2s infinite;
-		}
-
-		@keyframes pulse-ring {
-			0% { transform: scale(0.5); opacity: 0; }
-			50% { opacity: 0.3; }
-			100% { transform: scale(1.2); opacity: 0; }
+		.mobile-toggle-fab.active {
+			background: var(--bg-card);
+			border-color: var(--accent-cyan);
 		}
 
 		.left-sidebar {
@@ -255,11 +289,12 @@
 			width: min(320px, 85vw);
 			height: 100vh;
 			max-height: none;
-			background: var(--bg-secondary);
+			background: var(--bg);
 			z-index: 1100;
 			border-radius: 0;
 			border-right: 1px solid var(--border);
-			padding: 2rem 1.5rem;
+			border-left: none;
+			padding: 1.5rem;
 			transform: translateX(-100%);
 			transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 			display: flex;
@@ -273,12 +308,16 @@
 
 		.sidebar-header-mobile {
 			display: flex;
+			flex-direction: row;
 			align-items: center;
 			justify-content: space-between;
 			margin-bottom: 2rem;
+			padding-bottom: 1rem;
+			border-bottom: 1px solid var(--border-subtle);
 		}
 
 		.close-sidebar-btn {
+			display: block;
 			background: none;
 			border: none;
 			color: var(--text-muted);
@@ -286,9 +325,10 @@
 			cursor: pointer;
 		}
 
-		.sidebar-list {
-			gap: 0.75rem;
-			padding-right: 0;
+		.sidebar-scroll {
+			flex: 1;
+			overflow-y: auto;
+			padding-right: 0.5rem;
 		}
 
 		.sidebar-link {
@@ -297,15 +337,12 @@
 			border: 1px solid var(--border-subtle);
 			border-radius: var(--radius-md);
 			font-size: 0.95rem;
-			color: var(--text-secondary);
-			transition: all 0.2s ease;
 		}
 
 		.sidebar-link.active {
 			background: rgba(116, 215, 237, 0.1);
 			border-color: var(--accent-cyan);
 			color: var(--accent-cyan);
-			font-weight: 600;
 		}
 
 		.mobile-backdrop {

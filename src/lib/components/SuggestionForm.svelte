@@ -138,7 +138,7 @@
 
 	input,
 	textarea {
-		background: var(--bg-code);
+		background: var(--bg-secondary);
 		border: 1px solid var(--border);
 		border-radius: var(--radius-md);
 		padding: 0.8rem 1rem;
@@ -147,7 +147,8 @@
 		font-size: 0.95rem;
 		transition:
 			border-color var(--transition-fast),
-			box-shadow var(--transition-fast);
+			box-shadow var(--transition-fast),
+			background-color var(--transition-base);
 	}
 
 	input:focus,

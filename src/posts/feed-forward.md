@@ -2,7 +2,7 @@
 title: Feedforward Control
 date: 2026-03-28
 description: A practical guide to feedforward control for FTC mechanisms.
-tags: [software, intermediate, control, completed]
+tags: [completed, software, intermediate, control, completed]
 author: Ishaan Desai
 published: true
 ---

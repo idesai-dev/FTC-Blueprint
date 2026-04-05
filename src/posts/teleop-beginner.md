@@ -2,7 +2,7 @@
 title: Teleop Beginner
 date: 2026-03-28
 description: Content coming soon for Teleop Beginner.
-tags: [software, manual, beginner]
+tags: [completed, software, manual, beginner]
 author: Blueprint
 published: true
 ---

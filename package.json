@@ -1,14 +1,14 @@
 {
 	"name": "blueprint-ftc",
 	"private": true,
-	"version": "1.2.3",
+	"version": "1.2.10",
 	"type": "module",
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build",
 		"p": "vite preview",
-		"predeploy": "npm version patch --no-git-tag-version && echo \"#️⃣ Deploying version: v$(node -p \"require('./package.json').version\")\"",
-		"deploy": "npm run build && gh-pages -d build --dotfiles",
+		"predeploy": "npm version patch --no-git-tag-version && echo \"#️⃣ Preparing version: v$(node -p \"require('./package.json').version\")\"",
+		"deploy": "npm run build && gh-pages -d build --dotfiles && echo \"✅ Successfully deployed version: v$(node -p \"require('./package.json').version\")\"",
 		"prepare": "svelte-kit sync || echo ''",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
@@ -22,6 +22,7 @@
 		"@sveltejs/vite-plugin-svelte": "^6.2.4",
 		"@types/dompurify": "^3.0.5",
 		"@types/node": "^25.5.2",
+		"@types/three": "^0.183.1",
 		"mdsvex": "^0.12.7",
 		"prettier": "^3.8.1",
 		"prettier-plugin-svelte": "^3.4.1",
@@ -34,6 +35,7 @@
 		"dompurify": "^3.3.3",
 		"lucide-svelte": "^1.0.1",
 		"marked": "^17.0.5",
-		"svelte-5-french-toast": "^2.0.6"
+		"svelte-5-french-toast": "^2.0.6",
+		"three": "^0.183.2"
 	}
 }

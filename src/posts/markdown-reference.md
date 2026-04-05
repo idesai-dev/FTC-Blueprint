@@ -2,7 +2,7 @@
 title: Writing in Markdown - A Quick Reference
 date: 2026-03-20
 description: A practical guide to markdown syntax â headings, code blocks, tables, blockquotes, and more.
-tags: [software, beginner]
+tags: [completed, software, beginner]
 author: Blueprint
 published: true
 ---
@@ -20,7 +20,7 @@ Headers consist of information that is not shown to the public user, but instead
 title: Writing in Markdown â A Quick Reference
 date: 2026-03-20
 description: A practical guide to markdown syntax â headings, code blocks, tables, blockquotes, and more.
-tags: [markdown, beginner, formatting]
+tags: [completed, markdown, beginner, formatting]
 author: Blueprint
 published: true
 ---

@@ -2,7 +2,7 @@
 title: Drivetrain Overview
 date: 2026-04-03
 description: A comprehensive overview of FTC drivetrain types and selection.
-tags: [hardware, beginner]
+tags: [completed, hardware, beginner]
 author: Blueprint
 published: true
 ---

@@ -2,6 +2,7 @@
 	import BlogCard from '$lib/components/BlogCard.svelte';
 	import type { Post } from '$lib/utils/posts';
 	import FilterBar from '$lib/components/FilterBar.svelte';
+	import OutreachLeftSidebar from '$lib/components/OutreachLeftSidebar.svelte';
 	import { devModeState, initDevMode } from '$lib/stores/devMode.svelte';
 	import { onMount } from 'svelte';
 
@@ -60,99 +61,7 @@
 </svelte:head>
 
 <div class="directory-container">
-	<div class="sidebar">
-		<h3>Blueprint Guide</h3>
-		<br />
-
-		{#if showGroup(["/outreach/outreach-intro", "/outreach/outreach-planning"])}
-		<p
-			class="sub"
-			style="color:var(--accent-green); font-family:var(--font-heading); font-weight:600; font-size: 1.1rem; margin-top: 1rem; margin-bottom: 0.25rem;"
-		>
-			Getting Started
-		</p>
-		<ol style="padding:0; margin:0; list-style:none; color:var(--text-body);">
-			{#if showLink("/outreach/outreach-intro")}
-				<li style="padding-left:1.25rem; margin-top:0.25rem;">
-				<a href="/outreach/outreach-intro">What is Outreach?</a>
-			</li>
-			{/if}
-			{#if showLink("/outreach/outreach-planning")}
-				<li style="padding-left:1.25rem; margin-top:0.25rem;">
-				<a href="/outreach/outreach-planning">Planning Events</a>
-			</li>
-			{/if}
-		</ol>
-		{/if}
-
-		{#if showGroup(["/outreach/outreach-demos", "/outreach/outreach-workshops", "/outreach/outreach-stem-fairs"])}
-		<p
-			class="sub"
-			style="color:var(--accent-green); font-family:var(--font-heading); font-weight:600; font-size: 1.1rem; margin-top: 1rem; margin-bottom: 0.25rem;"
-		>
-			Community Events
-		</p>
-		<ol style="padding:0; margin:0; list-style:none; color:var(--text-body);">
-			{#if showLink("/outreach/outreach-demos")}
-				<li style="padding-left:1.25rem; margin-top:0.25rem;">
-				<a href="/outreach/outreach-demos">Robot Demos</a>
-			</li>
-			{/if}
-			{#if showLink("/outreach/outreach-workshops")}
-				<li style="padding-left:1.25rem; margin-top:0.25rem;">
-				<a href="/outreach/outreach-workshops">Workshops</a>
-			</li>
-			{/if}
-			{#if showLink("/outreach/outreach-stem-fairs")}
-				<li style="padding-left:1.25rem; margin-top:0.25rem;">
-				<a href="/outreach/outreach-stem-fairs">STEM Fairs</a>
-			</li>
-			{/if}
-		</ol>
-		{/if}
-
-		{#if showGroup(["/outreach/mentoring-teams", "/outreach/outreach-rookie-support"])}
-		<p
-			class="sub"
-			style="color:var(--accent-green); font-family:var(--font-heading); font-weight:600; font-size: 1.1rem; margin-top: 1rem; margin-bottom: 0.25rem;"
-		>
-			Mentoring
-		</p>
-		<ol style="padding:0; margin:0; list-style:none; color:var(--text-body);">
-			{#if showLink("/outreach/mentoring-teams")}
-				<li style="padding-left:1.25rem; margin-top:0.25rem;">
-				<a href="/outreach/mentoring-teams">Mentoring Teams</a>
-			</li>
-			{/if}
-			{#if showLink("/outreach/outreach-rookie-support")}
-				<li style="padding-left:1.25rem; margin-top:0.25rem;">
-				<a href="/outreach/outreach-rookie-support">Rookie Support</a>
-			</li>
-			{/if}
-		</ol>
-		{/if}
-
-		{#if showGroup(["/outreach/outreach-impact-essay", "/outreach/outreach-journal"])}
-		<p
-			class="sub"
-			style="color:var(--accent-green); font-family:var(--font-heading); font-weight:600; font-size: 1.1rem; margin-top: 1rem; margin-bottom: 0.25rem;"
-		>
-			Documentation
-		</p>
-		<ol style="padding:0; margin:0; list-style:none; color:var(--text-body);">
-			{#if showLink("/outreach/outreach-impact-essay")}
-				<li style="padding-left:1.25rem; margin-top:0.25rem;">
-				<a href="/outreach/outreach-impact-essay">Impact Essay Tips</a>
-			</li>
-			{/if}
-			{#if showLink("/outreach/outreach-journal")}
-				<li style="padding-left:1.25rem; margin-top:0.25rem;">
-				<a href="/outreach/outreach-journal">Keeping a Journal</a>
-			</li>
-			{/if}
-		</ol>
-		{/if}
-	</div>
+	<OutreachLeftSidebar mode="section" />
 
 	<div class="content-feed">
 		<section class="blog-header">
@@ -205,28 +114,21 @@
 		display: flex;
 		flex-direction: column;
 		width: 100%;
-	}
-
-	.sidebar {
-		display: none;
+		gap: 3rem;
+		max-width: var(--container-wide);
+		margin: 0 auto;
+		padding: 0 1.5rem;
 	}
 
 	.content-feed {
 		width: 100%;
 	}
 
-	@media (min-width: 860px) {
+	@media (min-width: 1101px) {
 		.directory-container {
 			flex-direction: row;
-			justify-content: flex-end;
-		}
-
-		.sidebar {
-			display: block;
-			width: 24vw;
-			background-color: var(--sidebar-bg);
-			border-right: 2px solid var(--border);
-			padding: 1rem;
+			justify-content: flex-start;
+			padding: 0 2rem;
 		}
 	}
 
@@ -248,11 +150,12 @@
 	.filters-section {
 		padding: 1.5rem 0;
 		border-bottom: 1px solid var(--border-subtle);
-		background: var(--bg-secondary);
+		background: rgba(30, 30, 30, 0.8);
 		position: sticky;
 		top: var(--header-height);
 		z-index: 10;
-		backdrop-filter: blur(12px);
+		backdrop-filter: blur(8px);
+		-webkit-backdrop-filter: blur(8px);
 	}
 	.posts-section {
 		padding: 2.5rem 0 5rem;

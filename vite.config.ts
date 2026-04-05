@@ -10,6 +10,14 @@ const pkg = JSON.parse(json);
 export default defineConfig({
 	plugins: [sveltekit()],
 	define: {
-		__APP_VERSION__: JSON.stringify(process.env.VITE_APP_VERSION || `v${pkg.version}`)
+		__APP_VERSION__: JSON.stringify(process.env.VITE_APP_VERSION || `v${pkg.version}`),
+		__BUILD_TIME__: JSON.stringify(new Date().toLocaleString('en-US', { 
+			hour: 'numeric', 
+			minute: '2-digit', 
+			hour12: true, 
+			month: 'short', 
+			day: 'numeric', 
+			year: 'numeric' 
+		}))
 	}
 });

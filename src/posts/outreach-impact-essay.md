@@ -2,7 +2,7 @@
 title: Impact Essay Tips
 date: 2026-04-03
 description: Tips for writing a compelling outreach impact essay.
-tags: [outreach, intermediate]
+tags: [completed, outreach, intermediate]
 author: Blueprint
 published: true
 ---

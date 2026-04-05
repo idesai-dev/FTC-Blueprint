@@ -29,6 +29,8 @@
 
 	let chatContainer: HTMLElement | null = $state(null);
 	let docs = $state<DocItem[]>([]);
+	const CACHE_KEY = 'docbot_blueprint_data';
+	const CACHE_TTL = 1000 * 60 * 60 * 24; // 24 hours
 
 	function normalize(text: string) {
 		return text
@@ -43,9 +45,25 @@
 		return clean.length > limit ? clean.slice(0, limit).trim() + '...' : clean;
 	}
 
-	async function loadBlueprintDocs() {
-		const sources = ['/software', '/hardware', '/outreach'];
+	async function loadBlueprintDocs(force = false) {
+		// 1. Try Cache First
+		if (!force) {
+			const cached = localStorage.getItem(CACHE_KEY);
+			if (cached) {
+				try {
+					const { timestamp, data } = JSON.parse(cached);
+					if (Date.now() - timestamp < CACHE_TTL) {
+						docs = data;
+						return;
+					}
+				} catch (e) {
+					localStorage.removeItem(CACHE_KEY);
+				}
+			}
+		}
 
+		console.log('DocBot: Fetching fresh documentation data...');
+		const sources = ['/software', '/hardware', '/outreach'];
 		const collected: DocItem[] = [];
 
 		const parseHtml = async (href: string) => {
@@ -63,7 +81,8 @@
 				const text = Array.from(doc.querySelectorAll('p, li, h2, h3, h4'))
 					.map((el) => el.textContent?.trim() || '')
 					.filter(Boolean)
-					.join(' ');
+					.join(' ')
+					.slice(0, 5000); // Limit context size for performance
 
 				collected.push({
 					title,
@@ -75,6 +94,17 @@
 			} catch {}
 		};
 
+		// Batch processing to avoid network congestion
+		const processBatch = async (links: string[]) => {
+			const batchSize = 5;
+			for (let i = 0; i < links.length; i += batchSize) {
+				const batch = links.slice(i, i + batchSize);
+				await Promise.all(batch.map(link => parseHtml(link)));
+				// Yield to main thread
+				await new Promise(r => setTimeout(r, 0));
+			}
+		};
+
 		for (const src of sources) {
 			try {
 				const res = await fetch(src);
@@ -84,17 +114,20 @@
 
 				const links = Array.from(doc.querySelectorAll('a[href]'))
 					.map((a) => (a as HTMLAnchorElement).getAttribute('href') || '')
-					.filter((h) => h.startsWith('/') && !h.startsWith('//'));
+					.filter((h) => h.startsWith('/') && h.length > 2);
 
 				const unique = [...new Set(links)];
-
-				for (const link of unique.slice(0, 60)) {
-					await parseHtml(link);
-				}
+				
+				// Limit depth for performance (20 pages per section)
+				await processBatch(unique.slice(0, 20));
 			} catch {}
 		}
 
 		docs = collected;
+		localStorage.setItem(CACHE_KEY, JSON.stringify({
+			timestamp: Date.now(),
+			data: collected
+		}));
 	}
 
 	function scoreItem(item: DocItem, q: string) {

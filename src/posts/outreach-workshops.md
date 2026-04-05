@@ -2,7 +2,7 @@
 title: Workshops
 date: 2026-04-03
 description: Organizing and running STEM workshops for your community.
-tags: [outreach, intermediate]
+tags: [completed, outreach, intermediate]
 author: Blueprint
 published: true
 ---

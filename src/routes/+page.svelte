@@ -145,6 +145,11 @@
 	<div class="container hero-content animate-fade-up">
 		<div class="eyebrow">
 			<span class="tag tag--cyan">{__APP_VERSION__}</span>
+			{#if devModeState.active}
+				<span class="tag tag--green" style="font-family: var(--font-mono); font-size: 0.7rem;">
+					Last Deployment: {__BUILD_TIME__}
+				</span>
+			{/if}
 		</div>
 		<h1>
 			FTC<br />
@@ -245,6 +250,7 @@
 		height: 100%;
 		opacity: 0.85;
 		animation: hex-drift 8s ease-in-out infinite;
+		will-change: transform;
 	}
 
 	.hex-poly {

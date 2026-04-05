@@ -2,7 +2,7 @@
 title: Parallel Plate Drivetrain
 date: 2026-03-28
 description: Content coming soon for Parallel Plate Drivetrain.
-tags: [hardware]
+tags: [completed, hardware]
 author: Blueprint
 published: true
 ---

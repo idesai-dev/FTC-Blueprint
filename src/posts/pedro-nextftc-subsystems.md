@@ -2,7 +2,7 @@
 title: NextFTC Subsystems
 date: 2026-03-28
 description: Building modular and reusable robot mechanisms using the NextFTC framework.
-tags: [software, intermediate]
+tags: [completed, software, intermediate]
 author: Ishaan Desai
 published: true
 ---

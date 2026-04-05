@@ -2,7 +2,7 @@
 title: Encoder Autonomous Introduction
 date: 2026-03-27
 description: Getting started with encoder-based autonomous operations.
-tags: [software, auto, beginner]
+tags: [completed, software, auto, beginner]
 author: Blueprint
 published: true
 ---
