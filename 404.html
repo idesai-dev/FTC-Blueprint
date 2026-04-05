@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en" class="dark">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="theme-color" content="#1a1a1a" />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<script>
+			(function () {
+				const saved = localStorage.getItem('theme');
+				const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+				const theme = saved || (prefersDark ? 'dark' : 'light');
+				document.documentElement.className = theme;
+			})();
+		</script>
+
+		<link rel="icon" type="image/png" href="/favicon.png" />
+		<link rel="apple-touch-icon" href="/favicon.png" />
+		<link href="/_app/immutable/entry/start.DR8Md0MI.js" rel="modulepreload">
+		<link href="/_app/immutable/chunks/C_BiuRXS.js" rel="modulepreload">
+		<link href="/_app/immutable/chunks/Bnmy8ppa.js" rel="modulepreload">
+		<link href="/_app/immutable/chunks/CqcXESg6.js" rel="modulepreload">
+		<link href="/_app/immutable/chunks/DD0fxbH1.js" rel="modulepreload">
+		<link href="/_app/immutable/entry/app.ZqdnFma1.js" rel="modulepreload">
+		<link href="/_app/immutable/chunks/PPVm8Dsz.js" rel="modulepreload">
+		<link href="/_app/immutable/chunks/D6n4huqk.js" rel="modulepreload">
+		<link href="/_app/immutable/chunks/BeJ8y95H.js" rel="modulepreload">
+		<link href="/_app/immutable/chunks/DcCu68Sf.js" rel="modulepreload">
+		<link href="/_app/immutable/chunks/i5s9aYQM.js" rel="modulepreload">
+		<link href="/_app/immutable/chunks/CCUHKMrk.js" rel="modulepreload">
+		<link href="/_app/immutable/chunks/Cl_mh_Ed.js" rel="modulepreload">
+		<link href="/_app/immutable/chunks/-bnxJKum.js" rel="modulepreload">
+		
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents">
+			<script>
+				{
+					__sveltekit_u0wllr = {
+						base: ""
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("/_app/immutable/entry/start.DR8Md0MI.js"),
+						import("/_app/immutable/entry/app.ZqdnFma1.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element);
+					});
+				}
+			</script>
+		</div>
+		<script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script>
+	</body>
+</html>

@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en" class="dark">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="theme-color" content="#1a1a1a" />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<script>
+			(function () {
+				const saved = localStorage.getItem('theme');
+				const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+				const theme = saved || (prefersDark ? 'dark' : 'light');
+				document.documentElement.className = theme;
+			})();
+		</script>
+
+		<link rel="icon" type="image/png" href="../favicon.png" />
+		<link rel="apple-touch-icon" href="../favicon.png" />
+		<link href="../_app/immutable/entry/start.DR8Md0MI.js" rel="modulepreload">
+		<link href="../_app/immutable/chunks/C_BiuRXS.js" rel="modulepreload">
+		<link href="../_app/immutable/chunks/Bnmy8ppa.js" rel="modulepreload">
+		<link href="../_app/immutable/chunks/CqcXESg6.js" rel="modulepreload">
+		<link href="../_app/immutable/chunks/DD0fxbH1.js" rel="modulepreload">
+		<link href="../_app/immutable/entry/app.ZqdnFma1.js" rel="modulepreload">
+		<link href="../_app/immutable/chunks/PPVm8Dsz.js" rel="modulepreload">
+		<link href="../_app/immutable/chunks/D6n4huqk.js" rel="modulepreload">
+		<link href="../_app/immutable/chunks/BeJ8y95H.js" rel="modulepreload">
+		<link href="../_app/immutable/chunks/DcCu68Sf.js" rel="modulepreload">
+		<link href="../_app/immutable/chunks/i5s9aYQM.js" rel="modulepreload">
+		<link href="../_app/immutable/chunks/CCUHKMrk.js" rel="modulepreload">
+		<link href="../_app/immutable/chunks/Cl_mh_Ed.js" rel="modulepreload">
+		<link href="../_app/immutable/chunks/-bnxJKum.js" rel="modulepreload">
+		<link href="../_app/immutable/nodes/0.D9SL2fk2.js" rel="modulepreload">
+		<link href="../_app/immutable/chunks/JqdUnowO.js" rel="modulepreload">
+		<link href="../_app/immutable/chunks/BPfiLG04.js" rel="modulepreload">
+		<link href="../_app/immutable/chunks/DouwiWmp.js" rel="modulepreload">
+		<link href="../_app/immutable/chunks/Bu6mw6h0.js" rel="modulepreload">
+		<link href="../_app/immutable/chunks/DIevTI5r.js" rel="modulepreload">
+		<link href="../_app/immutable/chunks/CY07afjp.js" rel="modulepreload">
+		<link href="../_app/immutable/chunks/BnVWFPwe.js" rel="modulepreload">
+		<link href="../_app/immutable/chunks/BUqnvk6M.js" rel="modulepreload">
+		<link href="../_app/immutable/chunks/8HGHkWW2.js" rel="modulepreload">
+		<link href="../_app/immutable/chunks/Bgyz-0IR.js" rel="modulepreload">
+		<link href="../_app/immutable/chunks/B9o_7ABy.js" rel="modulepreload">
+		<link href="../_app/immutable/chunks/Dyu2hlT1.js" rel="modulepreload">
+		<link href="../_app/immutable/chunks/DT8wQGY8.js" rel="modulepreload">
+		<link href="../_app/immutable/chunks/BIt1uBmu.js" rel="modulepreload">
+		<link href="../_app/immutable/nodes/2.BG1MTOEc.js" rel="modulepreload">
+		<link href="../_app/immutable/nodes/13.Bpk_8Ml4.js" rel="modulepreload">
+		<!--12qhfyh--><meta name="description" content="Blueprint — a modern blog for ideas, articles, and more."/><!----><!--10ilfs7--><meta name="description" content="Interactive mecanum drive kinematics simulator for FTC."/><!----><title>Mecanum Simulator | FTC Blueprint</title>
+		<link href="../_app/immutable/assets/Toaster.DAOApV86.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/0.B7POqlbp.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/2.C0WOjJus.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/13.DQBIrwuZ.css" rel="stylesheet">
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents"><!--[--><!--[0--><!--[--><!--[0--><div class="custom-cursor svelte-1nx4icj" style="transform: translate3d(0px, 0px, 0);" aria-hidden="true"><div class="cursor-inner svelte-1nx4icj"></div> <div class="cursor-outer svelte-1nx4icj"></div></div><!--]--><!----> <div class="docbot-wrapper svelte-1tizrit"><!--[-1--><!--]--> <button class="bot-trigger svelte-1tizrit" aria-label="Open documentation assistant"><!--[0--><div class="bot-icon-wrap svelte-1tizrit"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svelte-1tizrit"><path d="M12 2l9 4.5v11L12 22l-9-4.5v-11z" class="svelte-1tizrit"></path><circle cx="12" cy="12" r="3" class="svelte-1tizrit"></circle><path d="M12 9v1" class="svelte-1tizrit"></path><path d="M12 14v1" class="svelte-1tizrit"></path></svg> <span class="bot-pulse svelte-1tizrit"></span></div><!--]--></button></div><!----> <div aria-live="polite" role="status" class="toaster  svelte-17yx3r6"><!--[--><!--]--></div><!----> <!--[-1--><div class="site-wrapper svelte-12qhfyh"><header class="header svelte-1elxaub"><div class="inner container container--wide svelte-1elxaub"><a href="/" class="logo svelte-1elxaub"><span class="logo-mark svelte-1elxaub">⬡</span> <span class="logo-text">Blueprint</span></a> <nav class="nav svelte-1elxaub" aria-label="Main navigation"><!--[--><!--[-1--><a href="/" class="nav-link svelte-1elxaub">Home</a><!--]--><!--[-1--><a href="/software" class="nav-link svelte-1elxaub">Software</a><!--]--><!--[0--><div class="nav-dropdown svelte-1elxaub"><button type="button" class="nav-link dropdown-toggle svelte-1elxaub active" aria-expanded="false" aria-haspopup="true">Simulators <span class="chevron svelte-1elxaub">▾</span></button> <div class="dropdown-menu svelte-1elxaub"><!--[--><a href="/simulators/pid" class="dropdown-link svelte-1elxaub">PID Simulator</a><a href="/simulators/motionprofile" class="dropdown-link svelte-1elxaub">Motion Profiling</a><a href="/simulators/feedforward" class="dropdown-link svelte-1elxaub">Feedforward</a><a href="/simulators/pid-game" class="dropdown-link svelte-1elxaub">PID Learning Game</a><a href="/simulators/pedro-visualizer" class="dropdown-link svelte-1elxaub">Pedro Visualizer</a><a href="/simulators/mecanum" class="dropdown-link svelte-1elxaub active" aria-current="page">Mecanum Simulator</a><!--]--></div></div><!--]--><!--[-1--><a href="/hardware" class="nav-link svelte-1elxaub">Hardware</a><!--]--><!--[-1--><a href="/suggest" class="nav-link svelte-1elxaub">Suggest</a><!--]--><!--[-1--><a href="/about" class="nav-link svelte-1elxaub">About</a><!--]--><!--]--></nav> <div class="actions svelte-1elxaub"><form class="header-search-wrap svelte-1elxaub"><svg class="search-icon svelte-1elxaub" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg> <input type="search" placeholder="Global Search..." value="" class="header-search-input svelte-1elxaub"/> <!--[-1--><span class="search-cmd svelte-1elxaub">⌘K</span><!--]--></form> <a href="/search" class="action-btn mobile-search-btn svelte-1elxaub" aria-label="Search" title="Search"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg></a> <!--[-1--><!--]--> <button class="action-btn cursor-toggle svelte-1elxaub active" title="Toggle Custom Cursor"><!--[0--><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 3 7.07 16.97 2.51-7.39 7.39-2.51L3 3z"></path><path d="m13 13 6 6"></path></svg><!--]--></button> <button id="theme-toggle" class="toggle-btn svelte-1cmi4dh" aria-label="Switch to light mode" title="Light mode"><!--[0--><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path></svg><!--]--></button><!----> <button class="menu-btn svelte-1elxaub" aria-label="Toggle menu" aria-expanded="false"><span class="bar svelte-1elxaub"></span> <span class="bar svelte-1elxaub"></span> <span class="bar svelte-1elxaub"></span></button></div></div></header> <!--[-1--><!--]--><!----> <main class="main-content svelte-12qhfyh"><!--[0--><!--[--><!--[-1--><!--]--> <div class="simulator-wrapper svelte-wj7u9v"><!--[--><section class="sim-page svelte-10ilfs7"><div class="container container--narrow"><header class="sim-header text-center animate-fade-up svelte-10ilfs7"><span class="badge svelte-10ilfs7">Drive Systems</span> <h1 class="svelte-10ilfs7">Mecanum Drive <span class="gradient-text svelte-10ilfs7">Simulator</span></h1> <p class="subtitle svelte-10ilfs7">Press <strong>W A S D</strong> to strafe and translate, <strong>Q E</strong> to rotate.
+				Watch the wheel power values update in real time.</p></header> <div class="visualizer-wrap animate-fade-up svelte-10ilfs7" style="animation-delay: 100ms"><div class="vis-inner svelte-10ilfs7"><div class="chassis-area svelte-10ilfs7"><div class="chassis-label svelte-10ilfs7">Robot top view</div> <!--[-1--><!--]--> <div class="robot-chassis svelte-10ilfs7"><!--[-1--><!--]--> <!--[-1--><!--]--> <!--[--><div class="wheel wheel-fl svelte-10ilfs7"><div class="wheel-bar svelte-10ilfs7" style="height: 0px; background: var(--text-secondary); "></div> <span class="wheel-label svelte-10ilfs7">FL</span> <span class="wheel-val svelte-10ilfs7" style="color: var(--text-secondary)">0.00</span></div><div class="wheel wheel-fr svelte-10ilfs7"><div class="wheel-bar svelte-10ilfs7" style="height: 0px; background: var(--text-secondary); "></div> <span class="wheel-label svelte-10ilfs7">FR</span> <span class="wheel-val svelte-10ilfs7" style="color: var(--text-secondary)">0.00</span></div><div class="wheel wheel-bl svelte-10ilfs7"><div class="wheel-bar svelte-10ilfs7" style="height: 0px; background: var(--text-secondary); "></div> <span class="wheel-label svelte-10ilfs7">BL</span> <span class="wheel-val svelte-10ilfs7" style="color: var(--text-secondary)">0.00</span></div><div class="wheel wheel-br svelte-10ilfs7"><div class="wheel-bar svelte-10ilfs7" style="height: 0px; background: var(--text-secondary); "></div> <span class="wheel-label svelte-10ilfs7">BR</span> <span class="wheel-val svelte-10ilfs7" style="color: var(--text-secondary)">0.00</span></div><!--]--></div></div> <div class="right-panel svelte-10ilfs7"><div class="equations-block svelte-10ilfs7"><p class="panel-label svelte-10ilfs7">Live kinematics</p> <!--[--><div class="eq-row svelte-10ilfs7"><code class="eq-name svelte-10ilfs7">fl</code> <code class="eq-expr svelte-10ilfs7">(y + x + rx) / denom</code> <code class="eq-result svelte-10ilfs7" style="color: var(--text-secondary)">0.00</code></div><div class="eq-row svelte-10ilfs7"><code class="eq-name svelte-10ilfs7">fr</code> <code class="eq-expr svelte-10ilfs7">(y − x − rx) / denom</code> <code class="eq-result svelte-10ilfs7" style="color: var(--text-secondary)">0.00</code></div><div class="eq-row svelte-10ilfs7"><code class="eq-name svelte-10ilfs7">bl</code> <code class="eq-expr svelte-10ilfs7">(y − x + rx) / denom</code> <code class="eq-result svelte-10ilfs7" style="color: var(--text-secondary)">0.00</code></div><div class="eq-row svelte-10ilfs7"><code class="eq-name svelte-10ilfs7">br</code> <code class="eq-expr svelte-10ilfs7">(y + x − rx) / denom</code> <code class="eq-result svelte-10ilfs7" style="color: var(--text-secondary)">0.00</code></div><!--]--></div> <div class="inputs-block"><p class="panel-label svelte-10ilfs7">Input state</p> <div class="axis-row svelte-10ilfs7"><div class="axis-pill svelte-10ilfs7"><span class="svelte-10ilfs7">y</span><strong class="svelte-10ilfs7">0.00</strong></div> <div class="axis-pill svelte-10ilfs7"><span class="svelte-10ilfs7">x</span><strong class="svelte-10ilfs7">0.00</strong></div> <div class="axis-pill svelte-10ilfs7"><span class="svelte-10ilfs7">rx</span><strong class="svelte-10ilfs7">0.00</strong></div></div> <div class="keyboard svelte-10ilfs7"><div class="kb-row svelte-10ilfs7"><kbd class="svelte-10ilfs7">Q</kbd> <kbd class="svelte-10ilfs7">W</kbd> <kbd class="svelte-10ilfs7">E</kbd></div> <div class="kb-row svelte-10ilfs7"><kbd class="svelte-10ilfs7">A</kbd> <kbd class="svelte-10ilfs7">S</kbd> <kbd class="svelte-10ilfs7">D</kbd></div></div></div> <div class="accel-block svelte-10ilfs7"><p class="panel-label svelte-10ilfs7" style="margin-bottom: 0.5rem;">Acceleration smoothing</p> <div class="accel-row svelte-10ilfs7"><span class="accel-label svelte-10ilfs7">Smooth</span> <input type="range" min="0.05" max="1" step="0.01" value="0.18" class="accel-range svelte-10ilfs7"/> <span class="accel-label svelte-10ilfs7">Instant</span></div> <div class="accel-val svelte-10ilfs7">18%</div></div> <div class="field-centric-block svelte-10ilfs7"><label class="toggle-row svelte-10ilfs7"><input type="checkbox" class="svelte-10ilfs7"/> <span class="toggle-track svelte-10ilfs7"><span class="toggle-thumb svelte-10ilfs7"></span></span> <span class="toggle-text svelte-10ilfs7">Field-centric mode</span></label> <!--[-1--><!--]--></div></div></div> <div class="virtual-dpad svelte-10ilfs7"><p class="panel-label svelte-10ilfs7" style="text-align:center; margin-bottom: 0.75rem;">Virtual joystick</p> <div class="dpad-grid svelte-10ilfs7"><button class="v-btn up svelte-10ilfs7">▲</button> <button class="v-btn left svelte-10ilfs7">◀</button> <button class="v-btn down svelte-10ilfs7">▼</button> <button class="v-btn right svelte-10ilfs7">▶</button></div> <div class="rotate-row svelte-10ilfs7"><button class="v-btn rotate-btn svelte-10ilfs7">↺ Q</button> <button class="v-btn rotate-btn svelte-10ilfs7">↻ E</button></div></div></div> <div class="content animate-fade-up svelte-10ilfs7" style="animation-delay: 200ms"><h2 class="svelte-10ilfs7">How it Works</h2> <div class="grid-2 svelte-10ilfs7"><div class="card svelte-10ilfs7"><h3 class="svelte-10ilfs7">The kinematics</h3> <p class="svelte-10ilfs7">Each mecanum wheel has rollers at 45°, so forces decompose into X and Y components.
+						The equations combine your translational inputs (<strong>x</strong>, <strong>y</strong>) and
+						rotation (<strong>rx</strong>) into per-wheel powers that sum correctly.</p></div> <div class="card svelte-10ilfs7"><h3 class="svelte-10ilfs7">Field-centric mode</h3> <p class="svelte-10ilfs7">In robot-centric mode, <strong>W</strong> always drives the robot forward. In field-centric,
+						the IMU heading rotates the input vector so <strong>W</strong> always drives away from the
+						driver — the robot body rotates to show its real heading.</p></div> <div class="card svelte-10ilfs7"><h3 class="svelte-10ilfs7">Power normalization</h3> <p class="svelte-10ilfs7">The denominator is <code class="svelte-10ilfs7">max(|y| + |x| + |rx|, 1)</code>. When the raw sum exceeds 1, all
+						four wheels are scaled proportionally so the fastest wheel always runs at full power.</p></div> <div class="card svelte-10ilfs7"><h3 class="svelte-10ilfs7">Strafing diagonally</h3> <p class="svelte-10ilfs7">Press <strong>W + D</strong> simultaneously. Two wheels drive forward, two receive zero
+						power — the robot slides diagonally. This is unique to mecanum and impossible with
+						standard tank drive.</p></div></div> <div class="callout animate-fade-up svelte-10ilfs7" style="animation-delay: 300ms"><h3 class="svelte-10ilfs7">Ready to implement this on your robot?</h3> <p class="svelte-10ilfs7">Our full mecanum drive guide covers the math, Java implementation, and tips for
+					calibrating field-centric mode with a BNO055 IMU.</p> <a href="/hardware/mecanum-drive" class="btn svelte-10ilfs7">View Mecanum Guide →</a></div></div></div></section><!--]--><!----></div><!--]--><!--]--><!----></main> <footer class="footer svelte-jz8lnl"><div class="container container--wide inner svelte-jz8lnl"><div class="brand svelte-jz8lnl"><a href="/" class="logo svelte-jz8lnl"><span class="logo-mark svelte-jz8lnl">⬡</span> <span>Blueprint</span></a> <p class="tagline svelte-jz8lnl">FTC the right way</p></div> <nav class="footer-nav svelte-jz8lnl" aria-label="Footer navigation"><a href="/" class="svelte-jz8lnl">Home</a> <a href="/software" class="svelte-jz8lnl">Software</a> <a href="/hardware" class="svelte-jz8lnl">Hardware</a> <a href="/outreach" class="svelte-jz8lnl">Outreach</a> <a href="/about" class="svelte-jz8lnl">About</a></nav> <p class="copy svelte-jz8lnl">© 2026 Blueprint. Powered by SvelteKit</p></div></footer><!----></div><!--]--><!--]--><!--]--> <!--[-1--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_u0wllr = {
+						base: new URL("..", location).pathname.slice(0, -1)
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("../_app/immutable/entry/start.DR8Md0MI.js"),
+						import("../_app/immutable/entry/app.ZqdnFma1.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 2, 13],
+							data: [{type:"data",data:{completedPaths:["/hardware/hardware-claws","/software/basics-android-studio","/software/basics-motors-servos","/software/basics-wiring","/software/feed-forward","/software/mecanum-drivetrain","/software/pid-control"]},uses:{}},null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+		<script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script>
+	</body>
+</html>

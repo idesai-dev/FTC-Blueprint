@@ -1,0 +1,1 @@
+import{h as f,k as o,m,E as v,n as y,o as l,s as p,q as i,af as T,t as A}from"./Bnmy8ppa.js";import{B as E}from"./i5s9aYQM.js";function k(d,_,s){var t;o&&(t=A,m());var r=new E(d);f(()=>{var a=_()??null;if(o){var h=y(t),c=h===T,u=a!==null;if(c!==u){var e=l();p(e),r.anchor=e,i(!1),r.ensure(a,a&&(n=>s(n,a))),i(!0);return}}r.ensure(a,a&&(n=>s(n,a)))},v)}export{k as c};
