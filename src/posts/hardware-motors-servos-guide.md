@@ -2,7 +2,7 @@
 title: 'Motors & Servos Guide'
 date: 2026-04-03
 description: A hardware guide to selecting and using motors and servos in FTC.
-tags: [completed, hardware, beginner]
+tags: [ hardware, beginner]
 author: Blueprint
 published: true
 ---

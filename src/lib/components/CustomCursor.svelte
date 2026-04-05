@@ -21,9 +21,9 @@
 	function animate() {
 		if (!active) return;
 		
-		// Buttery smooth lerp (0.15 for responsiveness + elegance)
-		curX = lerp(curX, mouseX, 0.15);
-		curY = lerp(curY, mouseY, 0.15);
+		// Faster, more responsive tracking
+		curX = lerp(curX, mouseX, 0.25);
+		curY = lerp(curY, mouseY, 0.25);
 
 		if (cursorEl) {
 			cursorEl.style.setProperty('--x', `${curX}px`);
@@ -83,6 +83,7 @@
 	>
 		<div class="cursor-inner"></div>
 		<div class="cursor-outer"></div>
+		<div class="cursor-circle circle-1"></div>
 	</div>
 {/if}
 
@@ -100,7 +101,6 @@
 		margin: -10px 0 0 -10px;
 		pointer-events: none;
 		z-index: 10000;
-		mix-blend-mode: difference;
 		--x: -100px;
 		--y: -100px;
 		will-change: transform;
@@ -113,11 +113,11 @@
 		width: 5px;
 		height: 5px;
 		margin: -2.5px 0 0 -2.5px;
-		background: #fff;
+		background: var(--accent-cyan);
 		border-radius: 50%;
-		transition:
-			transform 0.25s cubic-bezier(0.23, 1, 0.32, 1),
-			opacity 0.25s ease-in-out;
+		box-shadow: 0 0 6px var(--accent-cyan);
+		z-index: 5;
+		transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 	}
 
 	.cursor-outer {
@@ -126,30 +126,50 @@
 		left: 0;
 		width: 100%;
 		height: 100%;
-		border: 1.5px solid #fff;
+		border: 1.2px solid var(--accent-green);
 		border-radius: 50%;
-		transition:
-			transform 0.35s cubic-bezier(0.23, 1, 0.32, 1),
-			border-color 0.3s ease-in-out,
-			background-color 0.3s ease-in-out;
+		opacity: 0.5;
+		z-index: 4;
+		transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 	}
 
-	.hovering .cursor-inner {
-		transform: scale(0);
+	.cursor-circle {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		border: 1px solid var(--accent-green);
+		border-radius: 50%;
+		transform: translate(-50%, -50%) scale(0);
 		opacity: 0;
+		transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+		pointer-events: none;
+	}
+
+	.circle-1 { width: 32px; height: 32px; opacity: 0; }
+
+	.hovering .cursor-inner {
+		transform: scale(0.6);
+		opacity: 0.9;
 	}
 
 	.hovering .cursor-outer {
-		transform: scale(2.2);
-		background: rgba(255, 255, 255, 0.15);
-		border-color: #fff;
+		transform: scale(1.3);
+		opacity: 0.25;
+		border-color: var(--accent-cyan);
 	}
 
-	/* Subtle glow for extra premium feel */
+	.hovering .cursor-circle {
+		opacity: 0.4;
+		transform: translate(-50%, -50%) scale(1);
+	}
+
+	.hovering .circle-1 { opacity: 0.6; border-color: var(--accent-cyan); }
+
+	/* Subtle glow */
 	.custom-cursor::after {
 		content: '';
 		position: absolute;
-		inset: -10px;
+		inset: -15px;
 		background: radial-gradient(circle, rgba(116, 215, 237, 0.15) 0%, transparent 70%);
 		opacity: 0;
 		transition: opacity 0.3s ease;

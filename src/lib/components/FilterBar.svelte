@@ -161,7 +161,6 @@
 		flex-wrap: wrap;
 		gap: 0.75rem;
 		align-items: center;
-		background: var(--bg-secondary);
 	}
 
 	.search-wrap {
@@ -183,7 +182,7 @@
 	.search-input {
 		width: 100%;
 		padding: 0.55em 0.75em 0.55em 2.2em;
-		background: var(--bg-card);
+		background: rgba(126, 130, 140, 0.05); /* Very subtle tint instead of solid bg-card */
 		border: 1px solid var(--border);
 		border-radius: var(--radius-md);
 		color: var(--text-body);
@@ -191,6 +190,7 @@
 		font-size: 0.88rem;
 		transition:
 			border-color 0.1s ease,
+			background-color 0.1s ease,
 			box-shadow 0.1s ease;
 		outline: none;
 	}
@@ -200,6 +200,7 @@
 	}
 
 	.search-input:focus {
+		background: transparent;
 		border-color: var(--text-primary);
 		box-shadow: var(--glow-cyan);
 	}
@@ -209,7 +210,7 @@
 		align-items: center;
 		gap: 0.5rem;
 		padding: 0.5em 1em;
-		background: var(--bg-card);
+		background: transparent; /* Removed solid background */
 		border: 1px solid var(--border);
 		border-radius: var(--radius-md);
 		color: var(--text-secondary);
@@ -222,6 +223,7 @@
 	.filter-toggle:hover {
 		border-color: var(--text-primary);
 		color: var(--text-primary);
+		background: rgba(116, 215, 237, 0.04);
 	}
 
 	.filter-toggle.expanded {
@@ -245,7 +247,7 @@
 
 	select {
 		appearance: none;
-		background: var(--bg-card);
+		background: transparent; /* Removed solid background */
 		border: 1px solid var(--border);
 		border-radius: var(--radius-md);
 		color: var(--text-body);

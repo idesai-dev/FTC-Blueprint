@@ -39,12 +39,17 @@
 	function getCompletedPaths() {
 		if ($page.data.completedPaths) return $page.data.completedPaths;
 		if ($page.data.posts) {
-			return $page.data.posts.map((p: any) => {
-				const sectionTag = p.meta.tags?.find((t: string) => 
-					['software', 'hardware', 'outreach'].includes(t.toLowerCase())
-				);
-				return `/${(sectionTag || 'outreach').toLowerCase()}/${p.slug}`;
-			});
+			return $page.data.posts
+				.filter((p: any) => {
+					const tags = (p.meta.tags || []).map((t: string) => t.toLowerCase());
+					return tags.includes('completed');
+				})
+				.map((p: any) => {
+					const sectionTag = p.meta.tags?.find((t: string) => 
+						['software', 'hardware', 'outreach'].includes(t.toLowerCase())
+					);
+					return `/${(sectionTag || 'outreach').toLowerCase()}/${p.slug}`;
+				});
 		}
 		return [currentPath];
 	}
@@ -72,8 +77,31 @@
 	let activeGroup = $derived(
 		baseGroups.find((group) => group.links.some((link) => link.href === currentPath))
 	);
-	import { fade } from 'svelte/transition';
 	let mobileOpen = $state(false);
+	let expandedGroups = $state<Record<string, boolean>>({});
+
+	// Initialize expansion state
+	$effect(() => {
+		if (mode === 'article') {
+			baseGroups.forEach(group => {
+				expandedGroups[group.title] = true;
+			});
+		} else {
+			baseGroups.forEach(group => {
+				const isActive = group.links.some(link => link.href === currentPath);
+				if (isActive) expandedGroups[group.title] = true;
+			});
+		}
+	});
+
+	function toggleGroup(title: string) {
+		if (expandedGroups[title] === undefined) {
+			expandedGroups[title] = false; // Toggle it from the implicit initial state
+		}
+		expandedGroups[title] = !expandedGroups[title];
+	}
+
+	import { slide, fade } from 'svelte/transition';
 </script>
 
 {#if visibleGroups.length > 0}
@@ -90,26 +118,43 @@
 		</div>
 		<div class="sidebar-scroll">
 			{#each visibleGroups as group}
-				{#if mode === 'section'}
-					<p class="sidebar-label">{group.title}</p>
-				{/if}
-				<ul class="sidebar-list">
-					{#each group.links as { href, label }}
-						<li class="sidebar-item">
-							<a
-								{href}
-								class="sidebar-link"
-								class:active={currentPath === href}
-								onclick={() => (mobileOpen = false)}
-							>
-								{label}
-							</a>
-						</li>
-					{/each}
-				</ul>
-				{#if mode === 'section'}
-					<div class="sidebar-divider"></div>
-				{/if}
+				<div class="sidebar-group">
+					<button 
+						class="sidebar-label-button" 
+						onclick={() => toggleGroup(group.title)}
+						aria-expanded={expandedGroups[group.title] === true}
+					>
+						<span class="sidebar-label">{group.title}</span>
+						<svg 
+							class="chevron-icon" 
+							class:rotated={expandedGroups[group.title] !== true}
+							width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
+						>
+							<polyline points="6 9 12 15 18 9"></polyline>
+						</svg>
+					</button>
+					
+					{#if expandedGroups[group.title] === true}
+						<div transition:slide={{ duration: 250 }}>
+							<ul class="sidebar-list">
+								{#each group.links as { href, label }}
+									<li class="sidebar-item">
+										<a
+											{href}
+											class="sidebar-link"
+											class:active={currentPath === href}
+											onclick={() => (mobileOpen = false)}
+										>
+											{label}
+										</a>
+									</li>
+								{/each}
+							</ul>
+						</div>
+					{/if}
+				</div>
+
+				<div class="sidebar-divider"></div>
 			{/each}
 		</div>
 	</nav>
@@ -142,16 +187,13 @@
 <style>
 	.left-sidebar {
 		position: sticky;
-		top: calc(var(--header-height) + 2rem);
-		width: 200px;
+		top: var(--header-height);
+		width: 310px;
 		flex-shrink: 0;
-		max-height: calc(100vh - var(--header-height) - 4rem);
-		overflow-y: auto;
+		padding-top: 3rem;
 		padding-left: 0.5rem;
-		border-right: 1px solid var(--border-subtle);
-
-		scrollbar-width: thin;
-		scrollbar-color: var(--border) transparent;
+		padding-right: 1.5rem;
+		border-right: 2.5px solid var(--border);
 	}
 
 	.sidebar-scroll {
@@ -178,13 +220,36 @@
 		text-transform: uppercase;
 		letter-spacing: 0.04em;
 		color: var(--text-primary);
+		line-height: 1;
+	}
+
+	.sidebar-label-button {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		width: 100%;
 		background: var(--bg-card);
 		border: 1px solid var(--border-subtle);
 		border-radius: var(--radius-sm);
 		padding: 0.35rem 0.6rem;
-		display: inline-block;
+		cursor: pointer;
 		box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 		margin-bottom: 0.5rem;
+		transition: all var(--transition-fast);
+	}
+
+	.sidebar-label-button:hover {
+		border-color: var(--text-primary);
+		background: var(--bg-card-hover);
+	}
+
+	.chevron-icon {
+		color: var(--text-muted);
+		transition: transform var(--transition-base);
+	}
+
+	.chevron-icon.rotated {
+		transform: rotate(-90deg);
 	}
 
 	.sidebar-list {

@@ -2,7 +2,7 @@
 title: Planning Events
 date: 2026-04-03
 description: How to plan and execute successful outreach events.
-tags: [completed, outreach, beginner]
+tags: [ outreach, beginner]
 author: Blueprint
 published: true
 ---

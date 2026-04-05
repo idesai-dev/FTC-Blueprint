@@ -252,7 +252,7 @@
 		</div>
 		<h1 class="animate-fade-up" style="animation-delay: 60ms">Model Converter</h1>
 		<p class="hero-desc animate-fade-up" style="animation-delay: 120ms">
-			Transform your raw CAD exports (STL, OBJ, PLY) into lightweight GLB models, perfectly optimized for the Blueprint 3D viewer.
+			Transform your raw CAD exports (STL, OBJ, PLY) into lightweight GLB models, used for the Blueprint 3D viewer.
 		</p>
 	</div>
 </section>
@@ -342,6 +342,9 @@
 		<h2>Why GLB?</h2>
 		<p>
 			GLB is the industry standard for 3D web graphics. It bundles geometry, textures, and lighting data into a single, efficient binary file that loads 10x faster than traditional CAD formats.
+			<br>
+			<br>
+			
 		</p>
 	</div>
 </div>

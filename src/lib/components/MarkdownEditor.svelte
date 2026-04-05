@@ -22,12 +22,7 @@
 	const GITHUB_OWNER = 'idesai-dev';
 	const GITHUB_REPO = 'FTC-Blueprint';
 
-	// Re-assembling the token to bypass GitHub's push protection scanner
-	const p1 = 'github_pat_11C';
-	const p2 = 'AWS2TI0LGrwPhLNC9T4_Ct4u7Of';
-	const p3 = 'CIuXDqRmgIeN2KOu7bNiMfGWLU';
-	const p4 = 'S1EEpMP1myS3YVQODDw9sT77FV';
-	const GITHUB_TOKEN = p1 + p2 + p3 + p4;
+	const GITHUB_TOKEN = import.meta.env.PUBLIC_GITHUB_TOKEN || '';
 
 	const PRESET_TAGS = [
 		{ label: 'completed', color: '#7EFFA0' },

@@ -2,7 +2,7 @@
 title: Tank Drive
 date: 2026-04-03
 description: Building and optimizing a tank drive in FTC.
-tags: [completed, hardware, beginner]
+tags: [ hardware, beginner]
 author: Blueprint
 published: true
 ---

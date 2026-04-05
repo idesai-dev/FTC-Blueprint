@@ -1,10 +1,14 @@
 <script lang="ts">
 	import BlogCard from '$lib/components/BlogCard.svelte';
 	import type { Post } from '$lib/utils/posts';
-	import FilterBar from '$lib/components/FilterBar.svelte';
+	import { tagColor } from '$lib/utils/posts';
+	import Collapsible from '$lib/components/Collapsible.svelte';
 	import OutreachLeftSidebar from '$lib/components/OutreachLeftSidebar.svelte';
+	import FilterBar from '$lib/components/FilterBar.svelte';
 	import { devModeState, initDevMode } from '$lib/stores/devMode.svelte';
 	import { onMount } from 'svelte';
+
+	import PortfolioReview from '$lib/components/PortfolioReview.svelte';
 
 	let { data }: { data: { posts: Post[] } } = $props();
 
@@ -25,7 +29,7 @@
 			const tags = (p.meta.tags || []).map((t) =>
 				typeof t === 'string' ? t.toLowerCase().trim() : ''
 			);
-			return tags.includes('completed') || tags.includes('coming soon');
+			return tags.includes('completed');
 		})
 	);
 
@@ -61,51 +65,52 @@
 </svelte:head>
 
 <div class="directory-container">
-	<OutreachLeftSidebar mode="section" />
-
-	<div class="content-feed">
-		<section class="blog-header">
-			<div class="container">
-				<div class="animate-fade-up">
+	<div class="main-layout">
+		<OutreachLeftSidebar mode="section" />
+		<div class="content-feed">
+			<section class="blog-header">
+				<div class="blog-header-inner animate-fade-up">
 					<span class="tag tag--cyan">All Prints</span>
+					<h1>The Outreach Guide</h1>
+					<p class="sub">
+						{data.posts.length} article{data.posts.length !== 1 ? 's' : ''}
+					</p>
 				</div>
-				<h1 class="animate-fade-up" style="animation-delay:60ms">The Outreach Guide</h1>
-				<p class="sub animate-fade-up" style="animation-delay:120ms">
-					{data.posts.length} article{data.posts.length !== 1 ? 's' : ''}
-				</p>
-			</div>
-		</section>
+			</section>
 
-		<section class="filters-section">
-			<div class="container animate-fade-up" style="animation-delay:160ms">
-				<FilterBar category="outreach" bind:activeTags bind:searchQuery />
-			</div>
-		</section>
+			<PortfolioReview />
 
-		<section class="posts-section">
-			<div class="container">
-				{#if filteredPosts.length > 0}
-					<div class="post-grid stagger">
-						{#each filteredPosts as post}
-							<BlogCard {post} basePath="/outreach" />
-						{/each}
-					</div>
-				{:else}
-					<div class="empty animate-fade-up">
-						<p>No posts match your search.</p>
-						<button
-							class="btn-reset"
-							onclick={() => {
-								searchQuery = '';
-								activeTags = [];
-							}}
-						>
-							Clear filters
-						</button>
-					</div>
-				{/if}
-			</div>
-		</section>
+			<section class="filters-section">
+				<div class="container animate-fade-up" style="animation-delay:160ms">
+					<FilterBar category="outreach" bind:activeTags bind:searchQuery />
+				</div>
+			</section>
+
+			<section class="posts-section">
+				<div class="container">
+					{#if filteredPosts.length > 0}
+						<div class="post-grid stagger">
+							{#each filteredPosts as post}
+								<BlogCard {post} basePath="/outreach" />
+							{/each}
+						</div>
+					{:else}
+						<div class="empty animate-fade-up">
+							<p>No posts match your search.</p>
+							<button
+								class="btn-reset"
+								onclick={() => {
+									searchQuery = '';
+									activeTags = [];
+								}}
+							>
+								Clear filters
+							</button>
+						</div>
+					{/if}
+				</div>
+			</section>
+		</div>
 	</div>
 </div>
 
@@ -114,33 +119,57 @@
 		display: flex;
 		flex-direction: column;
 		width: 100%;
-		gap: 3rem;
-		max-width: var(--container-wide);
+		max-width: 100%;
 		margin: 0 auto;
-		padding: 0 1.5rem;
+	}
+
+	.main-layout {
+		display: flex;
+		flex-direction: column;
+		gap: 0;
+		width: 100%;
+		margin: 0;
+		padding: 0;
 	}
 
 	.content-feed {
-		width: 100%;
+		flex: 1;
+		min-width: 0;
+		padding-top: 0;
 	}
 
 	@media (min-width: 1101px) {
-		.directory-container {
+		.main-layout {
 			flex-direction: row;
-			justify-content: flex-start;
-			padding: 0 2rem;
+			padding: 0;
+			gap: 0;
 		}
 	}
 
 	.blog-header {
-		padding: 4rem 0 1.5rem;
+		padding: 5rem 3rem;
 		background: var(--gradient-hero);
 		border-bottom: 1px solid var(--border-subtle);
+		margin-bottom: 3rem;
+		width: 100%;
 	}
-	.blog-header .container {
+
+	.blog-header-inner {
+		max-width: 1150px;
 		display: flex;
 		flex-direction: column;
-		gap: 0.6rem;
+		gap: 0.8rem;
+		align-items: flex-start;
+	}
+
+	.tag {
+		width: fit-content;
+	}
+
+	h1 {
+		font-size: clamp(2.5rem, 5vw, 4rem);
+		line-height: 1.1;
+		margin: 0.5rem 0;
 	}
 	.sub {
 		font-size: 0.85rem;
@@ -150,7 +179,7 @@
 	.filters-section {
 		padding: 1.5rem 0;
 		border-bottom: 1px solid var(--border-subtle);
-		background: rgba(30, 30, 30, 0.8);
+		background: transparent;
 		position: sticky;
 		top: var(--header-height);
 		z-index: 10;

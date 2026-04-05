@@ -97,6 +97,16 @@
 		<div class="post-body-inner">
 			<OutreachLeftSidebar />
 			<div class="container animate-fade-up" style="animation-delay:360ms;">
+				<div class="post-navigation-top">
+					<a href="/outreach" class="minimal-back-btn">
+						<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+							<line x1="19" y1="12" x2="5" y2="12"></line>
+							<polyline points="12 19 5 12 12 5"></polyline>
+						</svg>
+						Back to Outreach
+					</a>
+				</div>
+
 				<div class="prose">
 					<data.content />
 				</div>
@@ -123,7 +133,7 @@
 				>
 					<path d="M19 12H5M12 5l-7 7 7 7" />
 				</svg>
-				Back to all prints
+				Back to Outreach Prints
 			</a>
 		</div>
 	</div>
@@ -284,5 +294,41 @@
 		border-color: var(--accent-cyan);
 		transform: translateX(-4px);
 		background: var(--bg-card);
+	}
+
+	.post-navigation-top {
+		margin-bottom: 2.5rem;
+	}
+
+	.minimal-back-btn {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.6rem;
+		font-family: var(--font-mono);
+		font-size: 0.85rem;
+		font-weight: 600;
+		color: var(--text-muted);
+		text-decoration: none;
+		transition: all var(--transition-fast);
+		padding: 0.5rem 0.75rem;
+		border-radius: var(--radius-sm);
+		background: var(--bg-secondary);
+		border: 1px solid var(--border-subtle);
+		width: fit-content;
+	}
+
+	.minimal-back-btn:hover {
+		color: var(--accent-cyan);
+		background: var(--bg-card);
+		border-color: var(--accent-cyan);
+		transform: translateX(-4px);
+	}
+
+	.minimal-back-btn svg {
+		transition: transform var(--transition-fast);
+	}
+
+	.minimal-back-btn:hover svg {
+		transform: translateX(-2px);
 	}
 </style>

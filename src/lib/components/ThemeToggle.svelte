@@ -1,9 +1,9 @@
 <script lang="ts">
 	import toast from 'svelte-5-french-toast';
-	let theme = $state<'dark' | 'light'>('dark');
+	let theme = $state<'dark' | 'light'>('light');
 
 	$effect(() => {
-		theme = (document.documentElement.className as 'dark' | 'light') || 'dark';
+		theme = (document.documentElement.className as 'dark' | 'light') || 'light';
 	});
 
 	function toggle() {
