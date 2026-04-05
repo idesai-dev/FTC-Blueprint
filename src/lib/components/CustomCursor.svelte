@@ -7,39 +7,17 @@
 
 	let cursorEl: HTMLDivElement | null = $state(null);
 	
-	// Physics state (internal to component for performance)
+	// Mouse position variables
 	let mouseX = 0;
 	let mouseY = 0;
-	let curX = 0;
-	let curY = 0;
-	let rafId: number;
 
-	function lerp(start: number, end: number, factor: number) {
-		return start + (end - start) * factor;
-	}
 
-	function animate() {
-		if (!active) return;
-		
-		// Faster, more responsive tracking
-		curX = lerp(curX, mouseX, 0.25);
-		curY = lerp(curY, mouseY, 0.25);
-
-		if (cursorEl) {
-			cursorEl.style.setProperty('--x', `${curX}px`);
-			cursorEl.style.setProperty('--y', `${curY}px`);
-		}
-
-		rafId = requestAnimationFrame(animate);
-	}
 
 	$effect(() => {
 		if (active) {
 			document.body.classList.add('custom-cursor-active');
-			rafId = requestAnimationFrame(animate);
 		} else {
 			document.body.classList.remove('custom-cursor-active');
-			cancelAnimationFrame(rafId);
 		}
 	});
 
@@ -47,6 +25,11 @@
 		const handleMouseMove = (e: MouseEvent) => {
 			mouseX = e.clientX;
 			mouseY = e.clientY;
+
+			if (cursorEl) {
+				cursorEl.style.setProperty('--x', `${mouseX}px`);
+				cursorEl.style.setProperty('--y', `${mouseY}px`);
+			}
 		};
 
 		const handleMouseOver = (e: MouseEvent) => {
@@ -68,7 +51,6 @@
 			window.removeEventListener('mousemove', handleMouseMove);
 			window.removeEventListener('mouseover', handleMouseOver);
 			window.removeEventListener('mouseout', handleMouseOut);
-			cancelAnimationFrame(rafId);
 		};
 	});
 </script>
