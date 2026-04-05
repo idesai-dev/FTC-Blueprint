@@ -199,17 +199,24 @@ a {
 
 :global(.prose h2) {
 	font-size: 1.6rem;
+	margin-top: 3.5rem;
+	margin-bottom: 1.5rem;
 }
 :global(.prose h3) {
 	font-size: 1.25rem;
+	margin-top: 2.5rem;
+	margin-bottom: 1.2rem;
 }
 :global(.prose h4) {
 	font-size: 1.1rem;
+	margin-top: 2rem;
+	margin-bottom: 1rem;
 }
 
 :global(.prose p) {
-	margin-bottom: 1.4rem;
+	margin-bottom: 1.8rem;
 	color: var(--text-body);
+	line-height: 1.7;
 }
 
 :global(.prose a) {
@@ -238,12 +245,12 @@ a {
 
 :global(.prose ul),
 :global(.prose ol) {
-	margin-bottom: 1.4rem;
+	margin-bottom: 1.8rem;
 	padding-left: 1.5rem;
 }
 
 :global(.prose li) {
-	margin-bottom: 0.4rem;
+	margin-bottom: 0.75rem;
 	color: var(--text-body);
 }
 
@@ -253,12 +260,13 @@ a {
 
 :global(.prose blockquote) {
 	border-left: 3px solid var(--text-primary);
-	margin: 1.75rem 0;
-	padding: 0.75rem 1.25rem;
+	margin: 2.5rem 0;
+	padding: 1.25rem 1.75rem;
 	background: rgba(116, 215, 237, 0.04);
 	border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
 	color: var(--text-secondary);
 	font-style: italic;
+	line-height: 1.7;
 }
 
 :global(.prose code:not(pre code)) {
@@ -307,26 +315,34 @@ a {
 }
 
 :global(.prose pre) {
-	background: #121212;
+	background: #1a1a1a !important; /* Premium dark pop */
 	border: 1px solid var(--border-subtle);
 	border-radius: var(--radius-md);
-	padding: 1.5rem;
-	margin: 2rem 0;
+	padding: 1.5rem 2rem;
+	margin: 3rem 0;
 	overflow-x: auto;
-	box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+	box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.4);
+	position: relative;
 }
 
 :global(html.light) :global(.prose pre) {
-	background: #fdfaf3;
-	border-color: #e8e2d2;
-	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+	background: #f2eee3 !important; /* Premium dark beige pop */
+	border-color: #dcd6c5;
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 }
 
 :global(.prose pre code) {
 	background: transparent !important;
 	padding: 0 !important;
-	font-size: 0.95rem;
-	line-height: 1.6;
+	border: none !important;
+	font-size: 0.9rem;
+	line-height: 1.7;
+	color: #e0e0e0 !important;
+	font-family: var(--font-mono);
+}
+
+:global(html.light) :global(.prose pre code) {
+	color: #2d2d2d !important;
 }
 
 :global(.prose img) {
@@ -334,6 +350,23 @@ a {
 	border-radius: var(--radius-md);
 	border: 1px solid var(--border);
 	margin: 1.5rem 0;
+}
+
+/* Inline code */
+:global(.prose :not(pre) > code) {
+	background: #2a2a2a;
+	color: #74d7ed;
+	padding: 0.15em 0.4em;
+	border-radius: 4px;
+	font-size: 0.88em;
+	font-family: var(--font-mono);
+	border: 1px solid #3d3d3d;
+}
+
+:global(html.light) :global(.prose :not(pre) > code) {
+	background: #f0ede4;
+	color: #1a7a95;
+	border-color: #dcd6c5;
 }
 
 /* ---------- Utilities & Animations ---------- */

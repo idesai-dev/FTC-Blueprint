@@ -1,105 +1,117 @@
 ---
 title: Mecanum Drivetrain
 date: 2026-03-28
-description: Programming and optimizing a 4-wheel mecanum drivetrain for FTC.
-tags: [completed, software, beginner, completed]
-author: Ishaan Desai
+description: Learn the kinematics and programming behind a 4-motor mecanum drivetrain.
+tags: [completed, software, beginner, kinematics]
+author: Blueprint
 published: true
 ---
 
-Mecanum drivetrains are by far the most popular drivetrain in modern FTC. While they provide holonomic (omnidirectional) movement, programming the driving math and interpreting wheel vectors can be confusing for rookies.
 
-<div class="tuner-callout" style="padding: 1.5rem; background: rgba(116, 215, 237, 0.05); border-radius: var(--radius-md); border-left: 4px solid var(--accent-cyan); margin: 2rem 0;">
-    <p> 🕹️ <strong>Try our new full-page <a href="/simulators/mecanum">Mecanum Simulator</a></strong> to visualize the kinematics and math interactively!</p>
-</div>
+# Mecanum Drivetrain
 
-There are a few key steps to get your Mecanum drivetrain working effectively:
 
----
+Mecanum wheels are a popular choice in FTC because they allow a robot to move in any direction (omnidirectional) without changing its orientation. This is achieved by the specialized rollers on the wheels, which are oriented at a 45-degree angle.
 
-## Mecanum Vectoring
-
-The most important thing to understand is how the wheels combine to create movement:
-
-- **Forward:** All 4 wheels forward.
-- **Strafe Left:** Front-Right and Back-Left forward, Front-Left and Back-Right backward.
-- **Turn Left:** Right side forward, left side backward.
 
 <br>
 
+
 ---
 
-## Robocentric Driving
-
-In Robocentric driving, the robot moves relative to its own front. Pushing the stick forward always makes the robot go where its nose is pointing.
-
-### The Equations:
-
-```java
-double y = -gamepad1.left_stick_y; // Straight power
-double x = gamepad1.left_stick_x;  // Strafe power
-double rx = gamepad1.right_stick_x; // Rotation power
-
-// Calculate wheel powers
-double frontLeftPower = y + x + rx;
-double backLeftPower = y - x + rx;
-double frontRightPower = y - x - rx;
-double backRightPower = y + x - rx;
-```
 
 <br>
 
----
 
-## Field Centric Driving
+## Kinematics: The Math Behind the Movement
 
-Field Centric driving makes the robot move relative to the **field**, not itself. Pushing forward on the stick will make the robot move away from you, regardless of which way it is facing.
 
-### Why use Field Centric?
-- **Easier for Drivers:** No need to compensate for the robot's orientation.
-- **Consistent Control:** The robot always behaves the same way relative to the driver's perspective.
+To control a mecanum drivetrain, we need to calculate the correct power for each of the four motors based on the desired movement (forward/backward, strafe left/right, and rotation).
 
-### The Implementation (using IMU):
-
-```java
-// Read the robot's heading from the IMU
-double botHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
-
-// Rotate the input vector by the negative of the robot's heading
-double rotX = x * Math.cos(-botHeading) - y * Math.sin(-botHeading);
-double rotY = x * Math.sin(-botHeading) + y * Math.cos(-botHeading);
-
-// Now apply the rotated powers (rotX and rotY) instead of raw x and y
-double fl = rotY + rotX + rx;
-double bl = rotY - rotX + rx;
-double fr = rotY - rotX - rx;
-double br = rotY + rotX - rx;
-```
 
 <br>
 
+
+### The Formulas
+
+- **Front Left** = $y + x + r$
+- **Front Right** = $y - x - r$
+- **Back Left** = $y - x + r$
+- **Back Right** = $y + x - r$
+
+Where:
+- $y$ is the forward/backward movement.
+- $x$ is the strafing movement (sideways).
+- $r$ is the rotational movement.
+
+
+<br>
+
+
 ---
 
-## Standard Drive Functions
 
-When programming your drivetrain, ensure you normalize the motor powers so that no single value exceeds 1.0, which would cause inconsistent movements.
+<br>
+
+
+## Implementation in Java
+
+
+Here is a basic implementation of mecanum drive control in an OpMode:
+
 
 ```java
-// Find the maximum value among the four powers
-double max = Math.max(Math.abs(fl), Math.max(Math.abs(bl),
-             Math.max(Math.abs(fr), Math.abs(br))));
+@TeleOp
+public class MecanumDrive extends LinearOpMode {
+    @Override
+    public void runOpMode() {
+        DcMotor frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
+        DcMotor frontRight = hardwareMap.get(DcMotor.class, "frontRight");
+        DcMotor backLeft = hardwareMap.get(DcMotor.class, "backLeft");
+        DcMotor backRight = hardwareMap.get(DcMotor.class, "backRight");
 
-// If the max is greater than 1.0, scale them all down
-if (max > 1.0) {
-    fl /= max;
-    bl /= max;
-    fr /= max;
-    br /= max;
+        // Reverse the left side if necessary
+        frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        waitForStart();
+
+        while (opModeIsActive()) {
+            double y = -gamepad1.left_stick_y; // Remember, y is reversed!
+            double x = gamepad1.left_stick_x * 1.1; // Counteract imperfect strafing
+            double rx = gamepad1.right_stick_x;
+
+            // Denominator is the largest motor power (absolute value) or 1
+            // This ensures all the powers maintain the same ratio,
+            // but only if at least one is out of the range [-1, 1]
+            double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
+            double frontLeftPower = (y + x + rx) / denominator;
+            double backLeftPower = (y - x + rx) / denominator;
+            double frontRightPower = (y - x - rx) / denominator;
+            double backRightPower = (y + x - rx) / denominator;
+
+            frontLeft.setPower(frontLeftPower);
+            backLeft.setPower(backLeftPower);
+            frontRight.setPower(frontRightPower);
+            backRight.setPower(backRightPower);
+        }
+    }
 }
-
-// Apply the powers to the motors
-frontLeft.setPower(fl);
-backLeft.setPower(bl);
-frontRight.setPower(fr);
-backRight.setPower(br);
 ```
+
+
+<br>
+
+
+---
+
+
+<br>
+
+
+## Tips for Better Mecanum Drive
+
+
+- **Weight Distribution:** Mecanum wheels work best when the weight is evenly distributed across all four wheels. If one wheel has less weight, it will slip.
+- **Strafing Correction:** Because of the friction of the rollers, strafing often requires more power than moving forward. The `1.1` multiplier in the code above is a common way to compensate for this.
+- **Field-Centric Drive:** For advanced drivers, converting the movement to be relative to the field (not the robot) makes maneuvering much more intuitive.

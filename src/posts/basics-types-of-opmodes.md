@@ -7,23 +7,72 @@ author: Ishaan Desai
 published: true
 ---
 
+
+# Types of OpModes
+
+<br>
+
 In the FTC SDK, there are two primary classes you can inherit from to write your robot controller programs: `OpMode` and `LinearOpMode`. Choosing which one to use depends on how you want to structure your code and logic.
+
+
+<br>
+
+
+---
+
+
+<br>
+
 
 ## OpMode
 
+
 An `OpMode` (often called an Iterative OpMode) acts like a state machine. It has specific methods (`init()`, `init_loop()`, `start()`, `loop()`, and `stop()`) that are repeatedly called by the system in a non-blocking loop.
-You must avoid using loops like `while()` or `Thread.sleep()` inside `loop()`, because it will freeze the robot and crash the app.
+
+
+> [!WARNING]
+> You must avoid using loops like `while()` or `Thread.sleep()` inside `loop()`, because it will freeze the robot and crash the app.
+
+
+<br>
+
+
+---
+
+
+<br>
+
 
 ## Linear OpMode
 
-A `LinearOpMode` runs your code linearly from top to bottom. Everything happens inside a single `runOpMode()` method. To keep the program running continuously throughout the match, you must manually use a loop (usually `while (opModeIsActive())`). It's easier for beginners to grasp because it acts like a traditional linear program and permits blocking code (like `sleep()`).
+
+A `LinearOpMode` runs your code linearly from top to bottom. Everything happens inside a single `runOpMode()` method. To keep the program running continuously throughout the match, you must manually use a loop (usually `while (opModeIsActive())`). 
+
+
+It's easier for beginners to grasp because it acts like a traditional linear program and permits blocking code (like `sleep()`).
+
+
+<br>
+
+
+---
+
+
+<br>
+
 
 ## The Difference in Code
 
+
 Here is a side-by-side comparison of a simple robot waiting for start and then driving forward. Notice the structural and syntax differences between the two.
 
+
+<br>
+
+
+### Iterative OpMode Example
+
 ```java
-// ITERATIVE OPMODE EXAMPLE
 @TeleOp(name="Basic Iterative")
 public class BasicIterative extends OpMode {
     DcMotor motor;
@@ -41,8 +90,13 @@ public class BasicIterative extends OpMode {
 }
 ```
 
+
+<br>
+
+
+### Linear OpMode Example
+
 ```java
-// LINEAR OPMODE EXAMPLE
 @TeleOp(name="Basic Linear")
 public class BasicLinear extends LinearOpMode {
     DcMotor motor;

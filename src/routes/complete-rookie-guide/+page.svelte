@@ -2,6 +2,8 @@
 	import { formatDate, tagColor } from '$lib/utils/posts';
 	import type { PostMeta } from '$lib/utils/posts';
 	import type { Component } from 'svelte';
+	import { fade } from 'svelte/transition';
+	import PortfolioReview from '$lib/components/PortfolioReview.svelte';
 	import { setupCopyButtons } from '$lib/utils/codeCopyButton';
 	import SectionSidebar from '$lib/components/sectionSidebar.svelte';
 	import LeftSidebar from '$lib/components/SoftwareLeftSidebar.svelte';
@@ -83,6 +85,7 @@
 				<div class="prose">
 					<data.content />
 				</div>
+				<PortfolioReview />
 			</div>
 			<SectionSidebar contentSelector=".prose" />
 		</div>

@@ -32,7 +32,7 @@
 
 <style>
 	.suggest-header {
-		padding: 4rem 0 3rem;
+		padding: 3rem 0 1.5rem;
 		background: var(--gradient-hero);
 		border-bottom: 1px solid var(--border-subtle);
 	}
@@ -51,7 +51,7 @@
 	}
 
 	.suggest-body {
-		padding: 4rem 0 8rem;
+		padding: 2rem 0 8rem;
 	}
 
 	.form-wrapper {

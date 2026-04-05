@@ -99,7 +99,7 @@
 
 	const navLinks: NavLink[] = [
 		{ href: '/', label: 'Home' },
-		{ href: '/complete-rookie-guide', label: 'Rookie Guide', devOnly: true },
+		{ href: '/complete-rookie-guide', label: 'Rookie Guide'},
 		{ href: '/software', label: 'Software' },
 		{
 			label: 'Simulators',
@@ -183,7 +183,7 @@
 <svelte:window onkeydown={handleWindowKeydown} />
 
 <header class="header" class:scrolled={false}>
-	<div class="inner container container--wide" class:dev-mode-active={devModeState.active}>
+	<div class="inner" class:dev-mode-active={devModeState.active}>
 		<a href="/" class="logo" onclick={closeMenu}>
 			<span class="logo-mark">⬡</span>
 			<span class="logo-text">Blueprint</span>
@@ -387,8 +387,11 @@
 		display: flex;
 		align-items: center;
 		justify-content: flex-start;
-		gap: 2rem;
+		gap: 1.5rem;
 		height: 100%;
+		max-width: 1560px; /* Expanded for a wider, more agile logo position */
+		margin: 0 auto;
+		padding: 0 1.5rem;
 	}
 
 	.actions {
@@ -396,15 +399,22 @@
 		align-items: center;
 		gap: 0.75rem;
 		margin-left: auto;
+		flex-shrink: 0;
 	}
 
 	:global(.dev-mode-active) .actions {
 		margin-left: 0.5rem;
 		gap: 0.4rem;
+		flex-shrink: 0;
 	}
 
 	.inner.dev-mode-active {
-		gap: 0.5rem;
+		gap: 1rem;
+		padding-left: 0.5rem;
+	}
+
+	.inner.dev-mode-active .logo {
+		margin-right: 0.5rem;
 	}
 
 	.inner.dev-mode-active .nav {
@@ -416,13 +426,13 @@
 		font-size: 0.85rem;
 	}
 
-	@media (max-width: 1300px) {
+	@media (max-width: 1350px) {
 		.inner {
-			gap: 1rem;
+			gap: 0.5rem;
 		}
 		
 		.actions {
-			margin-left: 1rem;
+			margin-left: 0.5rem;
 		}
 	}
 
