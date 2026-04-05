@@ -143,18 +143,10 @@
 
 	// Initialize expansion state
 	$effect(() => {
-		if (mode === 'article') {
-			// In article mode, expand everything initially or at least the active group
-			baseGroups.forEach(group => {
-				expandedGroups[group.title] = true;
-			});
-		} else {
-			// In section mode, only expand the active group if any
-			baseGroups.forEach(group => {
-				const isActive = group.links.some(link => link.href === currentPath);
-				if (isActive) expandedGroups[group.title] = true;
-			});
-		}
+		// Expand all groups initially by default
+		baseGroups.forEach(group => {
+			expandedGroups[group.title] = true;
+		});
 	});
 
 	function toggleGroup(title: string) {

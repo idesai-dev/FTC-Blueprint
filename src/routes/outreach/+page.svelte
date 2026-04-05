@@ -20,6 +20,7 @@
 	let activeTags = $state<string[]>([]);
 
 	const completedSlugs = $derived(data.posts.filter((p) => (p.meta.tags || []).includes('completed')).map((p) => p.slug));
+	const completedCount = $derived(data.posts.filter((p) => (p.meta.tags || []).includes('completed')).length);
 	const showLink = (href: string) => devModeState.active || completedSlugs.includes(href.split('/').pop() || '');
 	const showGroup = (hrefs: string[]) => hrefs.some(showLink);
 
@@ -70,15 +71,16 @@
 		<div class="content-feed">
 			<section class="blog-header">
 				<div class="blog-header-inner animate-fade-up">
-					<span class="tag tag--cyan">All Prints</span>
-					<h1>The Outreach Guide</h1>
-					<p class="sub">
-						{data.posts.length} article{data.posts.length !== 1 ? 's' : ''}
-					</p>
+					<div class="header-text">
+						<span class="tag tag--cyan">All Prints</span>
+						<h1>The Outreach Guide</h1>
+						<p class="sub">
+							{completedCount} article{completedCount !== 1 ? 's' : ''}
+						</p>
+					</div>
+					<PortfolioReview isHeader={true} />
 				</div>
 			</section>
-
-			<PortfolioReview />
 
 			<section class="filters-section">
 				<div class="container animate-fade-up" style="animation-delay:160ms">
@@ -157,9 +159,18 @@
 	.blog-header-inner {
 		max-width: 1150px;
 		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-between;
+		align-items: center;
+		gap: 2rem;
+	}
+
+	.header-text {
+		display: flex;
 		flex-direction: column;
 		gap: 0.8rem;
-		align-items: flex-start;
+		flex: 1;
+		min-width: 300px;
 	}
 
 	.tag {

@@ -20,6 +20,7 @@
 	const allTags = $derived([...new Set(data.posts.flatMap((p) => p.meta.tags || []))]);
 
 	const completedSlugs = $derived(data.posts.filter((p) => (p.meta.tags || []).includes('completed')).map((p) => p.slug));
+	const completedCount = $derived(data.posts.filter((p) => (p.meta.tags || []).includes('completed')).length);
 	const showLink = (href: string) => devModeState.active || completedSlugs.includes(href.split('/').pop() || '');
 	const showGroup = (hrefs: string[]) => hrefs.some(showLink);
 
@@ -73,7 +74,7 @@
 					<span class="tag tag--orange">All Prints</span>
 					<h1>The Hardware Guide</h1>
 					<p class="sub">
-						{data.posts.length} article{data.posts.length !== 1 ? 's' : ''}
+						{completedCount} article{completedCount !== 1 ? 's' : ''}
 					</p>
 				</div>
 			</section>

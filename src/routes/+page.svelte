@@ -4,7 +4,7 @@
 	import { onMount } from 'svelte';
 	import { devModeState, initDevMode } from '$lib/stores/devMode.svelte';
 
-	let { data }: { data: { recentPosts: Post[] } } = $props();
+	let { data }: { data: { recentPosts: Post[], completedCount: number } } = $props();
 
 	onMount(() => {
 		initDevMode();
@@ -144,7 +144,7 @@
 
 	<div class="container hero-content animate-fade-up">
 		<div class="eyebrow">
-			<span class="tag tag--cyan">{__APP_VERSION__}</span>
+			<span class="tag tag--cyan">v1.2.{data.completedCount}</span>
 			{#if devModeState.active}
 				<span class="tag tag--green" style="font-family: var(--font-mono); font-size: 0.7rem;">
 					Last Deployment: {__BUILD_TIME__}

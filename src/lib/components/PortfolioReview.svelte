@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { fade } from 'svelte/transition';
+	let { isHeader = false } = $props();
+
 	let isSubmitting = $state(false);
 	let isSent = $state(false);
 	let submitText = $state('Submit Portfolio');
@@ -49,17 +51,21 @@
 	}
 </script>
 
-<section class="portfolio-section animate-fade-up">
+<section class="portfolio-section animate-fade-up" class:is-header={isHeader} class:form-open={showForm}>
 	<div class="portfolio-content">
 		<div class="text-side">
-			<span class="tag tag--yellow">Rookie Teams</span>
+			{#if !isHeader}
+				<span class="tag tag--yellow">Rookie Teams</span>
+			{/if}
 			<h2>Engineering Portfolio Review</h2>
 			<p>
-				Share your portfolio with us! We'll provide detailed feedback to help you excel. <br>
-				<strong>Reminder:</strong> Please give commenting access to 
-				<code class="email-code">ftcblueprint@gmail.com</code>.
+				Share your portfolio with us! We'll provide detailed feedback to help you <strong>excel and get an award!</strong>
 			</p>
-			<p class="small-note">Feel free to reach out by email if you need anything!</p>
+			
+			<p class="reminder-box">
+				<strong>Reminder:</strong> Give commenting access to 
+				<code class="email-code">ftcblueprint@gmail.com</code> again.
+			</p>
 			
 			{#if !showForm}
 				<button class="btn-primary" onclick={() => showForm = true}>
@@ -78,7 +84,7 @@
 					<div class="success-message" transition:fade>
 						<div class="success-icon">✓</div>
 						<h3>Portfolio Received!</h3>
-						<p>We've received your request and will get back to you shortly at the email provided.</p>
+						<p>We'll get back to you shortly at the email provided.</p>
 						<button class="btn-ghost" onclick={() => showForm = false}>Close</button>
 					</div>
 				{:else}
@@ -90,8 +96,8 @@
 							<input type="text" name="team" placeholder="Team Name & Number" required />
 							<input type="email" name="email" placeholder="Contact Email" required />
 						</div>
-						<input type="text" name="portfolio_link" placeholder="Link to Portfolio (Google Drive...)" required />
-						<textarea name="notes" placeholder="Notes (Specific areas?, Specific awards your team is going for?, etc.)" rows="2"></textarea>
+						<input type="text" name="portfolio_link" placeholder="Link to Portfolio (Drive...)" required />
+						<textarea name="notes" placeholder="Notes (Areas to focus on, awards you're chasing...)" rows="2"></textarea>
 						
 						<div class="form-actions">
 							<button type="button" class="btn-ghost" onclick={() => showForm = false}>Cancel</button>
@@ -113,84 +119,105 @@
 		border-radius: var(--radius-lg);
 		box-shadow: 0 4px 24px rgba(0,0,0,0.06);
 		overflow: hidden;
-		position: relative;
+		transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+	}
+
+	.portfolio-section.is-header {
+		margin: 0;
+		padding: 1.75rem;
+		background: rgba(140, 130, 110, 0.05);
+		border: 1px solid var(--border-subtle);
+		box-shadow: none;
+		max-width: 500px;
+	}
+
+	.portfolio-section.form-open.is-header {
+		max-width: 600px;
 	}
 
 	.portfolio-content {
 		display: flex;
-		gap: 3rem;
+		gap: 2rem;
 		align-items: center;
 		flex-wrap: wrap;
 	}
 
 	.text-side {
 		flex: 1;
-		min-width: 300px;
+		min-width: 260px;
 		display: flex;
 		flex-direction: column;
-		gap: 1.2rem;
+		gap: 1rem;
+	}
+
+	.is-header h2 {
+		font-size: 1.4rem;
 	}
 
 	h2 {
 		font-size: 1.75rem;
-		margin: 0.25rem 0;
+		margin: 0;
 		background: var(--gradient-accent);
 		-webkit-background-clip: text;
 		background-clip: text;
 		-webkit-text-fill-color: transparent;
 	}
 
-	h3 { margin-bottom: 0.5rem; color: var(--accent-green); }
-
 	p {
 		color: var(--text-secondary);
-		line-height: 1.6;
+		line-height: 1.5;
 		font-size: 0.95rem;
+		margin: 0;
+	}
+
+	.reminder-box {
+		font-size: 0.85rem;
+		padding: 0.75rem 1rem;
+		background: rgba(189, 157, 68, 0.08);
+		border-left: 3px solid var(--accent-yellow);
+		border-radius: 4px;
 	}
 
 	.email-code {
 		background: var(--bg-secondary);
-		padding: 0.15rem 0.45rem;
-		border-radius: 4px;
+		padding: 0.1rem 0.3rem;
+		border-radius: 3px;
 		font-family: var(--font-mono);
-		font-size: 0.85em;
+		font-size: 0.9em;
 		color: var(--accent-yellow);
-		border: 1px solid rgba(189, 157, 68, 0.2);
 	}
-
-	.small-note { font-size: 0.85rem; opacity: 0.7; font-style: italic; }
 
 	.form-side {
-		flex: 1.2;
-		min-width: 320px;
-		background: var(--bg);
-		padding: 2rem;
+		flex: 1.4;
+		min-width: 300px;
+		background: var(--bg-card);
+		padding: 1.5rem;
 		border-radius: var(--radius-md);
 		border: 1px solid var(--border-subtle);
-		box-shadow: 0 8px 30px rgba(0,0,0,0.04);
+		box-shadow: 0 8px 30px rgba(0,0,0,0.08);
 	}
 
-	.review-form { display: flex; flex-direction: column; gap: 1.2rem; }
+	.review-form { display: flex; flex-direction: column; gap: 0.75rem; }
 
 	.form-row {
 		display: flex;
-		gap: 1rem;
+		gap: 0.75rem;
 		flex-wrap: wrap;
 	}
 
 	.form-row input {
 		flex: 1;
-		min-width: 200px;
+		min-width: 140px;
 	}
 
 	input, textarea {
-		padding: 0.85rem 1.1rem;
-		background: var(--bg-card);
+		padding: 0.75rem 0.9rem;
+		background: var(--bg-secondary);
 		border: 1px solid var(--border);
 		border-radius: var(--radius-md);
 		color: var(--text-primary);
 		font-family: var(--font-body);
-		font-size: 0.95rem;
+		font-size: 0.9rem;
 		transition: all var(--transition-fast);
 		width: 100%;
 	}
@@ -198,70 +225,69 @@
 	input:focus, textarea:focus {
 		outline: none;
 		border-color: var(--accent-yellow);
-		box-shadow: 0 0 0 4px rgba(189, 157, 68, 0.1);
+		box-shadow: 0 0 0 3px rgba(189, 157, 68, 0.1);
 	}
 
 	.form-actions {
 		display: flex;
 		justify-content: flex-end;
-		gap: 1rem;
-		margin-top: 0.5rem;
+		gap: 0.75rem;
+		margin-top: 0.25rem;
 	}
 
 	.success-message {
 		text-align: center;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		gap: 1rem;
 		padding: 1rem 0;
 	}
 
 	.success-icon {
-		width: 48px;
-		height: 48px;
+		width: 40px;
+		height: 40px;
 		background: var(--accent-green);
 		color: #000;
 		border-radius: 50%;
-		display: flex;
+		display: inline-flex;
 		align-items: center;
 		justify-content: center;
-		font-size: 1.5rem;
 		font-weight: bold;
-		margin-bottom: 0.5rem;
+		margin-bottom: 0.75rem;
 	}
 
 	.btn-primary {
 		align-self: flex-start;
-		display: flex; align-items: center; gap: 0.75rem;
-		padding: 0.9rem 1.75rem;
+		display: inline-flex; align-items: center; gap: 0.5rem;
+		padding: 0.75rem 1.4rem;
 		background: var(--gradient-accent);
 		color: white; border: none; border-radius: var(--radius-md);
 		font-weight: 700; cursor: pointer; transition: all var(--transition-fast);
+		font-size: 0.9rem;
 	}
 
-	.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0,0,0,0.15); }
+	.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
 
 	.btn-submit {
-		padding: 0.9rem 1.75rem;
+		padding: 0.75rem 1.25rem;
 		background: var(--accent-yellow); color: #151515;
 		border: none; border-radius: var(--radius-md);
 		font-weight: 700; cursor: pointer; transition: all var(--transition-fast);
+		font-size: 0.9rem;
 	}
-
-	.btn-submit:hover:not(:disabled) { filter: brightness(1.1); transform: translateY(-1px); }
 
 	.btn-ghost {
 		background: transparent; border: 1px solid var(--border);
-		color: var(--text-secondary); padding: 0.9rem 1.5rem;
+		color: var(--text-secondary); padding: 0.75rem 1rem;
 		border-radius: var(--radius-md); cursor: pointer; transition: all 0.2s;
+		font-size: 0.9rem;
 	}
-	.btn-ghost:hover { background: rgba(255,255,255,0.05); color: var(--text-primary); }
 
-	@media (max-width: 768px) {
-		.portfolio-section { padding: 1.5rem; }
-		.text-side { min-width: 100%; }
-		.form-side { min-width: 100%; padding: 1.5rem; }
+	@media (max-width: 900px) {
+		.portfolio-section.is-header {
+			max-width: 100%;
+			margin-top: 2rem;
+		}
+	}
+
+	@media (max-width: 480px) {
 		.form-row { flex-direction: column; }
 	}
 </style>
