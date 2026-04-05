@@ -36,6 +36,11 @@
         <priority>0.8</priority>
     </url>
     <url>
+        <loc>https://ftcblueprint.com/editor</loc>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
         <loc>https://ftcblueprint.com/simulators/pid</loc>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
