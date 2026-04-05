@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { onMount, onDestroy } from 'svelte';
 	import * as THREE from 'three';
-	import { STLLoader } from 'three/examples/jsm/loaders/STLLoader.js';
-	import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
-	import { PLYLoader } from 'three/examples/jsm/loaders/PLYLoader.js';
-	import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter.js';
-	import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+	import { STLLoader } from 'three/addons/loaders/STLLoader.js';
+	import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
+	import { PLYLoader } from 'three/addons/loaders/PLYLoader.js';
+	import { GLTFExporter } from 'three/addons/exporters/GLTFExporter.js';
+	import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 	import { fade, fly } from 'svelte/transition';
 
 	let canvas = $state<HTMLCanvasElement | null>(null);
