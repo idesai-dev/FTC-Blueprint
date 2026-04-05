@@ -77,6 +77,13 @@
 				{ href: '/software/bulkreads', label: 'Bulkreads' },
 				{ href: '/software/mecanum-drivetrain', label: 'Mecanum Drivetrain' }
 			]
+		},
+		{
+			title: 'Developer',
+			devOnly: true,
+			links: [
+				{ href: '/software/markdown-reference', label: 'Markdown Reference' }
+			]
 		}
 	];
 
@@ -116,6 +123,7 @@
 				return { ...group, links: visibleLinks };
 			})
 			.filter((group) => group.links.length > 0)
+			.filter((group: any) => !group.devOnly || devModeState.active)
 	);
 
 	// Context-aware visible groups

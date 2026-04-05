@@ -17,7 +17,9 @@
 		isSandboxChild = window.location.search.includes('sandbox=true');
 		
 		const hasSeenOnboarding = localStorage.getItem('cursorOnboardingSeen');
-		if (!hasSeenOnboarding) {
+		const isDesktop = typeof window !== 'undefined' && window.innerWidth > 1024;
+		
+		if (!hasSeenOnboarding && isDesktop) {
 			setTimeout(() => {
 				showCursorOnboarding = true;
 			}, 1000);
@@ -110,7 +112,8 @@
 				{ href: '/simulators/feedforward', label: 'Feedforward' },
 				{ href: '/simulators/pid-game', label: 'PID Learning Game' },
 				{ href: '/simulators/pedro-visualizer', label: 'Pedro Visualizer' },
-				{ href: '/simulators/mecanum', label: 'Mecanum Simulator' }
+				{ href: '/simulators/mecanum', label: 'Mecanum Simulator' },
+				{ href: '/software/markdown-reference', label: 'Markdown Reference', devOnly: true }
 			]
 		},
 		{ href: '/hardware', label: 'Hardware'},
@@ -734,6 +737,12 @@
 
 	.cursor-toggle-wrapper {
 		position: relative;
+	}
+
+	@media (max-width: 1024px) {
+		.cursor-toggle-wrapper {
+			display: none;
+		}
 	}
 
 	.cursor-onboarding {

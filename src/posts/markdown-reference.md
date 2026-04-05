@@ -1,8 +1,8 @@
 ---
 title: Writing in Markdown - A Quick Reference
 date: 2026-03-20
-description: A practical guide to markdown syntax â headings, code blocks, tables, blockquotes, and more.
-tags: [completed, software, beginner]
+description: A practical guide to markdown syntax — headings, code blocks, tables, blockquotes, and more.
+tags: [software, beginner]
 author: Blueprint
 published: true
 ---
