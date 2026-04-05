@@ -161,11 +161,6 @@
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>https://ftcblueprint.com/software/basics-android-studio</loc>
-        <changefreq>weekly</changefreq>
-        <priority>0.8</priority>
-    </url>
-    <url>
         <loc>https://ftcblueprint.com/software/basics-motors-servos</loc>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>

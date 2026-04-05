@@ -1,0 +1,1 @@
+import"./6H5TL8dl.js";import"./D2OaxL_r.js";const t={title:"Pinpoint Odometry Computer",date:"2026-01-01T00:00:00.000Z",description:"How to use the pinpoint odometry computer in FTC",published:!0,tags:["completed","software"]},{title:p,date:n,description:r,published:d,tags:a}=t;function m(o){}export{m as default,t as metadata};

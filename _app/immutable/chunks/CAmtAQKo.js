@@ -1,1 +1,0 @@
-import{h as v,l as o,v as y,E as l,w as f,x as m,o as p,y as i,ah as T,z as A}from"./DMItKynx.js";import{B as E}from"./DUyy5aks.js";function x(d,h,e){var s;o&&(s=A,y());var r=new E(d);v(()=>{var a=h()??null;if(o){var _=f(s),c=_===T,u=a!==null;if(c!==u){var t=m();p(t),r.anchor=t,i(!1),r.ensure(a,a&&(n=>e(n,a))),i(!0);return}}r.ensure(a,a&&(n=>e(n,a)))},l)}export{x as c};

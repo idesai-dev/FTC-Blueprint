@@ -1,0 +1,1 @@
+import{a,f as s}from"./6H5TL8dl.js";import"./D2OaxL_r.js";const o={title:"Test Test",date:"2026-04-05T00:00:00.000Z",description:null,tags:["completed"],author:null,published:!1},{title:l,date:d,description:n,tags:m,author:u,published:c}=o;var r=s("<p>Start writing here…</p>");function f(t){var e=r();a(t,e)}export{f as default,o as metadata};
