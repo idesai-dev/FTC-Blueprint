@@ -294,9 +294,8 @@
 		display: flex;
 		align-items: flex-start;
 		gap: 3rem;
-		max-width: calc(var(--container-max) + 220px + 3rem);
-		margin: 0 auto;
-		padding: 0 1.5rem;
+		/* max-width: calc(var(--container-max) + 220px + 3rem); */
+		padding: 0 1.7rem;
 	}
 
 	/* Override container inside post-body-inner so it doesn't add extra padding */
@@ -304,6 +303,7 @@
 		padding: 0;
 		flex: 1;
 		min-width: 0;
+		width: 100%;
 	}
 
 	/* Post footer */
