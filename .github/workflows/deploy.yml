@@ -45,8 +45,7 @@ jobs:
 
       - name: Set and Output Version
         run: |
-          PKG_VERSION=$(node -p "require('./package.json').version.split('.').slice(0, 2).join('.')")
-          VERSION="v$PKG_VERSION.${{ github.run_number }}"
+          VERSION="v$(node -p "require('./package.json').version")"
           echo "VITE_APP_VERSION=$VERSION" >> $GITHUB_ENV
           echo "🚀 Deploying version: $VERSION"
 
