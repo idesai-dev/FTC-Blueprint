@@ -192,6 +192,7 @@
 
 	async function fetchRawContent() {
 		status = 'loading';
+		statusMsg = 'Loading file…';
 		content = '';
 		fileSha = '';
 
@@ -209,7 +210,7 @@
 			} catch (_) {}
 		}
 
-		// Step 2: fetch from GitHub to get SHA (required for saving)
+		// Step 2: fetch from GitHub to get SHA + content (required for saving)
 		if (token) {
 			try {
 				const r = await fetch(
@@ -221,28 +222,26 @@
 					fileSha = d.sha;
 					// Only use GitHub content if we didn't already get it locally
 					if (!content) {
-						content = atob(d.content.replace(/\n/g, ''));
+						// Use TextDecoder for proper UTF-8 decoding (atob only handles ASCII)
+						const b64 = d.content.replace(/\n/g, '');
+						const bytes = Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
+						content = new TextDecoder().decode(bytes);
 						currentTags = parseTags(content);
 					}
 				} else {
 					const err = await r.json().catch(() => ({}));
-					if (!content) {
-						status = 'error';
-						statusMsg = `GitHub ${r.status}: ${err.message || 'Could not load file'}`;
-						return;
-					}
-				}
-			} catch (e) {
-				if (!content) {
 					status = 'error';
-					statusMsg = 'Network error loading file.';
+					statusMsg = `GitHub ${r.status}: ${err.message || 'Could not load file'}`;
 					return;
 				}
+			} catch (e) {
+				status = 'error';
+				statusMsg = `Network error: ${e instanceof Error ? e.message : String(e)}`;
+				return;
 			}
 		} else if (!content) {
-			// No token and no local content — prompt for token
 			status = 'idle';
-			statusMsg = 'Enter your GitHub PAT below to load the file.';
+			statusMsg = 'No token — cannot load file.';
 			return;
 		}
 
