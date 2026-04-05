@@ -151,10 +151,9 @@
 				</span>
 			{/if}
 		</div>
-		<h1>
+		<h1 class="gradient-text">
 			FTC<br />
-			<span class="gradient-text">{typedText}</span>{#if showCursor}<span class="cursor">|</span
-				>{/if}
+			{typedText}{#if showCursor}<span class="cursor">|</span>{/if}
 		</h1>
 		<p class="hero-desc">
 			The complete blueprint for FTC — coding, hardware, and strategy, all made simple.

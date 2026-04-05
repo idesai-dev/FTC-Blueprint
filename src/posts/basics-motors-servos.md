@@ -3,7 +3,7 @@ title: Basics of Motors and Servos
 date: 2026-03-28
 description: Programming guide for DC motors and servos in FTC.
 tags: [completed, software, beginner, completed]
-author: Ishaan Desaii
+author: Ishaan Desai
 published: true
 ---
 
@@ -125,11 +125,70 @@ intake.setPower(1.0); // Full speed forward
 <br>
 
 
----
+<br>
 
+---
 
 <br>
 
+## Example Program: LinearOpMode
 
-> [!TIP]
-> **Testing:** Use a simple test OpMode (like the FTC Dashboard servo test) to find the correct positions and directions for your motors and servos.
+Here is a complete example of a `LinearOpMode` that initializes a motor and a servo, and allows you to control them.
+
+```java
+package org.firstinspires.ftc.teamcode;
+
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
+
+@TeleOp(name = "Motor and Servo Example", group = "Tutorial")
+public class MotorServoExample extends LinearOpMode {
+
+    private DcMotor armMotor;
+    private Servo gripper;
+
+    @Override
+    public void runOpMode() {
+        // 1. Initialize hardware
+        armMotor = hardwareMap.get(DcMotor.class, "armMotor");
+        gripper = hardwareMap.get(Servo.class, "gripper");
+
+        // 2. Set directions and behaviors
+        armMotor.setDirection(DcMotor.Direction.FORWARD);
+        armMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        telemetry.addData("Status", "Initialized");
+        telemetry.update();
+
+        // Wait for the game to start (driver presses START)
+        waitForStart();
+
+        // Run until the end of the match (driver presses STOP)
+        while (opModeIsActive()) {
+            
+            // 3. Control Motor (e.g., using left stick Y)
+            double motorPower = -gamepad1.left_stick_y; 
+            armMotor.setPower(motorPower);
+
+            // 4. Control Servo (e.g., using buttons)
+            if (gamepad1.a) {
+                gripper.setPosition(1.0); // Open
+            } else if (gamepad1.b) {
+                gripper.setPosition(0.0); // Closed
+            }
+
+            // 5. Send telemetry to the driver station
+            telemetry.addData("Motor Power", motorPower);
+            telemetry.addData("Servo Position", gripper.getPosition());
+            telemetry.update();
+        }
+    }
+}
+```
+
+<br>
+
+---
+

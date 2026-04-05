@@ -27,13 +27,11 @@
 	const visiblePosts = $derived(
 		data.posts.filter((p) => {
 			if (devModeState.active) return true;
-			const tags = (p.meta.tags || []).map((t) =>
-				typeof t === 'string' ? t.toLowerCase().trim() : ''
-			);
-			return tags.includes('completed');
+			return p.meta.published !== false;
 		})
 	);
 
+	// Filtered posts (search + tag filters on top of visibility)
 	const filteredPosts = $derived(
 		visiblePosts.filter((p) => {
 			const matchSearch =
@@ -44,18 +42,25 @@
 					(t) => typeof t === 'string' && t.toLowerCase().includes(searchQuery.toLowerCase())
 				);
 
+			const postTags = (p.meta.tags || []).map((tag) =>
+				typeof tag === 'string' ? tag.toLowerCase().trim() : ''
+			);
+
 			const matchTag =
 				activeTags.length === 0 ||
 				activeTags.every((t) => {
-					const postTags = (p.meta.tags || []).map((tag) =>
-						typeof tag === 'string' ? tag.toLowerCase().trim() : ''
-					);
 					const lowerT = t.toLowerCase();
 					if (lowerT === 'novideo') return !postTags.includes('video');
+					if (lowerT === 'not_completed') return !postTags.includes('completed');
 					return postTags.includes(lowerT);
 				});
 
-			return matchSearch && matchTag;
+			// Default: only show completed if no status filter is active
+			const statusTags = ['completed', 'not_completed', 'coming soon'];
+			const hasStatusFilter = activeTags.some(t => statusTags.includes(t.toLowerCase()));
+			const matchStatusDefault = hasStatusFilter || postTags.includes('completed') || devModeState.active;
+
+			return matchSearch && matchTag && matchStatusDefault;
 		})
 	);
 </script>

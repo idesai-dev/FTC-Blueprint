@@ -28,11 +28,10 @@
 		if (videoTutorial === 'yes') tags.push('video');
 		else if (videoTutorial === 'no') tags.push('novideo');
 		
-		if (devModeState.active && completion !== 'all') {
+		if (completion !== 'all') {
 			if (completion === 'completed') tags.push('completed');
-			else if (completion === 'coming_soon') tags.push('coming soon');
-		} else if (!devModeState.active && completion !== 'all') {
-			completion = 'all';
+			else if (completion === 'not_completed') tags.push('not_completed');
+			else if (completion === 'coming_soon' && devModeState.active) tags.push('coming soon');
 		}
 		
 		activeTags = tags;
@@ -133,6 +132,7 @@
 					<select bind:value={completion} aria-label="Completion Status">
 						<option value="all">Status: All</option>
 						<option value="completed">Completed</option>
+						<option value="not_completed">Not Completed</option>
 						<option value="coming_soon">Coming Soon</option>
 					</select>
 					<svg

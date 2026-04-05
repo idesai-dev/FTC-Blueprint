@@ -4,7 +4,7 @@
 
 	let isSubmitting = $state(false);
 	let isSent = $state(false);
-	let submitText = $state('Submit Portfolio');
+	let submitText = $state('Send Portfolio');
 	let showForm = $state(false);
 
 	async function handleSubmit(e: Event) {
@@ -35,16 +35,16 @@
 				setTimeout(() => {
 					showForm = false;
 					isSent = false;
-					submitText = 'Submit Portfolio';
+					submitText = 'Send Portfolio';
 				}, 5000);
 			} else {
 				submitText = 'Error!';
-				setTimeout(() => (submitText = 'Submit Portfolio'), 3000);
+				setTimeout(() => (submitText = 'Send Portfolio'), 3000);
 			}
 		} catch (error) {
 			console.error(error);
 			submitText = 'Error!';
-			setTimeout(() => (submitText = 'Submit Portfolio'), 3000);
+			setTimeout(() => (submitText = 'Send Portfolio'), 3000);
 		} finally {
 			isSubmitting = false;
 		}
