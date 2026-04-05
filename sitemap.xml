@@ -66,11 +66,6 @@
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>https://ftcblueprint.com/hardware/hardware-arms</loc>
-        <changefreq>weekly</changefreq>
-        <priority>0.8</priority>
-    </url>
-    <url>
         <loc>https://ftcblueprint.com/hardware/hardware-cad-intro</loc>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
@@ -251,6 +246,11 @@
         <priority>0.8</priority>
     </url>
     <url>
+        <loc>https://ftcblueprint.com/software/roadrunner-introduction</loc>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
         <loc>https://ftcblueprint.com/software/roadrunner-localization</loc>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
@@ -322,6 +322,11 @@
     </url>
     <url>
         <loc>https://ftcblueprint.com/software/encoder-autonomous-subsystem-functions</loc>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://ftcblueprint.com/software/markdown-reference</loc>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
