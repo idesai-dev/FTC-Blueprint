@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" class="dark">
+<html lang="en" class="light">
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -13,20 +13,19 @@
 		<script>
 			(function () {
 				const saved = localStorage.getItem('theme');
-				const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-				const theme = saved || (prefersDark ? 'dark' : 'light');
+				const theme = saved || 'light';
 				document.documentElement.className = theme;
 			})();
 		</script>
 
 		<link rel="icon" type="image/png" href="/favicon.png" />
 		<link rel="apple-touch-icon" href="/favicon.png" />
-		<link href="/_app/immutable/entry/start.xWvE1XpE.js" rel="modulepreload">
-		<link href="/_app/immutable/chunks/D4iLNCMT.js" rel="modulepreload">
+		<link href="/_app/immutable/entry/start.DRWoy-Ej.js" rel="modulepreload">
+		<link href="/_app/immutable/chunks/7o5MwonO.js" rel="modulepreload">
 		<link href="/_app/immutable/chunks/DcSPiBVf.js" rel="modulepreload">
 		<link href="/_app/immutable/chunks/BXbXSw2m.js" rel="modulepreload">
 		<link href="/_app/immutable/chunks/z9--eRsk.js" rel="modulepreload">
-		<link href="/_app/immutable/entry/app.C50-dp4b.js" rel="modulepreload">
+		<link href="/_app/immutable/entry/app.CyUqrpoh.js" rel="modulepreload">
 		<link href="/_app/immutable/chunks/PPVm8Dsz.js" rel="modulepreload">
 		<link href="/_app/immutable/chunks/Bz-QVniP.js" rel="modulepreload">
 		<link href="/_app/immutable/chunks/DaBHT7U_.js" rel="modulepreload">
@@ -42,15 +41,15 @@
 		<div style="display: contents">
 			<script>
 				{
-					__sveltekit_ons66u = {
+					__sveltekit_12z6gu6 = {
 						base: ""
 					};
 
 					const element = document.currentScript.parentElement;
 
 					Promise.all([
-						import("/_app/immutable/entry/start.xWvE1XpE.js"),
-						import("/_app/immutable/entry/app.C50-dp4b.js")
+						import("/_app/immutable/entry/start.DRWoy-Ej.js"),
+						import("/_app/immutable/entry/app.CyUqrpoh.js")
 					]).then(([kit, app]) => {
 						kit.start(app, element);
 					});
