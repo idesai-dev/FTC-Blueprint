@@ -54,6 +54,7 @@ jobs:
         run: npm run build
         env:
           VITE_APP_VERSION: ${{ env.VITE_APP_VERSION }}
+          VITE_GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
