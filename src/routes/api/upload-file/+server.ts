@@ -14,7 +14,10 @@ export const POST = async ({ request }) => {
 	}
 
 	try {
-		const dirPath = join(process.cwd(), 'static', 'images', 'posts', slug);
+        const isModel = fileName.endsWith('.glb') || fileName.endsWith('.gltf');
+        const subfolder = isModel ? 'models' : 'images';
+        
+		const dirPath = join(process.cwd(), 'static', subfolder, 'posts', slug);
 		if (!existsSync(dirPath)) {
 			mkdirSync(dirPath, { recursive: true });
 		}
@@ -26,7 +29,7 @@ export const POST = async ({ request }) => {
 
 		return json({ 
 			success: true, 
-			url: `/images/posts/${slug}/${fileName}` 
+			url: `/${subfolder}/posts/${slug}/${fileName}` 
 		});
 	} catch (e) {
 		console.error('Local upload error:', e);

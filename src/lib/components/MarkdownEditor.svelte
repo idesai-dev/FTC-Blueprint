@@ -117,11 +117,14 @@
 		}, 0);
 	}
 
-	async function uploadImage(file: File) {
+	async function uploadFile(file: File) {
 		if (isImageUploading) return;
 		isImageUploading = true;
 		statusMsg = `Uploading ${file.name}…`;
 		try {
+			const isModel = file.name.endsWith('.glb') || file.name.endsWith('.gltf');
+			const subfolder = isModel ? 'models' : 'images';
+			
 			const reader = new FileReader();
 			const base64Data = await new Promise<string>((resolve) => {
 				reader.onload = () => resolve((reader.result as string).split(',')[1]);
@@ -129,16 +132,16 @@
 			});
 			const safeName = file.name.replace(/[^a-z0-9.-]/gi, '_').toLowerCase();
 			const uniqueName = `${Date.now()}_${safeName}`;
-			let imageUrl = '';
+			let fileUrl = '';
 
 			if (import.meta.env.DEV) {
 				try {
-					const r = await fetch('/api/upload-image', {
+					const r = await fetch('/api/upload-file', {
 						method: 'POST',
 						headers: { 'Content-Type': 'application/json' },
 						body: JSON.stringify({ slug, fileName: uniqueName, base64Data })
 					});
-					imageUrl = (await r.json()).url || '';
+					fileUrl = (await r.json()).url || '';
 				} catch (_) {}
 			}
 
@@ -146,19 +149,25 @@
 			if (token) {
 				try {
 					await fetch(
-						`https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/static/images/posts/${slug}/${uniqueName}`,
+						`https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/static/${subfolder}/posts/${slug}/${uniqueName}`,
 						{
 							method: 'PUT',
 							headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
-							body: JSON.stringify({ message: `docs: upload image for ${slug}`, content: base64Data })
+							body: JSON.stringify({ message: `docs: upload ${isModel ? 'model' : 'image'} for ${slug}`, content: base64Data })
 						}
 					);
 				} catch (_) {}
 			}
 
-			if (!imageUrl) imageUrl = `/images/posts/${slug}/${uniqueName}`;
-			insertTextAtCursor(`\n![${file.name}](${imageUrl})\n`);
-			statusMsg = 'Image uploaded ✓';
+			if (!fileUrl) fileUrl = `/${subfolder}/posts/${slug}/${uniqueName}`;
+			
+			if (isModel) {
+				insertTextAtCursor(`\n<model-viewer src="${fileUrl}" camera-controls auto-rotate shadow-intensity="1" style="width: 100%; height: 400px; background: #1a1a1a; border-radius: 8px;"></model-viewer>\n`);
+			} else {
+				insertTextAtCursor(`\n![${file.name}](${fileUrl})\n`);
+			}
+			
+			statusMsg = `${isModel ? 'Model' : 'Image'} uploaded ✓`;
 			setTimeout(() => (statusMsg = ''), 3000);
 		} catch (e) {
 			statusMsg = 'Upload failed';
@@ -171,7 +180,7 @@
 		for (const item of Array.from(e.clipboardData?.items || [])) {
 			if (item.type.startsWith('image/')) {
 				const file = item.getAsFile();
-				if (file) { e.preventDefault(); await uploadImage(file); }
+				if (file) { e.preventDefault(); await uploadFile(file); }
 			}
 		}
 	}
@@ -179,13 +188,15 @@
 	async function handleDrop(e: DragEvent) {
 		e.preventDefault();
 		for (const file of Array.from(e.dataTransfer?.files || [])) {
-			if (file.type.startsWith('image/')) await uploadImage(file);
+			const isImage = file.type.startsWith('image/');
+			const isModel = file.name.endsWith('.glb') || file.name.endsWith('.gltf');
+			if (isImage || isModel) await uploadFile(file);
 		}
 	}
 
 	function handleFileSelect(e: Event) {
 		for (const file of Array.from((e.target as HTMLInputElement).files || [])) {
-			uploadImage(file);
+			uploadFile(file);
 		}
 	}
 	/** END IMAGE HANDLING **/
@@ -412,8 +423,8 @@
 							<button class="tab-btn" class:active={activeTab === 'editor'} onclick={() => activeTab = 'editor'}>Editor</button>
 							<button class="tab-btn" class:active={activeTab === 'preview'} onclick={() => activeTab = 'preview'}>Preview</button>
 							<label class="tab-btn upload-label">
-								Upload Image
-								<input type="file" accept="image/*" class="hidden" onchange={handleFileSelect} />
+								Upload File
+								<input type="file" accept="image/*, .glb, .gltf" class="hidden" onchange={handleFileSelect} />
 							</label>
 						</div>
 						<div class="editor-actions">
