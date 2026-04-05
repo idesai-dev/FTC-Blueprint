@@ -43,14 +43,15 @@ jobs:
 
       - name: Set and Output Version
         run: |
-          VERSION="v1.2.${{ github.run_number }}"
+          PKG_VERSION=$(node -p "require('./package.json').version.split('.').slice(0, 2).join('.')")
+          VERSION="v$PKG_VERSION.${{ github.run_number }}"
           echo "VITE_APP_VERSION=$VERSION" >> $GITHUB_ENV
           echo "🚀 Deploying version: $VERSION"
 
       - name: Build
         run: npm run build
         env:
-          VITE_APP_VERSION: v1.2.${{ github.run_number }}
+          VITE_APP_VERSION: ${{ env.VITE_APP_VERSION }}
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
