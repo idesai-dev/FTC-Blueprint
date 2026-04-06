@@ -1,6 +1,6 @@
 ---
 title: Mecanum Drivetrain
-panelCategory: "Miscellaneous"
+panelCategory: 'Miscellaneous'
 date: 2026-03-28
 description: Learn the kinematics and programming behind a 4-motor mecanum drivetrain.
 tags: [completed, software, beginner, kinematics]
@@ -8,30 +8,15 @@ author: Blueprint
 published: true
 ---
 
-
 # Mecanum Drivetrain
-
 
 Mecanum wheels are a popular choice in FTC because they allow a robot to move in any direction (omnidirectional) without changing its orientation. This is achieved by the specialized rollers on the wheels, which are oriented at a 45-degree angle.
 
-
-<br>
-
-
 ---
-
-
-<br>
-
 
 ## Kinematics: The Math Behind the Movement
 
-
 To control a mecanum drivetrain, we need to calculate the correct power for each of the four motors based on the desired movement (forward/backward, strafe left/right, and rotation).
-
-
-<br>
-
 
 ### The Formulas
 
@@ -41,25 +26,16 @@ To control a mecanum drivetrain, we need to calculate the correct power for each
 - **Back Right** = $y + x - r$
 
 Where:
+
 - $y$ is the forward/backward movement.
 - $x$ is the strafing movement (sideways).
 - $r$ is the rotational movement.
 
-
-<br>
-
-
 ---
-
-
-<br>
-
 
 ## Implementation in Java
 
-
 Here is a basic implementation of mecanum drive control in an OpMode:
-
 
 ```java
 @TeleOp
@@ -100,18 +76,9 @@ public class MecanumDrive extends LinearOpMode {
 }
 ```
 
-
-<br>
-
-
 ---
 
-
-<br>
-
-
 ## Tips for Better Mecanum Drive
-
 
 - **Weight Distribution:** Mecanum wheels work best when the weight is evenly distributed across all four wheels. If one wheel has less weight, it will slip.
 - **Strafing Correction:** Because of the friction of the rollers, strafing often requires more power than moving forward. The `1.1` multiplier in the code above is a common way to compensate for this.
