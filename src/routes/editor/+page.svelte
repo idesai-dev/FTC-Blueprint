@@ -76,7 +76,7 @@
 	let fm = $state<PostMeta>({
 		title: '',
 		date: new Date().toISOString().slice(0, 10),
-		panelCategory: '',
+		panelCategory: 'NOT ASSIGNED YET',
 		description: '',
 		tags: [],
 		author: '',
@@ -180,7 +180,7 @@
 		fm = {
 			title: String(obj.title ?? ''),
 			date: String(obj.date ?? new Date().toISOString().slice(0, 10)),
-			panelCategory: String(obj.panelCategory ?? ''),
+			panelCategory: String(obj.panelCategory ?? 'NOT ASSIGNED YET'),
 			description: String(obj.description ?? ''),
 			tags: Array.isArray(obj.tags) ? (obj.tags as string[]) : [],
 			author: String(obj.author ?? ''),
@@ -461,7 +461,7 @@
 				const stub = `---
 title: ${title}
 date: ${today}
-panelCategory: ""
+panelCategory: "NOT ASSIGNED YET"
 description: 
 tags: []
 author: 
@@ -471,7 +471,7 @@ published: false
 Start writing here...
 `;
 				localStorage.setItem(`blueprint_post_${slug}`, stub);
-				const newEntry: PostEntry = { slug, meta: { title, date: today, panelCategory: '', tags: [], published: false } };
+				const newEntry: PostEntry = { slug, meta: { title, date: today, panelCategory: 'NOT ASSIGNED YET', tags: [], published: false } };
 				posts = [newEntry, ...posts];
 				localStorage.setItem('blueprint_posts', JSON.stringify(posts));
 			}
