@@ -2,7 +2,10 @@
 	import { devModeState } from '$lib/stores/devMode.svelte';
 	import { fade, fly } from 'svelte/transition';
 	import { marked } from 'marked';
+	import markedKatex from 'marked-katex-extension';
 	import { browser } from '$app/environment';
+
+	marked.use(markedKatex({ throwOnError: false }));
 
 	function sanitize(html: string): string {
 		if (!browser) return html;

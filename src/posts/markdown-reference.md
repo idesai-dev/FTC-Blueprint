@@ -1,6 +1,6 @@
 ---
 title: Writing in Markdown - A Quick Reference
-panelCategory: "Developer"
+panelCategory: 'Developer'
 date: 2026-03-20
 description: A practical guide to markdown syntax — headings, code blocks, tables, blockquotes, and more.
 tags: [software, beginner]
@@ -173,20 +173,24 @@ To embed interactive 3D models, natively use the `<model-viewer>` component. It 
 > Web browsers do NOT natively support `.stl` format because it is inefficient for web rendering. You MUST convert `.stl` to `.glb` or `.gltf`.
 
 **Importing Custom Assets**
+
 1. **Convert to .glb:** If you designed in Fusion 360 or Blender, you can export natively as `glTF/GLB`. If using Onshape or you have a standalone `.stl` file, convert it freely using a [Model Converter](https://convert3d.org/stl-to-glb).
 2. **Move to internal static folder:** Place the generated `.glb` file inside your codebase at `static/assets/models/your-mechanism.glb`.
 3. **Reference it:** Reference the file inside your markup exactly like this: `src="/assets/models/your-mechanism.glb"`!
 
 ```html
-<div style="width: 100%; height: 500px; border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--border); background: var(--bg-secondary); margin: 2rem 0;">
-  <model-viewer 
-    src="https://modelviewer.dev/shared-assets/models/RobotExpressive.glb" 
-    alt="A 3D model of a robot mechanism" 
-    auto-rotate 
-    camera-controls 
-    style="width: 100%; height: 100%; background-color: transparent;"
-    shadow-intensity="1">
-  </model-viewer>
+<div
+	style="width: 100%; height: 500px; border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--border); background: var(--bg-secondary); margin: 2rem 0;"
+>
+	<model-viewer
+		src="https://modelviewer.dev/shared-assets/models/RobotExpressive.glb"
+		alt="A 3D model of a robot mechanism"
+		auto-rotate
+		camera-controls
+		style="width: 100%; height: 100%; background-color: transparent;"
+		shadow-intensity="1"
+	>
+	</model-viewer>
 </div>
 ```
 
