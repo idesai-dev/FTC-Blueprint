@@ -1,5 +1,6 @@
 ---
 title: Pedro Pathing Introduction
+panelCategory: "Pedro Pathing"
 date: 2026-03-28
 description: A powerful path-following library for FTC.
 tags: [software, intermediate, autonomous]

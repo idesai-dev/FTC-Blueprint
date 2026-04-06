@@ -1,5 +1,6 @@
 ---
 title: Control Hub
+panelCategory: "Electronics"
 date: 2026-04-03
 description: Setting up and understanding the REV Control Hub.
 tags: [hardware, beginner]

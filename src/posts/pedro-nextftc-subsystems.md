@@ -1,5 +1,6 @@
 ---
 title: NextFTC Subsystems
+panelCategory: "Pedro Pathing"
 date: 2026-03-28
 description: Building modular and reusable robot mechanisms using the NextFTC framework.
 tags: [completed, software, intermediate]

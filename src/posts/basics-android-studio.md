@@ -1,5 +1,6 @@
 ---
 title: Android Studio Setup
+panelCategory: "Basics"
 date: 2026-03-28
 description: Complete set up guide for Android Studio on both Windows and Mac.
 tags: ["completed", "software", "beginner", "completed", "rookie", "video"]

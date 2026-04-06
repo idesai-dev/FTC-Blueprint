@@ -1,5 +1,6 @@
 ---
 title: STEM Fairs
+panelCategory: "Community & STEM"
 date: 2026-04-03
 description: Participating in and organizing STEM fair events.
 tags: [ outreach, beginner]

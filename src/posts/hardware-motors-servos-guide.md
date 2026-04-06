@@ -1,5 +1,6 @@
 ---
 title: 'Motors & Servos Guide'
+panelCategory: "Electronics"
 date: 2026-04-03
 description: A hardware guide to selecting and using motors and servos in FTC.
 tags: [ hardware, beginner]

@@ -1,5 +1,6 @@
 ---
 title: Mecanum Drivetrain
+panelCategory: "Miscellaneous"
 date: 2026-03-28
 description: Learn the kinematics and programming behind a 4-motor mecanum drivetrain.
 tags: [completed, software, beginner, kinematics]

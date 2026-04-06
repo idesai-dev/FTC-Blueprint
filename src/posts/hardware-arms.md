@@ -1,5 +1,6 @@
 ---
 title: Arms
+panelCategory: "Mechanisms"
 date: 2026-04-03
 description: Building articulated arm mechanisms for FTC robots.
 tags: ["hardware", "intermediate"]

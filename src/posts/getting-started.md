@@ -1,5 +1,6 @@
 ---
 title: Getting Started
+panelCategory: "Basics"
 date: 2026-03-28
 description: Welcome to FTC! This guide walks you through the absolute basics of getting started with the competition.
 tags: [completed, rookie guide, beginner]

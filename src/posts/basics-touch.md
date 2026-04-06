@@ -1,5 +1,6 @@
 ---
 title: Touch Sensor
+panelCategory: "Basics"
 date: 2026-04-05
 description: Simple digital inputs for limit switches and button presses.
 tags: [software, completed, beginner]

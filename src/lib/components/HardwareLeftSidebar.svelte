@@ -62,11 +62,39 @@
 
 	let completedPaths = $derived(getCompletedPaths());
 
+	// Filter and group posts dynamically by panelCategory
+	let dynamicGroups = $derived(() => {
+		if (!$page.data.posts) return groups;
+		
+		const allPosts = $page.data.posts;
+		const sectionPosts = allPosts.filter((p: any) => 
+			(p.meta.tags || []).some((t: string) => t.toLowerCase() === 'hardware')
+		);
+
+		const grouped = sectionPosts.reduce((acc: any, p: any) => {
+			const cat = p.meta.panelCategory || 'General';
+			if (!acc[cat]) acc[cat] = [];
+			acc[cat].push({ 
+				href: `/hardware/${p.slug}`, 
+				label: p.meta.title,
+				devOnly: (p.meta.tags || []).some((t: string) => t.toLowerCase() === 'coming soon')
+			});
+			return acc;
+		}, {});
+
+		const sortedCats = Object.keys(grouped).sort((a, b) => a.localeCompare(b));
+
+		return sortedCats.map(title => ({
+			title,
+			links: grouped[title].sort((a: any, b: any) => a.label.localeCompare(b.label))
+		}));
+	});
+
 	let baseGroups = $derived(
-		groups
+		dynamicGroups()
 			.map((group) => {
 				const visibleLinks = group.links.filter(
-					(link) => devModeState.active || completedPaths.includes(link.href)
+					(link: any) => devModeState.active || completedPaths.includes(link.href)
 				);
 				return { ...group, links: visibleLinks };
 			})
@@ -76,12 +104,12 @@
 	// Context-aware visible groups
 	let visibleGroups = $derived(
 		mode === 'article'
-			? baseGroups.filter((group) => group.links.some((link) => link.href === currentPath))
+			? baseGroups.filter((group) => group.links.some((link: any) => link.href === currentPath))
 			: baseGroups
 	);
 
 	let activeGroup = $derived(
-		baseGroups.find((group) => group.links.some((link) => link.href === currentPath))
+		baseGroups.find((group) => group.links.some((link: any) => link.href === currentPath))
 	);
 	let mobileOpen = $state(false);
 	let expandedGroups = $state<Record<string, boolean>>({});

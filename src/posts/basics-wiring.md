@@ -1,5 +1,6 @@
 ---
 title: Basics of Wiring and Configuration
+panelCategory: "Basics"
 date: 2026-03-28
 description: Essential guide to wiring your FTC robot and configuring it in the app.
 tags: [completed, software, beginner, manual, completed]

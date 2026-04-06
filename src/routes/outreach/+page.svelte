@@ -147,7 +147,7 @@
 	@media (min-width: 1101px) {
 		.main-layout {
 			flex-direction: row;
-			padding: 0 0 0 4rem;
+			padding: 0 0 0 1.5rem;
 			gap: 0;
 		}
 	}

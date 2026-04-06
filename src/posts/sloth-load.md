@@ -1,5 +1,6 @@
 ---
 title: Sloth Load
+panelCategory: "Miscellaneous"
 date: 2026-03-28
 description: High-speed code deployment and hot-reloading for FTC using Sloth.
 tags: [completed, software, beginner, tools]

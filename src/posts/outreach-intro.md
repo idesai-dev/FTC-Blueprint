@@ -1,5 +1,6 @@
 ---
 title: What is Outreach?
+panelCategory: "Planning & Intro"
 date: 2026-04-03
 description: An introduction to outreach in FTC and why it matters.
 tags: [completed, outreach, beginner]

@@ -1,5 +1,6 @@
 ---
 title: Vision Relocalization Metatag2
+panelCategory: "Vision"
 date: 2026-03-28
 description: Content coming soon for Vision Relocalization Metatag2.
 tags: [ software, manual, beginner]

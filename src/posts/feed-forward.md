@@ -1,5 +1,6 @@
 ---
 title: Feedforward Control
+panelCategory: "Control"
 date: 2026-03-28
 description: A practical guide to feedforward control for FTC mechanisms.
 tags: [completed, software, intermediate, control, completed]

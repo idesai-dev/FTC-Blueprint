@@ -298,10 +298,13 @@
 		}, 0);
 	}
 
-	// ─── Image upload ──────────────────────────────────────────────────────────────
-	async function uploadImageFile(file: File) {
+	// ─── Image/File upload ─────────────────────────────────────────────────────────
+	async function uploadFile(file: File) {
 		if (!activeSlug) { alert('Open a post first.'); return; }
 		uploadingImage = true;
+		const isModel = file.name.endsWith('.glb') || file.name.endsWith('.gltf');
+		const subfolder = isModel ? 'models' : 'images';
+		
 		try {
 			const reader = new FileReader();
 			const fullDataUrl = await new Promise<string>((resolve) => {
@@ -309,26 +312,56 @@
 				reader.readAsDataURL(file);
 			});
 
+			let finalUrl = '';
+			const base64Data = fullDataUrl.split(',')[1];
+			const safeName = file.name.replace(/[^a-z0-9._-]/gi, '_').toLowerCase();
+			const uniqueName = `${Date.now()}_${safeName}`;
+
 			if (dev) {
-				const base64Data = fullDataUrl.split(',')[1];
-				const safeName = file.name.replace(/[^a-z0-9._-]/gi, '_').toLowerCase();
-				const uniqueName = `${Date.now()}_${safeName}`;
 				const r = await fetch('/api/upload-file', {
 					method: 'POST',
 					headers: { 'Content-Type': 'application/json' },
 					body: JSON.stringify({ slug: activeSlug, fileName: uniqueName, base64Data })
 				});
 				const d = await r.json();
-				pendingImageUrl = d.url || '';
+				finalUrl = d.url || '';
 			} else {
-				// In production, just use the Data URL directly
-				pendingImageUrl = fullDataUrl;
+				// PRODUCTION: Upload to GitHub directly
+				const GITHUB_TOKEN = import.meta.env.VITE_GITHUB_TOKEN || ''; // This should be provided or handled via API
+				// Note: Since we are in the main editor page, we use the GITHUB_OWNER logic similar to MarkdownEditor
+				const GITHUB_OWNER = 'idesai-dev';
+				const GITHUB_REPO = 'FTC-Blueprint';
+				
+				if (GITHUB_TOKEN) {
+					await fetch(
+						`https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/static/${subfolder}/posts/${activeSlug}/${uniqueName}`,
+						{
+							method: 'PUT',
+							headers: { Authorization: `Bearer ${GITHUB_TOKEN}`, Accept: 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
+							body: JSON.stringify({ message: `docs: upload ${isModel ? 'model' : 'image'} for ${activeSlug}`, content: base64Data })
+						}
+					);
+				}
+				finalUrl = `/${subfolder}/posts/${activeSlug}/${uniqueName}`;
 			}
 			
-			imageAlt = file.name.replace(/\.[^/.]+$/, '').replace(/[_-]/g, ' ');
-			showImageDialog = true;
-		} catch {
-			alert('Image upload failed.');
+			if (isModel) {
+				let url = finalUrl;
+				if (url.startsWith('data:')) {
+					const id = Math.random().toString(36).substring(2, 9);
+					imageMap.set(id, url);
+					url = `data:model/...#${id}`;
+				}
+				const html = `\n<model-viewer src="${url}" camera-controls auto-rotate shadow-intensity="1" style="width: 100%; height: 400px; background: #1a1a1a; border-radius: 8px;"></model-viewer>\n`;
+				insertRaw(html);
+			} else {
+				pendingImageUrl = finalUrl;
+				imageAlt = file.name.replace(/\.[^/.]+$/, '').replace(/[_-]/g, ' ');
+				showImageDialog = true;
+			}
+		} catch (e) {
+			console.error(e);
+			alert('Upload failed.');
 		} finally {
 			uploadingImage = false;
 		}
@@ -338,7 +371,7 @@
 		for (const item of Array.from(e.clipboardData?.items ?? [])) {
 			if (item.type.startsWith('image/')) {
 				const file = item.getAsFile();
-				if (file) { e.preventDefault(); await uploadImageFile(file); }
+				if (file) { e.preventDefault(); await uploadFile(file); }
 			}
 		}
 	}
@@ -346,7 +379,9 @@
 	async function handleDropInEditor(e: DragEvent) {
 		e.preventDefault();
 		for (const file of Array.from(e.dataTransfer?.files ?? [])) {
-			if (file.type.startsWith('image/')) await uploadImageFile(file);
+			const isImage = file.type.startsWith('image/');
+			const isModel = file.name.endsWith('.glb') || file.name.endsWith('.gltf');
+			if (isImage || isModel) await uploadFile(file);
 		}
 	}
 
@@ -634,19 +669,19 @@ Start writing here...
 						<button class="tool-btn" onclick={() => insertRaw('\n| Col | Col |\n|-----|-----|\n| val | val |\n')} title="Table">Table</button>
 						<span class="tool-sep"></span>
 						<!-- Image upload -->
-						<label class="tool-btn upload-lbl" title="Upload image">
+						<label class="tool-btn upload-lbl" title="Upload image or 3D model">
 							{#if uploadingImage}
 								<span class="mini-spin"></span>
 							{:else}
-								🖼 Image
+								Upload
 							{/if}
 							<input
 								type="file"
-								accept="image/*"
+								accept="image/*, .glb, .gltf"
 								class="hidden-file"
 								onchange={async (e) => {
 									const f = (e.target as HTMLInputElement).files?.[0];
-									if (f) await uploadImageFile(f);
+									if (f) await uploadFile(f);
 									(e.target as HTMLInputElement).value = '';
 								}}
 							/>

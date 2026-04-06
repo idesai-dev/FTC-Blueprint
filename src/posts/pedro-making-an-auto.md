@@ -1,5 +1,6 @@
 ---
 title: Pedro Pathing: Making an Auto
+panelCategory: "Pedro Pathing"
 date: 2026-03-28
 description: Building a complete autonomous routine with Pedro Pathing.
 tags: [completed, software, intermediate]

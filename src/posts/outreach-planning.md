@@ -1,5 +1,6 @@
 ---
 title: Planning Events
+panelCategory: "Planning & Intro"
 date: 2026-04-03
 description: How to plan and execute successful outreach events.
 tags: [ outreach, beginner]

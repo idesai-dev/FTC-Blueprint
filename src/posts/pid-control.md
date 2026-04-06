@@ -1,5 +1,6 @@
 ---
 title: PID Control
+panelCategory: "Control"
 date: 2026-03-28
 description: A comprehensive guide to proportional, integral, and derivative control in FTC.
 tags: [completed, software, intermediate, control, completed]

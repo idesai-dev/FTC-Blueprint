@@ -1,5 +1,6 @@
 ---
 title: Distance Sensor
+panelCategory: "Basics"
 date: 2026-04-05
 description: Using TOF distance sensors for precise robot positioning.
 tags: [software, completed, beginner]

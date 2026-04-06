@@ -158,16 +158,17 @@
 	/* Refreshed styles to resolve virtual module loading issues in Vite */
 	.filters {
 		display: flex;
-		flex-wrap: wrap;
+		flex-direction: row;
 		gap: 0.75rem;
 		align-items: center;
+		width: 100%;
 	}
 
 	.search-wrap {
 		position: relative;
 		flex: 1;
-		min-width: 200px;
-		max-width: 320px;
+		min-width: 0;
+		max-width: 400px;
 	}
 
 	.search-icon {

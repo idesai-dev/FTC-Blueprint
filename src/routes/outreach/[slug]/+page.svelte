@@ -252,7 +252,7 @@
 		gap: 3rem;
 		max-width: calc(var(--container-max) + 220px + 3rem);
 		margin: 0 auto;
-		padding: 0 2rem 0 4rem;
+		padding: 0 2rem 0 1.5rem;
 	}
 
 	.post-body-inner .container {

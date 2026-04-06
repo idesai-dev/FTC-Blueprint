@@ -1,5 +1,6 @@
 ---
 title: Roadrunner Localization
+panelCategory: "Roadrunner"
 date: 2026-03-28
 description: Content coming soon for Roadrunner Localization.
 tags: [ software, manual, beginner]

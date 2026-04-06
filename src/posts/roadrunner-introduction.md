@@ -1,5 +1,6 @@
 ---
 title: Roadrunner Introduction
+panelCategory: "Roadrunner"
 date: 2026-03-28
 description: The essential first steps for implementing Road Runner for advanced autonomous navigation in FTC.
 tags: [software, manual, beginner, road runner]

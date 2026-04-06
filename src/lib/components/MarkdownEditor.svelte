@@ -51,17 +51,23 @@
 	let imageMap = new Map<string, string>();
 
 	function shorten(text: string): string {
-		const dataUrlRegex = /data:image\/[a-zA-Z+-]+;base64,[a-zA-Z0-9+/=]+/g;
+		const dataUrlRegex = /data:(image|model)\/[a-zA-Z+-]+;base64,[a-zA-Z0-9+/=]+/g;
 		return text.replace(dataUrlRegex, (match) => {
+			const existingId = Array.from(imageMap.entries()).find(([, val]) => val === match)?.[0];
+			if (existingId) {
+				const type = match.split(':')[1].split(';')[0];
+				return `data:${type}/...#${existingId}`;
+			}
 			const id = Math.random().toString(36).substring(2, 9);
 			imageMap.set(id, match);
-			return `data:image/...#${id}`;
+			const type = match.split(':')[1].split(';')[0];
+			return `data:${type}/...#${id}`;
 		});
 	}
 
 	function expand(text: string): string {
-		const placeholderRegex = /data:image\/\.\.\.#([a-z0-9]+)/g;
-		return text.replace(placeholderRegex, (match, id) => {
+		const placeholderRegex = /data:(image|model)\/\.\.\.#([a-z0-9]+)/g;
+		return text.replace(placeholderRegex, (match, type, id) => {
 			return imageMap.get(id) || match;
 		});
 	}
@@ -176,10 +182,11 @@
 			
 			
 			let url = fileUrl;
-			if (url.startsWith('data:image/')) {
+			if (url.startsWith('data:')) {
 				const id = Math.random().toString(36).substring(2, 9);
 				imageMap.set(id, url);
-				url = `data:image/...#${id}`;
+				const type = url.split(':')[1].split(';')[0];
+				url = `data:${type}/...#${id}`;
 			}
 
 			if (isModel) {
@@ -548,7 +555,7 @@
 								{#if isImageUploading}
 									<div class="upload-overlay" transition:fade>
 										<span class="spinner large"></span>
-										<p>Uploading image…</p>
+										<p>Uploading file…</p>
 									</div>
 								{/if}
 							</div>

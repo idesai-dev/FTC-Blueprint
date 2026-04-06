@@ -127,6 +127,7 @@
 		padding: 1.75rem;
 		background: rgba(140, 130, 110, 0.05);
 		border: 1px solid var(--border-subtle);
+		border-radius: var(--radius-lg);
 		box-shadow: none;
 		max-width: 500px;
 	}

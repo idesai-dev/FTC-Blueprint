@@ -1,5 +1,6 @@
 ---
 title: 'Complete Rookie Guide'
+panelCategory: "Judging & Portfolio"
 date: '2024-01-01'
 description: 'A comprehensive guide for FTC rookies.'
 tags:

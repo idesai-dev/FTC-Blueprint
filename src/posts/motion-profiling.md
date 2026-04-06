@@ -1,5 +1,6 @@
 ---
 title: Motion Profiling
+panelCategory: "Control"
 date: 2026-03-28
 description: Learn how to use trapezoidal motion profiling with FTC drivetrains and single‑motor mechanisms.
 tags: [completed, software, advanced, novideo]

@@ -1,5 +1,6 @@
 ---
 title: Parallel Plate Drivetrain
+panelCategory: "Drivetrain"
 date: 2026-03-28
 description: Content coming soon for Parallel Plate Drivetrain.
 tags: [ hardware]

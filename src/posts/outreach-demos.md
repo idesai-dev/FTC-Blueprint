@@ -1,5 +1,6 @@
 ---
 title: Robot Demos
+panelCategory: "Community & STEM"
 date: 2026-04-03
 description: Running effective robot demonstration events in your community.
 tags: [ outreach, beginner]

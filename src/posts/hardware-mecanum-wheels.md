@@ -1,5 +1,6 @@
 ---
 title: Mecanum Wheels
+panelCategory: "Drivetrain"
 date: 2026-04-03
 description: Understanding and building with mecanum wheels in FTC.
 tags: [ hardware, beginner]
