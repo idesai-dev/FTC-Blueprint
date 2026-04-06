@@ -21,8 +21,18 @@
 
 	// ─── State ───────────────────────────────────────────────────────────────────
 	let posts = $state<PostEntry[]>([]);
-	let filteredPosts = $state<PostEntry[]>([]);
 	let search = $state('');
+	let filteredPosts = $derived.by(() => {
+		const q = search.toLowerCase();
+		return q
+			? posts.filter(
+				(p) =>
+					p.slug.includes(q) ||
+					String(p.meta.title ?? '').toLowerCase().includes(q) ||
+					(p.meta.tags ?? []).some((t) => t.toLowerCase().includes(q))
+			)
+			: [...posts];
+	});
 	let activeSlug = $state<string | null>(null);
 	let rawContent = $state('');
 	let saveStatus = $state<'idle' | 'saving' | 'saved' | 'error'>('idle');
@@ -84,18 +94,6 @@
 		return expand(body);
 	});
 
-	// ─── Search filtering ─────────────────────────────────────────────────────────
-	$effect(() => {
-		const q = search.toLowerCase();
-		filteredPosts = q
-			? posts.filter(
-				(p) =>
-					p.slug.includes(q) ||
-					String(p.meta.title ?? '').toLowerCase().includes(q) ||
-					(p.meta.tags ?? []).some((t) => t.toLowerCase().includes(q))
-			)
-			: [...posts];
-	});
 
 	// ─── Section grouping ─────────────────────────────────────────────────────────
 	function getSection(p: PostEntry): string {
@@ -105,7 +103,7 @@
 		return 'Software';
 	}
 
-	let grouped = $derived(() => {
+	let grouped = $derived.by(() => {
 		const g: Record<string, PostEntry[]> = {};
 		for (const p of filteredPosts) {
 			const s = getSection(p);
@@ -511,7 +509,7 @@ Start writing here...
 		</div>
 
 		<nav class="file-list">
-			{#each Object.entries(grouped()) as [section, entries]}
+			{#each Object.entries(grouped) as [section, entries]}
 				<div class="section-group">
 					<div class="section-label">{section}</div>
 					{#each entries as post}
