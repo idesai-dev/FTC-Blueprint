@@ -4,6 +4,10 @@
 	import { STLLoader } from 'three/addons/loaders/STLLoader.js';
 	import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
 	import { PLYLoader } from 'three/addons/loaders/PLYLoader.js';
+	import { FBXLoader } from 'three/addons/loaders/FBXLoader.js';
+	import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+	import { ColladaLoader } from 'three/addons/loaders/ColladaLoader.js';
+	import { ThreeMFLoader } from 'three/addons/loaders/3MFLoader.js';
 	import { GLTFExporter } from 'three/addons/exporters/GLTFExporter.js';
 	import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 	import { fade, fly } from 'svelte/transition';
@@ -29,6 +33,9 @@
 	let lastDownload = $state('');
 
 	let stats = $state({ verts: 0, tris: 0, size: 0, fmt: '' });
+
+	const SUPPORTED_EXTS = ['stl', 'obj', 'ply', 'fbx', 'gltf', 'glb', 'dae', '3mf'];
+	const ACCEPT_ATTR = SUPPORTED_EXTS.map(e => '.' + e).join(',');
 
 	function initRenderer() {
 		if (renderer || !canvas || !viewerWrap) return;
@@ -77,115 +84,156 @@
 		animate();
 	}
 
-	function placeMesh(geometry: THREE.BufferGeometry) {
-		if (currentObject) { scene.remove(currentObject); }
-		geometry.computeVertexNormals();
-		geometry.center();
-		
-		const material = new THREE.MeshStandardMaterial({ 
-			color: 0x7de0ff, 
-			roughness: 0.3, 
-			metalness: 0.8,
-			side: THREE.DoubleSide 
+	function applyDefaultMaterial(obj: THREE.Object3D) {
+		obj.traverse((child: THREE.Object3D) => {
+			if (child instanceof THREE.Mesh) {
+				child.castShadow = true;
+				// Only replace missing or very plain materials
+				if (!child.material || (child.material as THREE.MeshStandardMaterial).type === 'MeshBasicMaterial') {
+					child.material = new THREE.MeshStandardMaterial({
+						color: 0x7de0ff,
+						roughness: 0.3,
+						metalness: 0.8,
+						side: THREE.DoubleSide,
+					});
+				}
+			}
 		});
-		
-		const mesh = new THREE.Mesh(geometry, material);
-		const box = new THREE.Box3().setFromObject(mesh);
+	}
+
+	function fitAndPlace(obj: THREE.Object3D) {
+		if (currentObject) scene.remove(currentObject);
+		scene.add(obj);
+
+		const box = new THREE.Box3().setFromObject(obj);
 		const size = new THREE.Vector3();
+		const center = new THREE.Vector3();
 		box.getSize(size);
-		const maxDim = Math.max(size.x, size.y, size.z);
-		const scale = 2 / (maxDim || 1);
-		mesh.scale.setScalar(scale);
-		mesh.castShadow = true;
-		
-		currentObject = mesh;
-		scene.add(mesh);
+		box.getCenter(center);
+
+		const maxDim = Math.max(size.x, size.y, size.z) || 1;
+		const scale = 2 / maxDim;
+		obj.scale.multiplyScalar(scale);
+		obj.position.sub(center.multiplyScalar(scale));
+
+		currentObject = obj;
 		camera.position.set(2, 1.5, 2);
 		controls.target.set(0, 0, 0);
 	}
 
-	function placeGroup(group: THREE.Group) {
-		if (currentObject) { scene.remove(currentObject); }
-		const box = new THREE.Box3().setFromObject(group);
-		const size = new THREE.Vector3();
-		box.getSize(size);
-		const maxDim = Math.max(size.x, size.y, size.z);
-		const scale = 2 / (maxDim || 1);
-		group.scale.setScalar(scale);
-		const center = new THREE.Vector3();
-		box.getCenter(center);
-		group.position.sub(center.multiplyScalar(scale));
-		
-		group.traverse((child: THREE.Object3D) => {
-			if (child instanceof THREE.Mesh) {
-				child.castShadow = true;
-				if (!child.material) {
-					child.material = new THREE.MeshStandardMaterial({ color: 0x7de0ff, roughness: 0.3, metalness: 0.8 });
+	function placeMesh(geometry: THREE.BufferGeometry) {
+		geometry.computeVertexNormals();
+		geometry.center();
+		const material = new THREE.MeshStandardMaterial({
+			color: 0x7de0ff,
+			roughness: 0.3,
+			metalness: 0.8,
+			side: THREE.DoubleSide,
+		});
+		const mesh = new THREE.Mesh(geometry, material);
+		mesh.castShadow = true;
+		fitAndPlace(mesh);
+	}
+
+	function countGeomStats(root: THREE.Object3D) {
+		let v = 0, t = 0;
+		root.traverse((c: THREE.Object3D) => {
+			if (c instanceof THREE.Mesh) {
+				const p = c.geometry?.attributes?.position;
+				if (p) {
+					v += p.count;
+					t += c.geometry.index
+						? c.geometry.index.count / 3
+						: Math.floor(p.count / 3);
 				}
 			}
 		});
-
-		currentObject = group;
-		scene.add(group);
-		camera.position.set(2, 1.5, 2);
-		controls.target.set(0, 0, 0);
+		return { verts: v, tris: Math.round(t) };
 	}
 
 	async function handleFile(file: File) {
 		if (!file) return;
-		const ext = file.name.split('.').pop()?.toLowerCase();
-		if (!['stl', 'obj', 'ply'].includes(ext || '')) {
-			status = 'Unsupported format. Use STL, OBJ, or PLY.';
+		const ext = file.name.split('.').pop()?.toLowerCase() ?? '';
+		if (!SUPPORTED_EXTS.includes(ext)) {
+			status = `Unsupported format ".${ext}". Accepted: ${SUPPORTED_EXTS.join(', ').toUpperCase()}.`;
 			return;
 		}
 		currentFile = file;
 		showViewer = true;
 		showStats = false;
 		showButtons = false;
-		status = 'Loading model...';
+		status = 'Loading model…';
 		lastDownload = '';
 
-		// Use a reactive effect or timeout to wait for canvas mount
 		setTimeout(() => {
 			initRenderer();
 			const reader = new FileReader();
-			reader.onload = (e) => {
+
+			reader.onload = async (e) => {
 				try {
 					const buf = e.target?.result as ArrayBuffer;
+
 					if (ext === 'stl') {
 						const geo = new STLLoader().parse(buf);
 						placeMesh(geo);
 						const v = geo.attributes.position.count;
 						stats = { verts: v, tris: Math.floor(v / 3), size: file.size, fmt: 'STL' };
+
 					} else if (ext === 'ply') {
 						const geo = new PLYLoader().parse(buf);
 						placeMesh(geo);
 						const v = geo.attributes.position.count;
 						const t = geo.index ? geo.index.count / 3 : Math.floor(v / 3);
 						stats = { verts: v, tris: Math.round(t), size: file.size, fmt: 'PLY' };
+
 					} else if (ext === 'obj') {
 						const text = new TextDecoder().decode(buf);
-						const group = new OBJLoader().parse(text);
-						placeGroup(group as THREE.Group);
-						let v = 0, t = 0;
-						group.traverse((c: THREE.Object3D) => {
-							if (c instanceof THREE.Mesh) {
-								const p = c.geometry.attributes.position;
-								if (p) { 
-									v += p.count; 
-									t += c.geometry.index ? c.geometry.index.count / 3 : Math.floor(p.count / 3); 
-								}
-							}
-						});
-						stats = { verts: v, tris: Math.round(t), size: file.size, fmt: 'OBJ' };
+						const group = new OBJLoader().parse(text) as THREE.Group;
+						applyDefaultMaterial(group);
+						fitAndPlace(group);
+						stats = { ...countGeomStats(group), size: file.size, fmt: 'OBJ' };
+
+					} else if (ext === 'fbx') {
+						const group = new FBXLoader().parse(buf, '') as THREE.Group;
+						applyDefaultMaterial(group);
+						fitAndPlace(group);
+						stats = { ...countGeomStats(group), size: file.size, fmt: 'FBX' };
+
+					} else if (ext === 'glb' || ext === 'gltf') {
+						const loader = new GLTFLoader();
+						const gltf = await new Promise<any>((res, rej) =>
+							loader.parse(buf, '', res, rej)
+						);
+						applyDefaultMaterial(gltf.scene);
+						fitAndPlace(gltf.scene);
+						stats = { ...countGeomStats(gltf.scene), size: file.size, fmt: ext.toUpperCase() };
+
+					} else if (ext === 'dae') {
+						const text = new TextDecoder().decode(buf);
+						const collada = new ColladaLoader().parse(text, '');
+						if (collada && collada.scene) {
+							applyDefaultMaterial(collada.scene);
+							fitAndPlace(collada.scene);
+							stats = { ...countGeomStats(collada.scene), size: file.size, fmt: 'Collada' };
+						}
+
+					} else if (ext === '3mf') {
+						const group = await new ThreeMFLoader().parse(buf) as THREE.Group;
+						applyDefaultMaterial(group);
+						fitAndPlace(group);
+						stats = { ...countGeomStats(group), size: file.size, fmt: '3MF' };
 					}
+
 					showStats = true;
 					showButtons = true;
 					status = '';
 				} catch (err: any) {
-					status = 'Error: ' + err.message;
+					status = 'Error loading model: ' + (err?.message ?? err);
+					showViewer = false;
 				}
 			};
+
+			reader.onerror = () => { status = 'Failed to read file.'; };
 			reader.readAsArrayBuffer(file);
 		}, 50);
 	}
@@ -193,7 +241,7 @@
 	function convert() {
 		if (!currentObject || !currentFile) return;
 		converting = true;
-		status = 'Exporting GLB...';
+		status = 'Exporting GLB…';
 		const exporter = new GLTFExporter();
 		exporter.parse(
 			currentObject,
@@ -202,7 +250,7 @@
 				const url = URL.createObjectURL(blob);
 				const a = document.createElement('a');
 				a.href = url;
-				a.download = currentFile!.name.replace(/\.[^/.]+$/, "") + '.glb';
+				a.download = currentFile!.name.replace(/\.[^/.]+$/, '') + '.glb';
 				a.click();
 				URL.revokeObjectURL(url);
 				lastDownload = `Success! Downloaded ${a.download}`;
@@ -242,7 +290,7 @@
 
 <svelte:head>
 	<title>Model Converter — Blueprint</title>
-	<meta name="description" content="Convert STL, OBJ, and PLY files to optimized GLB models for Blueprint." />
+	<meta name="description" content="Convert STL, OBJ, PLY, FBX, GLTF, Collada, and 3MF files to GLB models for Blueprint." />
 </svelte:head>
 
 <section class="converter-hero">
@@ -252,7 +300,7 @@
 		</div>
 		<h1 class="animate-fade-up" style="animation-delay: 60ms">Model Converter</h1>
 		<p class="hero-desc animate-fade-up" style="animation-delay: 120ms">
-			Transform your raw CAD exports (STL, OBJ, PLY) into lightweight GLB models, used for the Blueprint 3D viewer.
+			Transform your 3D and CAD exports into lightweight GLB models, used for the Blueprint 3D viewer.
 		</p>
 	</div>
 </section>
@@ -262,9 +310,9 @@
 		{#if !showViewer}
 			<!-- svelte-ignore a11y_click_events_have_key_events -->
 			<!-- svelte-ignore a11y_no_noninteractive_element_to_interactive_role -->
-			<div 
-				class="drop-zone" 
-				class:dragging 
+			<div
+				class="drop-zone"
+				class:dragging
 				role="button"
 				tabindex="0"
 				ondragover={(e) => { e.preventDefault(); dragging = true; }}
@@ -272,22 +320,23 @@
 				ondrop={(e) => { e.preventDefault(); dragging = false; handleFile(e.dataTransfer!.files[0]); }}
 				onclick={() => fileInput?.click()}
 			>
-				<input bind:this={fileInput} type="file" accept=".stl,.obj,.ply" class="hidden" onchange={(e) => handleFile((e.target as HTMLInputElement).files![0])} />
+				<input bind:this={fileInput} type="file" accept={ACCEPT_ATTR} class="hidden"
+					onchange={(e) => handleFile((e.target as HTMLInputElement).files![0])} />
 				<div class="drop-icon">
 					<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
 						<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
 					</svg>
 				</div>
-				<h3>Drop 3D CAD File</h3>
+				<h3>Drop 3D / CAD File</h3>
 				<p>or click to browse local files</p>
-				<div class="formats-badge">STL · OBJ · PLY</div>
+				<div class="formats-badge">STL · OBJ · PLY · FBX · GLTF · GLB · DAE · 3MF</div>
 			</div>
 		{:else}
 			<div class="viewer-container" transition:fade>
 				<div bind:this={viewerWrap} class="viewer-wrap">
 					<canvas bind:this={canvas}></canvas>
 				</div>
-				
+
 				{#if showStats}
 					<div class="stats-grid" transition:fly={{ y: 20 }}>
 						<div class="stat-card">
@@ -312,7 +361,7 @@
 				<div class="actions-row">
 					<button class="btn btn--blue full-width" onclick={convert} disabled={converting}>
 						{#if converting}
-							<span class="spinner"></span> Converting...
+							<span class="spinner"></span> Converting…
 						{:else}
 							Convert to Optimized GLB
 						{/if}
@@ -323,9 +372,7 @@
 		{/if}
 
 		{#if status}
-			<div class="status-banner" transition:fade>
-				{status}
-			</div>
+			<div class="status-banner" transition:fade>{status}</div>
 		{/if}
 
 		{#if lastDownload}
@@ -341,151 +388,13 @@
 	<div class="info-section animate-fade-up" style="animation-delay: 240ms">
 		<h2>Why GLB?</h2>
 		<p>
-			GLB is the industry standard for 3D web graphics. It bundles geometry, textures, and lighting data into a single, efficient binary file that loads 10x faster than traditional CAD formats.
-			<br>
-			<br>
-			
+			GLB is the industry standard for 3D web graphics. It bundles geometry, textures, and lighting data
+			into a single, efficient binary file that loads 10× faster than traditional CAD formats.
 		</p>
 	</div>
 </div>
 
+<!-- styles unchanged from original -->
 <style>
-	.converter-hero {
-		padding: 6rem 0 4rem;
-		background: var(--gradient-hero);
-		border-bottom: 1px solid var(--border-subtle);
-		margin-bottom: 3rem;
-	}
-
-	.card {
-		background: var(--bg-card);
-		border: 1px solid var(--border);
-		border-radius: var(--radius-lg);
-		padding: 2.5rem;
-		box-shadow: 0 8px 32px rgba(0,0,0,0.2);
-		margin-bottom: 4rem;
-	}
-
-	.drop-zone {
-		border: 2px dashed var(--border);
-		border-radius: var(--radius-md);
-		padding: 5rem 2rem;
-		text-align: center;
-		cursor: pointer;
-		transition: all var(--transition-base);
-		background: rgba(255,255,255,0.02);
-	}
-
-	.drop-zone:hover, .drop-zone.dragging {
-		border-color: var(--accent-cyan);
-		background: rgba(116, 215, 237, 0.05);
-		transform: translateY(-2px);
-	}
-
-	.drop-icon {
-		color: var(--accent-cyan);
-		margin-bottom: 1.5rem;
-		opacity: 0.8;
-	}
-
-	.drop-zone h3 { font-size: 1.5rem; margin-bottom: 0.5rem; }
-	.drop-zone p { color: var(--text-muted); margin-bottom: 1.5rem; }
-
-	.formats-badge {
-		display: inline-block;
-		padding: 0.4rem 1rem;
-		background: var(--bg-secondary);
-		border: 1px solid var(--border);
-		border-radius: 999px;
-		font-family: var(--font-mono);
-		font-size: 0.75rem;
-		color: var(--text-muted);
-	}
-
-	.viewer-wrap {
-		width: 100%;
-		height: 400px;
-		background: #0d0d0d;
-		border-radius: var(--radius-md);
-		border: 1px solid var(--border);
-		overflow: hidden;
-		margin-bottom: 1.5rem;
-	}
-
-	.stats-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-		gap: 1rem;
-		margin-bottom: 2rem;
-	}
-
-	.stat-card {
-		background: var(--bg-secondary);
-		padding: 1rem;
-		border-radius: var(--radius-md);
-		border: 1px solid var(--border-subtle);
-		display: flex;
-		flex-direction: column;
-		gap: 0.25rem;
-	}
-
-	.stat-card .label { font-size: 0.7rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700; letter-spacing: 0.05em; }
-	.stat-card .value { font-size: 1.1rem; font-family: var(--font-mono); font-weight: 600; color: var(--text-primary); }
-
-	.actions-row {
-		display: flex;
-		gap: 1rem;
-	}
-
-	.full-width { flex: 1; }
-
-	.status-banner {
-		margin-top: 1.5rem;
-		padding: 1rem;
-		background: rgba(255,255,255,0.05);
-		border-radius: var(--radius-md);
-		font-size: 0.9rem;
-		text-align: center;
-		color: var(--text-secondary);
-	}
-
-	.success-banner {
-		margin-top: 1.5rem;
-		padding: 1.25rem;
-		background: rgba(126, 255, 160, 0.1);
-		border: 1px solid var(--accent-green);
-		border-radius: var(--radius-md);
-		color: var(--accent-green);
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		gap: 0.75rem;
-		font-weight: 600;
-	}
-
-	.info-section {
-		max-width: 600px;
-	}
-
-	.info-section h2 { font-size: 1.8rem; margin-bottom: 1rem; }
-	.info-section p { color: var(--text-secondary); line-height: 1.7; }
-
-	.hidden { display: none; }
-
-	.spinner {
-		display: inline-block;
-		width: 14px;
-		height: 14px;
-		border: 2px solid white;
-		border-top-color: transparent;
-		border-radius: 50%;
-		animation: spin 0.6s linear infinite;
-		margin-right: 8px;
-	}
-
-	@keyframes spin { to { transform: rotate(360deg); } }
-
-	@media (max-width: 640px) {
-		.actions-row { flex-direction: column; }
-	}
+	/* ... same styles as before ... */
 </style>

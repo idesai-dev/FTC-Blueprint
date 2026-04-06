@@ -1,6 +1,6 @@
 ---
 title: Color Sensor
-panelCategory: "Basics"
+panelCategory: "Sensors"
 date: 2026-04-05
 description: How to read RGB and HSV values from the REV Color Sensor.
 tags: ["software", "completed", "beginner"]

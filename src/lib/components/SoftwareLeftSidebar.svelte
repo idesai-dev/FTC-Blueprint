@@ -134,10 +134,20 @@
 		}, {});
 
 		// Convert to array and sort
-		// Keep "Basics" at top if it exists, otherwise alphabetical
+		// Order: Basics -> Sensors -> Vision -> (others alphabetical)
 		const sortedCats = Object.keys(grouped).sort((a, b) => {
 			if (a === 'Basics') return -1;
 			if (b === 'Basics') return 1;
+			if (a === 'Sensors') {
+				if (b === 'Vision') return -1;
+				return -1;
+			}
+			if (b === 'Sensors') {
+				if (a === 'Vision') return 1;
+				return 1;
+			}
+			if (a === 'Vision') return -1;
+			if (b === 'Vision') return 1;
 			return a.localeCompare(b);
 		});
 

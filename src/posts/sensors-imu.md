@@ -1,6 +1,6 @@
 ---
 title: Universal IMU Guide
-panelCategory: "Basics"
+panelCategory: "Sensors"
 date: 2026-04-05
 description: Using the modern, hub-agnostic IMU interface for robot orientation.
 tags: [software, completed, beginner]

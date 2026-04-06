@@ -1,6 +1,6 @@
 ---
 title: Pinpoint Odometry Computer
-panelCategory: "Miscellaneous"
+panelCategory: "Sensors"
 date: 2026-01-01
 description: How to use the pinpoint odometry computer in FTC
 published: true

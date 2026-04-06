@@ -1,8 +1,8 @@
 ---
 title: Distance Sensor
-panelCategory: "Basics"
+panelCategory: "Sensors"
 date: 2026-04-05
-description: Using TOF distance sensors for precise robot positioning.
+description: How to use a distance sensor
 tags: [software, completed, beginner]
 author: Ishaan Desai
 published: true
