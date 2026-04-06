@@ -8,6 +8,7 @@
 	interface PostMeta {
 		title?: string;
 		date?: string;
+		panelCategory?: string;
 		description?: string;
 		tags?: string[];
 		author?: string;
@@ -56,16 +57,16 @@
 	let imageMap = new Map<string, string>();
 
 	function shorten(text: string): string {
-		const dataUrlRegex = /data:image\/[a-zA-Z+-]+;base64,[a-zA-Z0-9+/=]+/g;
+		const dataUrlRegex = /data:(?:image|application|model)\/[a-zA-Z0-9+-.]+;base64,[a-zA-Z0-9+/=]+/g;
 		return text.replace(dataUrlRegex, (match) => {
 			const id = Math.random().toString(36).substring(2, 9);
 			imageMap.set(id, match);
-			return `data:image/...#${id}`;
+			return `data:asset/...#${id}`;
 		});
 	}
 
 	function expand(text: string): string {
-		const placeholderRegex = /data:image\/\.\.\.#([a-z0-9]+)/g;
+		const placeholderRegex = /data:asset\/\.\.\.#([a-z0-9]+)/g;
 		return text.replace(placeholderRegex, (match, id) => {
 			return imageMap.get(id) || match;
 		});
@@ -75,6 +76,7 @@
 	let fm = $state<PostMeta>({
 		title: '',
 		date: new Date().toISOString().slice(0, 10),
+		panelCategory: '',
 		description: '',
 		tags: [],
 		author: '',
@@ -178,6 +180,7 @@
 		fm = {
 			title: String(obj.title ?? ''),
 			date: String(obj.date ?? new Date().toISOString().slice(0, 10)),
+			panelCategory: String(obj.panelCategory ?? ''),
 			description: String(obj.description ?? ''),
 			tags: Array.isArray(obj.tags) ? (obj.tags as string[]) : [],
 			author: String(obj.author ?? ''),
@@ -194,10 +197,11 @@
 			'---',
 			`title: ${fm.title ?? ''}`,
 			`date: ${fm.date ?? ''}`,
+			`panelCategory: "${fm.panelCategory ?? ''}"`,
 			`description: ${fm.description ?? ''}`,
 			`tags: ${tagLine}`,
 			`author: ${fm.author ?? ''}`,
-			`published: ${publishUnlocked ? (fm.published ?? false) : false}`,
+			`published: ${fm.published ?? false}`,
 			'---',
 			'',
 			body.replace(/^\n+/, '')
@@ -216,10 +220,11 @@
 			'---',
 			`title: ${fm.title ?? ''}`,
 			`date: ${fm.date ?? ''}`,
+			`panelCategory: "${fm.panelCategory ?? ''}"`,
 			`description: ${fm.description ?? ''}`,
 			`tags: ${tagLine}`,
 			`author: ${fm.author ?? ''}`,
-			`published: ${publishUnlocked ? (fm.published ?? false) : false}`,
+			`published: ${fm.published ?? false}`,
 			'---',
 			'',
 			body.replace(/^\n+/, '')
@@ -251,6 +256,19 @@
 			saveStatus = 'error';
 			saveMsg = 'Save failed';
 		}
+	}
+
+	function exportTxt() {
+		if (!activeSlug) return;
+		const full = buildRaw();
+		const blob = new Blob([full], { type: 'text/plain' });
+		const url = URL.createObjectURL(blob);
+		const a = Object.assign(document.createElement('a'), {
+			href: url,
+			download: `${activeSlug}.txt`
+		});
+		a.click();
+		URL.revokeObjectURL(url);
 	}
 
 	// ─── Keyboard shortcuts ────────────────────────────────────────────────────────
@@ -348,7 +366,7 @@
 				if (url.startsWith('data:')) {
 					const id = Math.random().toString(36).substring(2, 9);
 					imageMap.set(id, url);
-					url = `data:model/...#${id}`;
+					url = `data:asset/...#${id}`;
 				}
 				const html = `\n<model-viewer src="${url}" camera-controls auto-rotate shadow-intensity="1" style="width: 100%; height: 400px; background: #1a1a1a; border-radius: 8px;"></model-viewer>\n`;
 				insertRaw(html);
@@ -390,10 +408,10 @@
 		const m = alignMap[imageAlign];
 		
 		let url = pendingImageUrl;
-		if (url.startsWith('data:image/')) {
+		if (url.startsWith('data:')) {
 			const id = Math.random().toString(36).substring(2, 9);
 			imageMap.set(id, url);
-			url = `data:image/...#${id}`;
+			url = `data:asset/...#${id}`;
 		}
 		
 		const html = `\n<img src="${url}" alt="${imageAlt}" style="width: ${w}; ${m} display: block; border-radius: 8px;" />\n`;
@@ -443,6 +461,7 @@
 				const stub = `---
 title: ${title}
 date: ${today}
+panelCategory: ""
 description: 
 tags: []
 author: 
@@ -452,7 +471,7 @@ published: false
 Start writing here...
 `;
 				localStorage.setItem(`blueprint_post_${slug}`, stub);
-				const newEntry: PostEntry = { slug, meta: { title, date: today, tags: [], published: false } };
+				const newEntry: PostEntry = { slug, meta: { title, date: today, panelCategory: '', tags: [], published: false } };
 				posts = [newEntry, ...posts];
 				localStorage.setItem('blueprint_posts', JSON.stringify(posts));
 			}
@@ -566,6 +585,12 @@ Start writing here...
 					<button class="toggle-preview-btn" onclick={() => (previewOpen = !previewOpen)} title="Toggle preview">
 						{previewOpen ? 'Hide Preview' : 'Show Preview'}
 					</button>
+					<button class="export-btn" onclick={exportTxt} title="Export as .txt">
+						<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+							<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+						</svg>
+						Export
+					</button>
 					<button class="save-btn" onclick={save} disabled={saveStatus === 'saving'}>
 						{#if saveStatus === 'saving'}Saving…{:else if saveStatus === 'saved'}Saved ✓{:else if saveStatus === 'error'}Error!{:else}Save <kbd>⌘S</kbd>{/if}
 					</button>
@@ -587,6 +612,9 @@ Start writing here...
 
 							<label class="fm-label" for="fm-author">Author</label>
 							<input id="fm-author" class="fm-input" bind:value={fm.author} placeholder="Your name…" />
+
+							<label class="fm-label" for="fm-category">Left Panel Category</label>
+							<input id="fm-category" class="fm-input" bind:value={fm.panelCategory} placeholder="Basics, Sensors, Vision..." />
 
 							<label class="fm-label" for="fm-desc">Description</label>
 							<textarea id="fm-desc" class="fm-input fm-textarea" bind:value={fm.description} rows="2" placeholder="Short summary…"></textarea>
