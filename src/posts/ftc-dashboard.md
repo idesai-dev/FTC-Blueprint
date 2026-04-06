@@ -1,9 +1,9 @@
 ---
-title: FTC Dashboard & PID Live Tuning
-panelCategory: "Miscellaneous"
+title: FTC Dashboard & Live PID Tuning
 date: 2026-04-05
-description: Tune your robot's PID controller in real time using FTC Dashboard — no recompiling required.
-tags: [software, intermediate, pid, dashboard, completed]
+panelCategory: ""Miscellaneous""
+description: Tune your robot's PID controller in real time using FTC Dashboard - No rebuilding required
+tags: ["intermediate", "pid", "dashboard", "completed", "software"]
 author: Ishaan Desai
 published: true
 ---

@@ -1,13 +1,13 @@
 {
 	"name": "blueprint-ftc",
 	"private": true,
-	"version": "1.2.33",
+	"version": "1.2.35",
 	"type": "module",
 	"scripts": {
-		"dev": "npm run build && vite dev",
+		"dev": "vite dev",
 		"build": "vite build",
 		"p": "vite preview",
-		"deploy": "npm version patch --no-git-tag-version && npm run build && echo \"✅ (v$(node -p \"require('./package.json').version\")) deployment successful\"",
+		"deploy": "npm version patch --no-git-tag-version && echo \"✅ (v$(node -p \"require('./package.json').version\")) deployment successful\"",
 		"prepare": "svelte-kit sync || echo ''",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",

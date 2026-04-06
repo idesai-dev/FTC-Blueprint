@@ -25,14 +25,13 @@
 	let search = $state('');
 	let filteredPosts = $derived.by(() => {
 		const q = search.toLowerCase();
-		return q
-			? posts.filter(
-				(p) =>
-					p.slug.includes(q) ||
-					String(p.meta.title ?? '').toLowerCase().includes(q) ||
-					(p.meta.tags ?? []).some((t) => t.toLowerCase().includes(q))
-			)
-			: [...posts];
+		if (!q) return [...posts];
+		return posts.filter(
+			(p) =>
+				p.slug.toLowerCase().includes(q) ||
+				String(p.meta.title ?? '').toLowerCase().includes(q) ||
+				(p.meta.tags ?? []).some((t) => t.toLowerCase().includes(q))
+		);
 	});
 	let activeSlug = $state<string | null>(null);
 	let rawContent = $state('');
@@ -113,6 +112,15 @@
 		}
 		return g;
 	});
+
+	function toggleTag(tag: string) {
+		const t = tag.toLowerCase();
+		if ((fm.tags ?? []).includes(t)) {
+			fm.tags = (fm.tags ?? []).filter((x) => x !== t);
+		} else {
+			fm.tags = [...(fm.tags ?? []), t];
+		}
+	}
 
 	// ─── Load posts list ──────────────────────────────────────────────────────────
 	async function loadPosts() {
@@ -211,6 +219,18 @@
 	// ─── Save ─────────────────────────────────────────────────────────────────────
 	async function save() {
 		if (!activeSlug || saveStatus === 'saving') return;
+
+		// Validation: Requires at least one core category tag
+		const requiredTags = ['software', 'hardware', 'outreach'];
+		const hasCategory = (fm.tags ?? []).some(t => requiredTags.includes(t.toLowerCase()));
+		
+		if (!hasCategory) {
+			saveStatus = 'error';
+			saveMsg = 'Tag required: software, hardware, or outreach (See Frontmatter tab)';
+			editorTab = 'frontmatter'; // Switch to Frontmatter tab
+			return;
+		}
+
 		saveStatus = 'saving';
 		saveMsg = 'Saving…';
 		const expanded = expand(rawContent);
@@ -251,7 +271,7 @@
 			await loadPosts();
 			saveStatus = 'saved';
 			saveMsg = 'Saved ✓';
-			setTimeout(() => { if (saveStatus === 'saved') { saveStatus = 'idle'; saveMsg = ''; } }, 2500);
+			setTimeout(() => { if (saveStatus === 'saved') { saveStatus = 'idle'; saveMsg = ''; } }, 2000);
 		} catch (e) {
 			saveStatus = 'error';
 			saveMsg = 'Save failed';
@@ -273,7 +293,7 @@
 
 	// ─── Keyboard shortcuts ────────────────────────────────────────────────────────
 	function handleKeydown(e: KeyboardEvent) {
-		if ((e.metaKey || e.ctrlKey) && e.key === 's') {
+		if ((e.metaKey || e.ctrlKey) && (e.key === 's' || e.key === 'Enter')) {
 			e.preventDefault();
 			save();
 		}
@@ -613,7 +633,7 @@ Start writing here...
 							<label class="fm-label" for="fm-author">Author</label>
 							<input id="fm-author" class="fm-input" bind:value={fm.author} placeholder="Your name…" />
 
-							<label class="fm-label" for="fm-category">Left Panel Category</label>
+							<label class="fm-label" for="fm-category">Left Panel Collapsible Category Name</label>
 							<input id="fm-category" class="fm-input" bind:value={fm.panelCategory} placeholder="Basics, Sensors, Vision..." />
 
 							<label class="fm-label" for="fm-desc">Description</label>
@@ -641,9 +661,10 @@ Start writing here...
 								<div class="preset-tags">
 									{#each PRESET_TAGS as preset}
 										<button
+											type="button"
 											class="preset-tag"
 											class:used={(fm.tags ?? []).includes(preset)}
-											onclick={() => (fm.tags ?? []).includes(preset) ? removeTag(preset) : addTag(preset)}
+											onclick={() => toggleTag(preset)}
 										>{preset}</button>
 									{/each}
 								</div>
@@ -947,15 +968,26 @@ Start writing here...
 		padding: 6px 0;
 	}
 
-	.section-group { margin-bottom: 4px; }
 
+	.section-group { margin-bottom: 24px; }
 	.section-label {
-		padding: 8px 12px 4px;
-		font-size: 10px;
-		font-weight: 700;
-		text-transform: uppercase;
-		letter-spacing: 0.08em;
+		font-size: 11px;
+		font-weight: 800;
 		color: var(--text-muted);
+		text-transform: uppercase;
+		letter-spacing: 0.12em;
+		padding: 0 16px;
+		margin-bottom: 10px;
+		display: flex;
+		align-items: center;
+		gap: 8px;
+	}
+	.section-label::after {
+		content: '';
+		flex: 1;
+		height: 1px;
+		background: var(--border-subtle);
+		opacity: 0.5;
 	}
 
 	.file-item {
@@ -1087,8 +1119,25 @@ Start writing here...
 	}
 	.toggle-preview-btn:hover { color: var(--text-primary); border-color: var(--text-muted); }
 
+	.export-btn {
+		background: none;
+		border: 1px solid var(--accent-cyan-dim);
+		border-radius: 6px;
+		padding: 5px 12px;
+		color: var(--accent-cyan);
+		font-size: 12px;
+		font-weight: 600;
+		cursor: pointer;
+		display: flex;
+		align-items: center;
+		gap: 6px;
+		transition: all 0.15s;
+		height: 30px;
+	}
+	.export-btn:hover { background: var(--accent-cyan-dim); color: var(--accent-cyan); border-color: var(--accent-cyan); }
+	
 	.save-btn {
-		background: var(--accent-green);
+		background: var(--accent-cyan);
 		color: #000;
 		border: none;
 		border-radius: 6px;
@@ -1099,14 +1148,20 @@ Start writing here...
 		display: flex;
 		align-items: center;
 		gap: 5px;
-		transition: opacity 0.15s;
+		transition: transform 0.1s, opacity 0.15s, box-shadow 0.2s;
+		height: 30px;
 	}
-	.save-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+	:global(html.light) .save-btn { color: #fff; background: var(--accent-cyan); }
+	.save-btn:hover { opacity: 0.9; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(116, 215, 237, 0.2); }
+	.save-btn:active { transform: translateY(0); }
+	.save-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
 	.save-btn kbd {
-		background: var(--bg-card-hover);
+		background: rgba(0, 0, 0, 0.1);
 		border-radius: 3px;
 		padding: 0 4px;
 		font-size: 10px;
+		opacity: 0.7;
 	}
 
 	/* ── Editor body ─────────────────────────────────────────────────────────────── */
