@@ -166,7 +166,7 @@
 
 <style>
 	.search-page {
-		padding: 6rem 0;
+		padding: 6rem 0 12rem;
 		min-height: 80vh;
 	}
 

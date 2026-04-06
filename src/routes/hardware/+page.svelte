@@ -1,5 +1,6 @@
 <script lang="ts">
 	import BlogCard from '$lib/components/BlogCard.svelte';
+	import CADReview from '$lib/components/CADReview.svelte';
 	import type { Post } from '$lib/utils/posts';
 	import { tagColor } from '$lib/utils/posts';
 	import Collapsible from '$lib/components/Collapsible.svelte';
@@ -76,11 +77,14 @@
 		<div class="content-feed">
 			<section class="blog-header">
 				<div class="blog-header-inner animate-fade-up">
-					<span class="tag tag--orange">All Prints</span>
-					<h1>The Hardware Guide</h1>
-					<p class="sub">
-						{completedCount} article{completedCount !== 1 ? 's' : ''}
-					</p>
+					<div class="header-text">
+						<span class="tag tag--orange">All Prints</span>
+						<h1>The Hardware Guide</h1>
+						<p class="sub">
+							{completedCount} article{completedCount !== 1 ? 's' : ''}
+						</p>
+					</div>
+					<CADReview isHeader={true} />
 				</div>
 			</section>
 
@@ -147,25 +151,34 @@
 	@media (min-width: 1101px) {
 		.main-layout {
 			flex-direction: row;
-			padding: 0;
+			padding: 0 0 0 4rem;
 			gap: 0;
 		}
 	}
 
 	.blog-header {
-		padding: 5rem 3rem;
+		padding: 0.7rem 3rem;
 		background: var(--gradient-hero);
 		border-bottom: 1px solid var(--border-subtle);
-		margin-bottom: 3rem;
+		margin-bottom: 0;
 		width: 100%;
 	}
 
 	.blog-header-inner {
 		max-width: 1150px;
 		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-between;
+		align-items: center;
+		gap: 2rem;
+	}
+
+	.header-text {
+		display: flex;
 		flex-direction: column;
 		gap: 0.8rem;
-		align-items: flex-start;
+		flex: 1;
+		min-width: 300px;
 	}
 
 	.tag {

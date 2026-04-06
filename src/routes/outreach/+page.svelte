@@ -147,16 +147,16 @@
 	@media (min-width: 1101px) {
 		.main-layout {
 			flex-direction: row;
-			padding: 0;
+			padding: 0 0 0 4rem;
 			gap: 0;
 		}
 	}
 
 	.blog-header {
-		padding: 5rem 3rem;
+		padding: 0.7rem 3rem;
 		background: var(--gradient-hero);
 		border-bottom: 1px solid var(--border-subtle);
-		margin-bottom: 3rem;
+		margin-bottom: 0;
 		width: 100%;
 	}
 

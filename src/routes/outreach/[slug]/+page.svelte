@@ -49,12 +49,25 @@
 	<header class="post-header">
 		<div class="post-header-bg" aria-hidden="true"></div>
 		<div class="container">
-			<nav class="breadcrumbs animate-fade-up">
-				{#each breadcrumbs() as crumb, i}
-					<a href={crumb.href}>{crumb.label}</a>
-					{#if i < breadcrumbs().length - 1}<span class="sep">/</span>{/if}
-				{/each}
-			</nav>
+			<div class="header-breadcrumb-area animate-fade-up">
+				<a href="/outreach" class="minimal-back-btn">
+					<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+						<line x1="19" y1="12" x2="5" y2="12"></line>
+						<polyline points="12 19 5 12 12 5"></polyline>
+					</svg>
+					Back to Outreach
+				</a>
+				
+				<span class="breadcrumb-sep" aria-hidden="true">|</span>
+
+				<!-- Breadcrumbs -->
+				<nav class="breadcrumbs">
+					{#each breadcrumbs() as crumb, i}
+						<a href={crumb.href}>{crumb.label}</a>
+						{#if i < breadcrumbs().length - 1}<span class="sep">/</span>{/if}
+					{/each}
+				</nav>
+			</div>
 			<div class="post-meta animate-fade-up" style="animation-delay:60ms">
 				<time class="date" datetime={data.meta.date}>{formatDate(data.meta.date)}</time>
 				{#if data.meta.author}
@@ -87,15 +100,7 @@
 		<div class="post-body-inner">
 			<OutreachLeftSidebar />
 			<div class="container animate-fade-up" style="animation-delay:360ms;">
-				<div class="post-navigation-top">
-					<a href="/outreach" class="minimal-back-btn">
-						<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-							<line x1="19" y1="12" x2="5" y2="12"></line>
-							<polyline points="12 19 5 12 12 5"></polyline>
-						</svg>
-						Back to Outreach
-					</a>
-				</div>
+					<!-- Back button moved to header -->
 
 				<div class="prose">
 					<data.content />
@@ -177,7 +182,6 @@
 		font-family: var(--font-mono);
 		font-size: 0.8rem;
 		color: var(--text-muted);
-		margin-bottom: 0.5rem;
 	}
 	.breadcrumbs a {
 		color: var(--text-muted);
@@ -248,7 +252,7 @@
 		gap: 3rem;
 		max-width: calc(var(--container-max) + 220px + 3rem);
 		margin: 0 auto;
-		padding: 0 1.5rem;
+		padding: 0 2rem 0 4rem;
 	}
 
 	.post-body-inner .container {
@@ -286,31 +290,34 @@
 		background: var(--bg-card);
 	}
 
-	.post-navigation-top {
-		margin-bottom: 2.5rem;
+	.header-breadcrumb-area {
+		display: flex;
+		align-items: center;
+		gap: 1.25rem;
+		margin-bottom: 2rem;
+	}
+
+	.breadcrumb-sep {
+		color: var(--border);
+		font-size: 0.8rem;
+		opacity: 0.6;
 	}
 
 	.minimal-back-btn {
 		display: inline-flex;
 		align-items: center;
-		gap: 0.6rem;
+		gap: 0.5rem;
 		font-family: var(--font-mono);
 		font-size: 0.85rem;
-		font-weight: 600;
+		font-weight: 500;
 		color: var(--text-muted);
 		text-decoration: none;
 		transition: all var(--transition-fast);
-		padding: 0.5rem 0.75rem;
-		border-radius: var(--radius-sm);
-		background: var(--bg-secondary);
-		border: 1px solid var(--border-subtle);
-		width: fit-content;
+		padding: 0;
 	}
 
 	.minimal-back-btn:hover {
 		color: var(--accent-cyan);
-		background: var(--bg-card);
-		border-color: var(--accent-cyan);
 		transform: translateX(-4px);
 	}
 

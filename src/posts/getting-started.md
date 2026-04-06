@@ -88,5 +88,5 @@ While you can use blocks, we highly recommend learning **Java**. Java gives you 
 <br>
 
 
-> [!TIP]
+### Tip
 > **Don't panic!** Robotics is hard, but everyone starts somewhere. Start simple, get a basic robot moving, and iterate from there.

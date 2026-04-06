@@ -2,18 +2,18 @@
 title: Color Sensor
 date: 2026-04-05
 description: How to read RGB and HSV values from the REV Color Sensor.
-tags: [software, completed, beginner]
+tags: ["software", "completed", "beginner"]
 author: Ishaan Desai
-published: true
+published: false
 ---
 
-# Color Sensor Bascis
+# Color Sensor Basics
 
 The color sensor (most common being the REV Color/Range Sensor) allows your robot to detect colors, light levels, and even proximity. This is essential for detecting team props, game pieces, or tape on the field.
 
 <br>
 
-> [!TIP]
+### Tip
 > **Why use a Color Sensor?** Beyond just "seeing" color, these sensors are great for identifying the orientation of objects or ensuring a robot has correctly grabbed a specific game piece.
 
 <br>

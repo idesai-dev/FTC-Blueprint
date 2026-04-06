@@ -58,7 +58,7 @@ telemetry.update();
 
 <br>
 
-> [!TIP]
+### Tip
 > **Avoiding Interference:** If you use multiple TOF sensors facing the same direction, they can sometimes "confuse" each other's infrared beams. Try to angle them slightly away from each other or read them sequentially if you encounter "jittery" data.
 
 <br>
@@ -124,6 +124,6 @@ public class DistanceSensorExample extends LinearOpMode {
 
 <br>
 
-> [!TIP]
+### Tip
 > **Material Matters:** TOF sensors can struggle with very dark materials (which absorb light) or highly reflective/transparent materials (like plexiglass or field perimeter glass). Always test with the specific material you intend to detect!
 

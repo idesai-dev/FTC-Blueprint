@@ -43,6 +43,23 @@
 	let publishUnlocked = $derived(publishKey === 'unlock-publish');
 
 	let editorEl = $state<HTMLTextAreaElement | null>(null);
+	let imageMap = new Map<string, string>();
+
+	function shorten(text: string): string {
+		const dataUrlRegex = /data:image\/[a-zA-Z+-]+;base64,[a-zA-Z0-9+/=]+/g;
+		return text.replace(dataUrlRegex, (match) => {
+			const id = Math.random().toString(36).substring(2, 9);
+			imageMap.set(id, match);
+			return `data:image/...#${id}`;
+		});
+	}
+
+	function expand(text: string): string {
+		const placeholderRegex = /data:image\/\.\.\.#([a-z0-9]+)/g;
+		return text.replace(placeholderRegex, (match, id) => {
+			return imageMap.get(id) || match;
+		});
+	}
 
 	// ─── Frontmatter fields ───────────────────────────────────────────────────────
 	let fm = $state<PostMeta>({
@@ -63,7 +80,8 @@
 	// ─── Computed content body (without frontmatter) ──────────────────────────────
 	let contentBody = $derived(() => {
 		const match = rawContent.match(/^---[\s\S]*?---\r?\n([\s\S]*)$/);
-		return match ? match[1] : rawContent;
+		const body = match ? match[1] : rawContent;
+		return expand(body);
 	});
 
 	// ─── Search filtering ─────────────────────────────────────────────────────────
@@ -122,11 +140,13 @@
 				const r = await fetch(`/api/get-local?slug=${encodeURIComponent(slug)}`);
 				if (!r.ok) throw new Error(await r.text());
 				const d = await r.json();
-				rawContent = d.content;
+				imageMap.clear();
+				rawContent = shorten(d.content);
 			} else {
 				const content = localStorage.getItem(`blueprint_post_${slug}`);
 				if (content === null) throw new Error('Post not found in storage');
-				rawContent = content;
+				imageMap.clear();
+				rawContent = shorten(content);
 			}
 			parseFM(rawContent);
 		} catch (e) {
@@ -191,7 +211,22 @@
 		if (!activeSlug || saveStatus === 'saving') return;
 		saveStatus = 'saving';
 		saveMsg = 'Saving…';
-		const finalContent = buildRaw();
+		const expanded = expand(rawContent);
+		const body = expanded.replace(/^---[\s\S]*?---\r?\n?/, '');
+		const tagLine = `[${(fm.tags ?? []).map((t) => `"${t}"`).join(', ')}]`;
+		const finalContent = [
+			'---',
+			`title: ${fm.title ?? ''}`,
+			`date: ${fm.date ?? ''}`,
+			`description: ${fm.description ?? ''}`,
+			`tags: ${tagLine}`,
+			`author: ${fm.author ?? ''}`,
+			`published: ${publishUnlocked ? (fm.published ?? false) : false}`,
+			'---',
+			'',
+			body.replace(/^\n+/, '')
+		].join('\n');
+
 		try {
 			if (dev) {
 				const r = await fetch('/api/save-local', {
@@ -320,7 +355,15 @@
 		const alignMap = { left: 'margin-right: auto;', center: 'margin: 0 auto;', right: 'margin-left: auto;' };
 		const w = sizeMap[imageSize];
 		const m = alignMap[imageAlign];
-		const html = `\n<img src="${pendingImageUrl}" alt="${imageAlt}" style="width: ${w}; ${m} display: block; border-radius: 8px;" />\n`;
+		
+		let url = pendingImageUrl;
+		if (url.startsWith('data:image/')) {
+			const id = Math.random().toString(36).substring(2, 9);
+			imageMap.set(id, url);
+			url = `data:image/...#${id}`;
+		}
+		
+		const html = `\n<img src="${url}" alt="${imageAlt}" style="width: ${w}; ${m} display: block; border-radius: 8px;" />\n`;
 		insertRaw(html);
 		showImageDialog = false;
 		pendingImageUrl = '';
@@ -651,8 +694,14 @@ Start writing here...
      NEW POST DIALOG
 ══════════════════════════════════════════════════════════════════════════════ -->
 {#if showNewPostDialog}
-	<!-- svelte-ignore a11y_click_events_have_key_events a11y_no_static_element_interactions -->
-	<div class="dialog-backdrop" transition:fade={{ duration: 120 }} onclick={(e) => { if (e.target === e.currentTarget) showNewPostDialog = false; }}>
+	<div 
+		class="dialog-backdrop" 
+		transition:fade={{ duration: 120 }} 
+		onclick={(e) => { if (e.target === e.currentTarget) showNewPostDialog = false; }}
+		role="button"
+		tabindex="-1"
+		onkeydown={(e) => { if (e.key === 'Escape') showNewPostDialog = false; }}
+	>
 		<div class="dialog">
 			<div class="dialog-header">
 				<span>New Post</span>
@@ -668,6 +717,12 @@ Start writing here...
 					onkeydown={(e) => e.key === 'Enter' && createPost()}
 				/>
 				<p class="slug-hint">lowercase letters, numbers, and hyphens only</p>
+				<div class="naming-reminder" transition:fade>
+					<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+						<circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>
+					</svg>
+					<span>Prefix <strong>outreach-</strong> for outreach or <strong>hardware-</strong> for hardware.</span>
+				</div>
 				{#if newPostError}<p class="dialog-error">{newPostError}</p>{/if}
 			</div>
 			<div class="dialog-footer">
@@ -682,8 +737,14 @@ Start writing here...
      IMAGE INSERT DIALOG
 ══════════════════════════════════════════════════════════════════════════════ -->
 {#if showImageDialog}
-	<!-- svelte-ignore a11y_click_events_have_key_events a11y_no_static_element_interactions -->
-	<div class="dialog-backdrop" transition:fade={{ duration: 120 }} onclick={(e) => { if (e.target === e.currentTarget) { showImageDialog = false; } }}>
+	<div 
+		class="dialog-backdrop" 
+		transition:fade={{ duration: 120 }} 
+		onclick={(e) => { if (e.target === e.currentTarget) { showImageDialog = false; } }}
+		role="button"
+		tabindex="-1"
+		onkeydown={(e) => { if (e.key === 'Escape') showImageDialog = false; }}
+	>
 		<div class="dialog">
 			<div class="dialog-header">
 				<span>Insert Image</span>
@@ -1355,6 +1416,20 @@ Start writing here...
 	.cancel-btn:hover { border-color: var(--text-muted); color: var(--text-body); }
 
 	.slug-hint { font-size: 11px; color: var(--text-muted); margin: 0; font-family: monospace; }
+	.naming-reminder {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		padding: 8px 12px;
+		background: rgba(116, 215, 237, 0.05);
+		border: 1px solid rgba(116, 215, 237, 0.15);
+		border-radius: 8px;
+		color: var(--accent-cyan);
+		font-size: 11.5px;
+		margin: 4px 0 2px;
+		line-height: 1.4;
+	}
+	.naming-reminder strong { color: var(--text-primary); font-weight: 700; }
 	.dialog-error { color: var(--accent-yellow); font-size: 12px; margin: 0; }
 
 	.img-preview-wrap {

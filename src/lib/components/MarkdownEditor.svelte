@@ -48,6 +48,23 @@
 	let isImageUploading = $state(false);
 	let tagPopoverOpen = $state(false);
 	let isMobile = $state(false);
+	let imageMap = new Map<string, string>();
+
+	function shorten(text: string): string {
+		const dataUrlRegex = /data:image\/[a-zA-Z+-]+;base64,[a-zA-Z0-9+/=]+/g;
+		return text.replace(dataUrlRegex, (match) => {
+			const id = Math.random().toString(36).substring(2, 9);
+			imageMap.set(id, match);
+			return `data:image/...#${id}`;
+		});
+	}
+
+	function expand(text: string): string {
+		const placeholderRegex = /data:image\/\.\.\.#([a-z0-9]+)/g;
+		return text.replace(placeholderRegex, (match, id) => {
+			return imageMap.get(id) || match;
+		});
+	}
 
 	// svelte-ignore state_referenced_locally
 	const filePath = `src/posts/${slug}.md`;
@@ -157,10 +174,18 @@
 
 			if (!fileUrl) fileUrl = `/${subfolder}/posts/${slug}/${uniqueName}`;
 			
+			
+			let url = fileUrl;
+			if (url.startsWith('data:image/')) {
+				const id = Math.random().toString(36).substring(2, 9);
+				imageMap.set(id, url);
+				url = `data:image/...#${id}`;
+			}
+
 			if (isModel) {
-				insertTextAtCursor(`\n<model-viewer src="${fileUrl}" camera-controls auto-rotate shadow-intensity="1" style="width: 100%; height: 400px; background: #1a1a1a; border-radius: 8px;"></model-viewer>\n`);
+				insertTextAtCursor(`\n<model-viewer src="${url}" camera-controls auto-rotate shadow-intensity="1" style="width: 100%; height: 400px; background: #1a1a1a; border-radius: 8px;"></model-viewer>\n`);
 			} else {
-				insertTextAtCursor(`\n![${file.name}](${fileUrl})\n`);
+				insertTextAtCursor(`\n![${file.name}](${url})\n`);
 			}
 			
 			statusMsg = `${isModel ? 'Model' : 'Image'} uploaded ✓`;
@@ -211,7 +236,8 @@
 				const r = await fetch(`/api/get-local?slug=${slug}`);
 				if (r.ok) {
 					const d = await r.json();
-					content = d.content;
+					imageMap.clear();
+					content = shorten(d.content);
 					currentTags = parseTags(content);
 				}
 			} catch (_) {}
@@ -232,7 +258,8 @@
 						// Use TextDecoder for proper UTF-8 decoding (atob only handles ASCII)
 						const b64 = d.content.replace(/\n/g, '');
 						const bytes = Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
-						content = new TextDecoder().decode(bytes);
+						imageMap.clear();
+						content = shorten(new TextDecoder().decode(bytes));
 						currentTags = parseTags(content);
 					}
 				} else {
@@ -282,7 +309,8 @@
 		status = 'saving';
 		statusMsg = 'Committing to GitHub…';
 		try {
-			const encoded = btoa(unescape(encodeURIComponent(content)));
+			const expanded = expand(content);
+			const encoded = btoa(unescape(encodeURIComponent(expanded)));
 			const res = await fetch(
 				`https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${filePath}`,
 				{
@@ -355,9 +383,14 @@
 	{/if}
 
 	{#if isOpen}
-		<!-- svelte-ignore a11y_click_events_have_key_events -->
-		<!-- svelte-ignore a11y_no_static_element_interactions -->
-		<div class="editor-overlay" transition:fade={{ duration: 150 }} onclick={(e) => { if (e.target === e.currentTarget) close(); }}>
+		<div 
+			class="editor-overlay" 
+			transition:fade={{ duration: 150 }} 
+			onclick={(e) => { if (e.target === e.currentTarget) close(); }}
+			role="button"
+			tabindex="-1"
+			onkeydown={(e) => { if (e.key === 'Escape') close(); }}
+		>
 			{#if isOnlyTags}
 				<div class="tag-modal" transition:fly={{ y: 20, duration: 250 }}>
 					<div class="tag-modal-header">
@@ -523,7 +556,7 @@
 							<div class="preview-container">
 								<div class="markdown-body">
 									{@html sanitize(marked.parse(
-										content.replace(/\/images\/posts\//g,
+										expand(content).replace(/\/images\/posts\//g,
 											`https://raw.githubusercontent.com/${GITHUB_OWNER}/${GITHUB_REPO}/main/static/images/posts/`)
 									) as string)}
 								</div>

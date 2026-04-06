@@ -99,7 +99,7 @@
 		border-radius: 50%;
 		box-shadow: 0 0 6px var(--accent-cyan);
 		z-index: 5;
-		transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+		transition: transform 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 	}
 
 	.cursor-outer {
@@ -112,7 +112,7 @@
 		border-radius: 50%;
 		opacity: 0.5;
 		z-index: 4;
-		transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+		transition: all 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 	}
 
 	.cursor-circle {
@@ -123,7 +123,7 @@
 		border-radius: 50%;
 		transform: translate(-50%, -50%) scale(0);
 		opacity: 0;
-		transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+		transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 		pointer-events: none;
 	}
 

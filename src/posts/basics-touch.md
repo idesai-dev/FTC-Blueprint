@@ -44,7 +44,7 @@ if (touchSensor.getState() == false) {
 }
 ```
 
-> [!TIP]
+### Tip
 > Use `!touchSensor.getState()` to get a "logic high" when the button is pressed.
 
 <br>
@@ -145,9 +145,3 @@ public class TouchSensorExample extends LinearOpMode {
 <br>
 
 ---
-
-<br>
-
-> [!TIP]
-> **Magnetic Limit Switches:** REV also makes Magnetic Limit Switches that work similarly to touch sensors but don't require physical contact. They use the same `TouchSensor` class or `DigitalChannel` in code.
-
