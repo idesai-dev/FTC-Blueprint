@@ -1,11 +1,7 @@
 {
 	"name": "blueprint-ftc",
 	"private": true,
-<<<<<<< HEAD
-	"version": "1.2.37",
-=======
-	"version": "1.2.36",
->>>>>>> c952c02b19a0830bd304210f0d993dbf4c0095af
+	"version": "1.2.38",
 	"type": "module",
 	"scripts": {
 		"dev": "vite dev",
