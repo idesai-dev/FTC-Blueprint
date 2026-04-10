@@ -21,3 +21,7 @@ Thumbs.db
 # Vite
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+# deploy-later (generated runtime files)
+.deploy-later-run.sh
+.deploy-later.log

@@ -54,7 +54,6 @@
 			}
 
 			await sleep(1500);
-			showCursor = false;
 		};
 
 		typeSequence();
@@ -153,7 +152,7 @@
 		</div>
 		<h1 class="gradient-text">
 			FTC<br />
-			{typedText}{#if showCursor}<span class="cursor">|</span>{/if}
+			{typedText}{#if showCursor}<span class="cursor"></span>{/if}
 		</h1>
 		<p class="hero-desc">
 			The complete blueprint for FTC — coding, hardware, and strategy, all made simple.
@@ -296,11 +295,15 @@
 	}
 
 	.cursor {
-		font-weight: 300;
-		color: var(--text-primary);
-		animation: blink 1s step-end infinite;
 		display: inline-block;
+		width: 3px;
+		height: 1.1em;
+		background-color: var(--text-primary);
+		vertical-align: text-bottom;
 		margin-left: 4px;
+		animation: blink 1s step-end infinite;
+		border-radius: 1px;
+		box-shadow: 0 0 10px var(--text-primary);
 	}
 
 	@keyframes blink {
