@@ -4,7 +4,7 @@
 	import Footer from '$lib/components/Footer.svelte';
 	import CustomCursor from '$lib/components/CustomCursor.svelte';
 	import DocBot from '$lib/components/DocBot.svelte';
-	import { Toaster } from 'svelte-5-french-toast';
+	import { Toaster, toast } from 'svelte-5-french-toast';
 	import { page } from '$app/stores';
 	import { devModeState } from '$lib/stores/devMode.svelte';
 
@@ -17,6 +17,12 @@
 	});
 
 	const showSandboxLayout = $derived(!isSandboxChild && devModeState.active && devModeState.previewMode !== 'desktop');
+
+	$effect(() => {
+		const handleClick = () => toast.dismiss();
+		window.addEventListener('click', handleClick);
+		return () => window.removeEventListener('click', handleClick);
+	});
 </script>
 
 <svelte:head>

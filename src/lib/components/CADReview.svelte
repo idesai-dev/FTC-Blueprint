@@ -59,7 +59,7 @@
 			{/if}
 			<h2>CAD Review</h2>
 			<p>
-				Share your CAD models with us! We'll provide detailed feedback to help you <strong>perfect your mechanical design!</strong>
+				Share your CAD models with us! We'll provide detailed feedback to help you <strong>perfect your robot design!</strong>
 			</p>
 			
 			<p class="reminder-box">

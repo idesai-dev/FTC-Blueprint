@@ -119,7 +119,9 @@
 		{ href: '/hardware', label: 'Hardware', devOnly: true},
 		{ href: '/outreach', label: 'Outreach', devOnly: true},
 		{ href: '/editor', label: 'Editor', devOnly: true},
+		{ href: '/review', label: 'Review' },
 		{ href: '/suggest', label: 'Suggest' },
+
 		{ href: '/about', label: 'About' }
 	];
 
@@ -407,14 +409,12 @@
 	}
 
 	:global(.dev-mode-active) .actions {
-		margin-left: 0.5rem;
 		gap: 0.4rem;
 		flex-shrink: 0;
 	}
 
 	.inner.dev-mode-active {
 		gap: 1rem;
-		padding-left: 0.5rem;
 	}
 
 	.inner.dev-mode-active .logo {
@@ -899,7 +899,8 @@
 
 		.dropdown-toggle {
 			width: 100%;
-			justify-content: space-between;
+			justify-content: center;
+			gap: 0.35rem;
 			padding: 0.6em 0.75em;
 		}
 
@@ -925,6 +926,9 @@
 
 		.dropdown-link {
 			width: 100%;
+			font-size: 0.8rem;
+			padding: 0.45rem 0.75rem;
+			text-align: center;
 		}
 	}
 

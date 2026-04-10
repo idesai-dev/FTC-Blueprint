@@ -54,6 +54,7 @@
 			}
 
 			await sleep(1500);
+			showCursor = false;
 		};
 
 		typeSequence();

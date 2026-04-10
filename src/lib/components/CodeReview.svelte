@@ -59,7 +59,7 @@
 			{/if}
 			<h2>Code Review</h2>
 			<p>
-				Share your code with us! We'll provide detailed feedback to help you <strong>optimize and refine your autonomous!</strong>
+				Share your code with us! We'll provide detailed feedback to help you with your <strong>code, logic, and errors!</strong>!
 			</p>
 			
 			<p class="reminder-box">

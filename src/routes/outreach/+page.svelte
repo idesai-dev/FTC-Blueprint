@@ -82,7 +82,9 @@
 							{completedCount} article{completedCount !== 1 ? 's' : ''}
 						</p>
 					</div>
-					<PortfolioReview isHeader={true} />
+					<a href="/review?tab=portfolio" class="review-link">
+						Get a Portfolio Review →
+					</a>
 				</div>
 			</section>
 
@@ -153,7 +155,7 @@
 	}
 
 	.blog-header {
-		padding: 0.7rem 3rem;
+		padding: 2.5rem 3rem;
 		background: var(--gradient-hero);
 		border-bottom: 1px solid var(--border-subtle);
 		margin-bottom: 0;
@@ -231,5 +233,25 @@
 	.btn-reset:hover {
 		border-color: var(--text-primary);
 		color: var(--text-primary);
+	}
+
+	.review-link {
+		display: inline-flex;
+		align-items: center;
+		padding: 0.6rem 1.2rem;
+		background: rgba(126, 255, 160, 0.08); /* Green tint */
+		border: 1px solid var(--border-subtle);
+		border-radius: var(--radius-md);
+		color: var(--text-primary);
+		font-size: 0.85rem;
+		font-weight: 600;
+		text-decoration: none;
+		transition: all var(--transition-fast);
+	}
+
+	.review-link:hover {
+		background: rgba(126, 255, 160, 0.15);
+		border-color: var(--text-primary);
+		transform: translateY(-1px);
 	}
 </style>
