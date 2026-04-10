@@ -55,11 +55,11 @@
 	<div class="review-content">
 		<div class="text-side">
 			{#if !isHeader}
-				<span class="tag tag--cyan">Resource</span>
+				<span class="tag tag--yellow">Rookie Teams</span>
 			{/if}
 			<h2>Code Review</h2>
 			<p>
-				Share your code with us! We'll provide detailed feedback to help you with your <strong>code, logic, and errors!</strong>!
+				Share your code with us! We'll provide detailed feedback to help you with your <strong>code, errors, and logic!</strong>
 			</p>
 			
 			<p class="reminder-box">
@@ -173,8 +173,8 @@
 	.reminder-box {
 		font-size: 0.85rem;
 		padding: 0.75rem 1rem;
-		background: rgba(26, 122, 149, 0.08); /* Cyan background tint */
-		border-left: 3px solid var(--accent-cyan);
+		background: rgba(26, 122, 149, 0.08); /* Yellow background tint */
+		border-left: 3px solid var(--accent-yellow);
 		border-radius: 4px;
 	}
 
@@ -184,7 +184,7 @@
 		border-radius: 3px;
 		font-family: var(--font-mono);
 		font-size: 0.9em;
-		color: var(--accent-cyan);
+		color: var(--accent-yellow);
 	}
 
 	.form-side {
@@ -224,7 +224,7 @@
 
 	input:focus, textarea:focus {
 		outline: none;
-		border-color: var(--accent-cyan);
+		border-color: var(--accent-yellow);
 		box-shadow: 0 0 0 3px rgba(26, 122, 149, 0.1);
 	}
 
@@ -267,7 +267,7 @@
 
 	.btn-submit {
 		padding: 0.75rem 1.25rem;
-		background: var(--accent-cyan); color: white;
+		background: var(--accent-yellow); color: white;
 		border: none; border-radius: var(--radius-md);
 		font-weight: 700; cursor: pointer; transition: all var(--transition-fast);
 		font-size: 0.9rem;
