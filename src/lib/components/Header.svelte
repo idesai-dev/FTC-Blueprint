@@ -102,7 +102,7 @@
 	const navLinks: NavLink[] = [
 		{ href: '/', label: 'Home' },
 		{ href: '/complete-rookie-guide', label: 'Rookie Guide'},
-		{ href: '/software', label: 'Software' },
+		{ href: '/software', label: 'Software'},
 		{
 			label: 'Simulators',
 			children: [
@@ -116,8 +116,8 @@
 				{ href: '/software/markdown-reference', label: 'Markdown Reference', devOnly: true }
 			]
 		},
-		{ href: '/hardware', label: 'Hardware'},
-		{ href: '/outreach', label: 'Outreach' },
+		{ href: '/hardware', label: 'Hardware', devOnly: true},
+		{ href: '/outreach', label: 'Outreach', devOnly: true},
 		{ href: '/editor', label: 'Editor', devOnly: true},
 		{ href: '/suggest', label: 'Suggest' },
 		{ href: '/about', label: 'About' }
@@ -660,7 +660,7 @@
 		background: var(--bg-card);
 		border: 1px solid var(--border);
 		border-radius: var(--radius-pill);
-		padding: 0.45rem 1rem 0.45rem 2.2rem;
+		padding: 0.45rem 3rem 0.45rem 2.2rem;
 		font-size: 0.85rem;
 		color: var(--text-primary);
 		width: 200px;
@@ -704,6 +704,7 @@
 		border-radius: 4px;
 		pointer-events: none;
 		opacity: 0.8;
+		z-index: 10;
 	}
 
 	.action-btn {

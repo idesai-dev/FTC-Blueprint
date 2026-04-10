@@ -303,7 +303,7 @@
 		margin-left: 4px;
 		animation: blink 1s step-end infinite;
 		border-radius: 1px;
-		box-shadow: 0 0 10px var(--text-primary);
+
 	}
 
 	@keyframes blink {
