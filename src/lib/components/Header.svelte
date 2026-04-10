@@ -101,7 +101,7 @@
 
 	const navLinks: NavLink[] = [
 		{ href: '/', label: 'Home' },
-		{ href: '/complete-rookie-guide', label: 'Rookie Guide'},
+		{ href: '/complete-rookie-guide', label: 'Rookie Guide', devOnly: true},
 		{ href: '/software', label: 'Software'},
 		{
 			label: 'Simulators',
