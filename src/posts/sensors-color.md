@@ -12,16 +12,10 @@ published: false
 
 The color sensor (most common being the REV Color/Range Sensor) allows your robot to detect colors, light levels, and even proximity. This is essential for detecting team props, game pieces, or tape on the field.
 
-<br>
-
 ### Tip
 > **Why use a Color Sensor?** Beyond just "seeing" color, these sensors are great for identifying the orientation of objects or ensuring a robot has correctly grabbed a specific game piece.
 
-<br>
-
 ---
-
-<br>
 
 Add the sensor to your hardware map using the `NormalizedColorSensor` class. This interface is recommended because it provides consistent values (0.0 to 1.0) regardless of the sensor's internal resolution.
 
@@ -32,8 +26,6 @@ import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 NormalizedColorSensor colorSensor = hardwareMap.get(NormalizedColorSensor.class, "colorSensor");
 ```
 
-<br>
-
 Read the colors into a `NormalizedRGBA` object.
 
 ```java
@@ -43,8 +35,6 @@ telemetry.addData("Red", "%.3f", colors.red);
 telemetry.addData("Green", "%.3f", colors.green);
 telemetry.addData("Blue", "%.3f", colors.blue);
 ```
-
-<br>
 
 ## 3. Detecting Specific Colors
 
@@ -58,8 +48,6 @@ if (red > blue && red > green) {
 }
 ```
 
-<br>
-
 For more reliable color detection, it's recommended to convert your RGB values into **HSV** (Hue, Saturation, Value).
 
 ```java
@@ -70,8 +58,6 @@ Color.colorToHSV(colors.toColor(), hsvValues);
 telemetry.addData("Hue", hsvValues[0]);
 ```
 *Tip: Red is usually around 0 or 360, Blue is around 240, and Yellow is around 60.*
-
-<br>
 
 ## 5. Built-in Distance Sensing
 
@@ -84,11 +70,7 @@ double distance = ((DistanceSensor) colorSensor).getDistance(DistanceUnit.CM);
 telemetry.addData("Distance (cm)", "%.2f", distance);
 ```
 
-<br>
-
 ---
-
-<br>
 
 ```java
 package org.firstinspires.ftc.teamcode;
@@ -145,11 +127,7 @@ public class ColorSensorExample extends LinearOpMode {
 }
 ```
 
-<br>
-
 ---
-
-<br>
 
 > [!IMPORTANT]
 > **Lighting:** The REV Color Sensor has a built-in LED. You can turn it on or off using `colorSensor.enableLed(true)`. This is helpful for surface detection but might interfere with detecting distant objects.

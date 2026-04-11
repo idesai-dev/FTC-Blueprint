@@ -14,26 +14,15 @@ published: true
 
 PID (Proportional, Integral, Derivative) control is the most common control algorithm used in FTC for precise movements, whether it's for a drivetrain, an arm, or a slide.
 
-
 <div class="tuner-callout" style="padding: 1.5rem; background: rgba(116, 215, 237, 0.05); border-radius: var(--radius-md); border-left: 4px solid var(--accent-cyan); margin: 2rem 0;">
     <p> 🚀 <strong>Try our new full-page <a href="/simulators/pid">PID Simulator</a></strong> for a deeper understanding of PID!</p>
 </div>
 
-
 <PIDVisualizer />
-
-
-<br>
-
 
 ---
 
-
-<br>
-
-
 ## The Three Components
-
 
 ### 1. Proportional (P)
 The **Proportional** term is the simplest. It produces an output that is proportional to the current error.
@@ -43,38 +32,21 @@ The **Proportional** term is the simplest. It produces an output that is proport
 
 If you are far from the target, the output is large. As you get closer, the output decreases.
 
-
-<br>
-
-
 ### 2. Integral (I)
 The **Integral** term accounts for the accumulation of past errors. If the proportional term isn't enough to reach the target (due to friction or gravity), the Integral term will slowly increase the output over time until the target is reached.
 
 - **Output** = `Kp × Error + Ki × Σ Error × dt`
-
-
-<br>
-
 
 ### 3. Derivative (D)
 The **Derivative** term predicts future error based on the current rate of change. It acts as a "brake," dampening the movement to prevent overshoot and oscillations.
 
 - **Output** = `Kp × Error + Kd × d(Error)/dt`
 
-
-<br>
-
-
 ---
-
-
-<br>
-
 
 ## Implementation in Java
 
 Here is a simple PID class you can use in your FTC code:
-
 
 ```java
 public class PIDController {
@@ -114,20 +86,11 @@ public class PIDController {
 }
 ```
 
-
-<br>
-
-
 ---
-
-
-<br>
-
 
 ## Tuning Your PID
 
 Tuning is the process of finding the right values for $K_p$, $K_i$, and $K_d$.
-
 
 1. **Set K_i and K_d to zero.**
 2. **Increase K_p** until the system starts to oscillate steadily.

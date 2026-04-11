@@ -286,7 +286,7 @@
 		align-items: flex-start;
 		gap: 3rem;
 		/* max-width: calc(var(--container-max) + 220px + 3rem); */
-		padding: 0 2rem 0 4rem;
+		padding: 0 2rem 0 1.5rem;
 	}
 
 	/* Override container inside post-body-inner so it doesn't add extra padding */

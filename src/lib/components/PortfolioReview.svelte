@@ -55,7 +55,7 @@
 	<div class="portfolio-content">
 		<div class="text-side">
 			{#if !isHeader}
-				<span class="tag tag--yellow">Rookie Teams</span>
+				<span class="tag tag--cyan">Rookie Teams</span>
 			{/if}
 			<h2>Engineering Portfolio Review</h2>
 			<p>
@@ -96,7 +96,7 @@
 							<input type="text" name="team" placeholder="Team Name & Number" required />
 							<input type="email" name="email" placeholder="Contact Email" required />
 						</div>
-						<input type="text" name="portfolio_link" placeholder="Link to Portfolio (Drive...)" required />
+						<input type="text" name="portfolio_link" placeholder="Link to Portfolio" required />
 						<textarea name="notes" placeholder="Notes (Areas to focus on, awards you're chasing...)" rows="2"></textarea>
 						
 						<div class="form-actions">
@@ -174,8 +174,8 @@
 	.reminder-box {
 		font-size: 0.85rem;
 		padding: 0.75rem 1rem;
-		background: rgba(189, 157, 68, 0.08);
-		border-left: 3px solid var(--accent-yellow);
+		background: rgba(26, 122, 149, 0.08);
+		border-left: 3px solid var(--accent-cyan);
 		border-radius: 4px;
 	}
 
@@ -185,7 +185,7 @@
 		border-radius: 3px;
 		font-family: var(--font-mono);
 		font-size: 0.9em;
-		color: var(--accent-yellow);
+		color: var(--accent-cyan);
 	}
 
 	.form-side {
@@ -225,8 +225,8 @@
 
 	input:focus, textarea:focus {
 		outline: none;
-		border-color: var(--accent-yellow);
-		box-shadow: 0 0 0 3px rgba(189, 157, 68, 0.1);
+		border-color: var(--accent-cyan);
+		box-shadow: 0 0 0 3px rgba(26, 122, 149, 0.1);
 	}
 
 	.form-actions {
@@ -268,7 +268,7 @@
 
 	.btn-submit {
 		padding: 0.75rem 1.25rem;
-		background: var(--accent-yellow); color: #151515;
+		background: var(--accent-cyan); color: white;
 		border: none; border-radius: var(--radius-md);
 		font-weight: 700; cursor: pointer; transition: all var(--transition-fast);
 		font-size: 0.9rem;

@@ -8,39 +8,19 @@ author: Blueprint
 published: true
 ---
 
-
 # Motion Profiling
-
 
 Motion profiling is a technique for moving motors smoothly by limiting not just maximum speed, but also acceleration and deceleration. In FTC, this is especially valuable for **drivetrains** and **single‑motor mechanisms** like arms or slides, because it reduces wheel slip, lowers mechanical stress, and improves positional repeatability.
 
-
-<br>
-
-
 ---
-
-
-<br>
-
 
 ## Why profile a drivetrain?
 
-
 On a 4‑motor FTC drivetrain, slamming full power into the motors from rest can cause the wheels to break traction and skid. Motion profiling instead shapes the _target_ velocity (or position) so that the drivetrain accelerates and decelerates smoothly, which keeps the wheels rolling cleanly and makes autonomous and driver‑controlled motion more predictable.
-
-
-<br>
-
 
 ---
 
-
-<br>
-
-
 ## What is a trapezoid profile?
-
 
 A **trapezoidal motion profile** has three phases:
 
@@ -48,36 +28,17 @@ A **trapezoidal motion profile** has three phases:
 - **Cruise:** velocity stays constant.
 - **Deceleration:** velocity ramps back down to 0.
 
-
 The velocity vs. time graph looks like a trapezoid if the robot reaches max speed before slowing; if the distance is too short, the cruise phase disappears and you get a **triangular** profile. For most FTC drivetrain moves, trapezoidal profiles work well because they are simple and smooth.
 
-
-<br>
-
-
 ---
-
-
-<br>
-
 
 ## How profiling helps drivetrains
 
-
 Instead of telling your PID controller “go to 3000 encoder ticks right now,” you tell it “here is the ideal position, velocity, and acceleration at this moment.” The profile becomes the _reference trajectory_, and the controller follows it. This approach is used in libraries like Road Runner and can be adapted to your own drivetrain code.
-
-
-<br>
-
 
 ---
 
-
-<br>
-
-
 ## Core kinematics
-
 
 At the heart of trapezoidal motion profiling are basic constant‑acceleration equations:
 
@@ -86,21 +47,11 @@ $$x = x_0 + v_0 \cdot t + \tfrac{1}{2} a \cdot t^2$$
 
 These equations let you compute the target position and velocity for each time step along the profile.
 
-
-<br>
-
-
 ---
-
-
-<br>
-
 
 ## Example 1: Single‑motor mechanism
 
-
 This example shows a simple trapezoidal motion profile for a **single DcMotorEx** (e.g., an arm or slide) using a custom profile generator. The controller is PIDF‑based, and the profile is computed inline.
-
 
 ```java
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -188,15 +139,7 @@ public class SingleMotorProfile extends LinearOpMode {
 }
 ```
 
-
-<br>
-
-
 ---
-
-
-<br>
-
 
 ## Notes and tuning tips
 

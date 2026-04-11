@@ -55,7 +55,7 @@
 	<div class="review-content">
 		<div class="text-side">
 			{#if !isHeader}
-				<span class="tag tag--yellow">Rookie Teams</span>
+				<span class="tag tag--cyan">Rookie Teams</span>
 			{/if}
 			<h2>Code Review</h2>
 			<p>
@@ -173,8 +173,8 @@
 	.reminder-box {
 		font-size: 0.85rem;
 		padding: 0.75rem 1rem;
-		background: rgba(26, 122, 149, 0.08); /* Yellow background tint */
-		border-left: 3px solid var(--accent-yellow);
+		background: rgba(26, 122, 149, 0.08); /* Cyan background tint */
+		border-left: 3px solid var(--accent-cyan);
 		border-radius: 4px;
 	}
 
@@ -184,7 +184,7 @@
 		border-radius: 3px;
 		font-family: var(--font-mono);
 		font-size: 0.9em;
-		color: var(--accent-yellow);
+		color: var(--accent-cyan);
 	}
 
 	.form-side {
@@ -224,7 +224,7 @@
 
 	input:focus, textarea:focus {
 		outline: none;
-		border-color: var(--accent-yellow);
+		border-color: var(--accent-cyan);
 		box-shadow: 0 0 0 3px rgba(26, 122, 149, 0.1);
 	}
 
@@ -267,7 +267,7 @@
 
 	.btn-submit {
 		padding: 0.75rem 1.25rem;
-		background: var(--accent-yellow); color: white;
+		background: var(--accent-cyan); color: white;
 		border: none; border-radius: var(--radius-md);
 		font-weight: 700; cursor: pointer; transition: all var(--transition-fast);
 		font-size: 0.9rem;

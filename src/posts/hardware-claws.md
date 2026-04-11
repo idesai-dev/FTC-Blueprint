@@ -20,8 +20,6 @@ Here is an example 3D preview of a claw! You can drag to rotate and scroll to zo
   shadow-intensity="1">
 </model-viewer>
 
-
 <model-viewer src="/models/posts/hardware-claws/1775455850168_claw-itd.glb" camera-controls auto-rotate shadow-intensity="1" style="width: 100%; height: 400px; background: #1a1a1a; border-radius: 8px;"></model-viewer>
-
 
 Content coming soon...

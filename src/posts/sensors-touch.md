@@ -12,16 +12,10 @@ published: true
 
 The touch sensor is a simple digital switch. It returns a boolean value: either **pressed** or **not pressed**.
 
-<br>
-
 > [!NOTE]
 > Even though it's called a "Touch" sensor, it behaves exactly like a **limit switch** or a **button**. In code, it's a `DigitalChannel` that returns `true` or `false`.
 
-<br>
-
 ---
-
-<br>
 
 To use a touch sensor as a digital input, use the `DigitalChannel` class.
 
@@ -32,8 +26,6 @@ DigitalChannel touchSensor = hardwareMap.get(DigitalChannel.class, "touchSensor"
 // Important: Set the mode to INPUT
 touchSensor.setMode(DigitalChannel.Mode.INPUT);
 ```
-
-<br>
 
 The `getState()` method returns the current electrical state. For most FTC sensors (like the REV Touch Sensor), **`false`** means the sensor is pressed (grounded), and **`true`** means it is open.
 
@@ -48,8 +40,6 @@ if (touchSensor.getState() == false) {
 ### Tip
 > Use `!touchSensor.getState()` to get a "logic high" when the button is pressed.
 
-<br>
-
 If you have a lift or an arm, you can place a touch sensor at the extreme end of its range. When the mechanism hits the sensor, you can:
 1. **Stop the motor** immediately to prevent damage.
 2. **Reset the encoder** to zero to ensure your software stays calibrated.
@@ -61,8 +51,6 @@ if (limitSwitch.getState() == false) {
     slideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 }
 ```
-
-<br>
 
 ## 4. Single-Press Logic (Debouncing)
 
@@ -81,11 +69,7 @@ if (currentState && !lastState) {
 lastState = currentState;
 ```
 
-<br>
-
 ---
-
-<br>
 
 This example shows how to use a `DigitalChannel` as a limit switch for a simple motor-based lift.
 
@@ -142,7 +126,5 @@ public class TouchSensorExample extends LinearOpMode {
     }
 }
 ```
-
-<br>
 
 ---

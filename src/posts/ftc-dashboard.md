@@ -10,17 +10,11 @@ published: true
 
 # FTC Dashboard & PID Live Tuning
 
-<br>
-
 > Dial in your robot's motion without touching Android Studio — change constants live, graph your error in real time, and lock in values that actually work.
 
-<br>
-
 ---
-<br>
 
 ## What Is FTC Dashboard?
-<br>
 
 FTC Dashboard is a browser-based tool that connects to your Control Hub over Wi-Fi. It lets you:
 
@@ -28,18 +22,11 @@ FTC Dashboard is a browser-based tool that connects to your Control Hub over Wi-
 - **Graph telemetry** (error, position, power) in real time
 - **View a field overlay** of your robot's position
 
-<br>
-
 **To connect:** join the Control Hub's Wi-Fi network, then open `http://192.168.43.1:8080/dash` in your browser.
 
-<br>
-
 ---
-<br>
 
 ## Installation
-
-<br>
 
 > **Using the Road Runner quickstart?** FTC Dashboard is already included, so skip this section entirely.
 
@@ -71,11 +58,7 @@ Then **sync Gradle** in Android Studio (the elephant icon, or File → Sync Proj
 
 ---
 
-<br>
-
 ## How `@Config` Works
-
-<br>
 
 To make a variable tunable from the Dashboard, two things must be true:
 
@@ -97,21 +80,13 @@ public class LiftConstants {
 
 Static variables live on the **class itself**, not on any object instance. When Dashboard updates a value, it writes directly to that memory location — and since your running code reads from the same place, the change takes effect **instantly** with no restart needed.
 
-<br>
-
 ### Why `PIDFCoefficients`?
 
 Instead of four separate `double` fields, the FTC SDK provides `PIDFCoefficients` — a single object with `.p`, `.i`, `.d`, and `.f` fields built in. Dashboard knows how to display and edit each field individually, so you get a clean set of sliders with no extra boilerplate.
 
-<br>
-
 ---
 
-<br>
-
 ## Organizing Your Constants
-
-<br>
 
 Keep all tunable values in a dedicated constants file. This keeps OpModes clean and gives you one place to look when something needs adjusting.
 
@@ -135,15 +110,9 @@ Access coefficients anywhere with `RobotConstants.Lift.PIDF.p`, `.d`, etc.
 
 ---
 
-<br>
-
 ## Understanding PD Control
 
-<br>
-
 For most FTC mechanisms, **P and D are all you need.** The integral term (I) sounds useful in theory but causes more problems than it solves in practice — windup, instability, and oscillation that's hard to debug. Leave it at zero.
-
-<br>
 
 | Term | What It Does | Too High → | Too Low → |
 |------|-------------|-----------|----------|
@@ -152,11 +121,7 @@ For most FTC mechanisms, **P and D are all you need.** The integral term (I) sou
 
 **F** (feedforward) is for counteracting a constant force like gravity — useful on lifts and arms, but tune P and D first.
 
-<br>
-
 ---
-
-<br>
 
 ## Full Example: Live-Tunable Lift PID
 
@@ -245,11 +210,7 @@ public class LiftPIDTuner extends LinearOpMode {
 | Erratic, noisy movement | `D` too high | Decrease `D` |
 | Stops just short of target (lift only) | Gravity load | Add a small `F` value |
 
-<br>
-
 ---
-
-<br>
 
 ## Tuning Workflow
 
@@ -268,12 +229,8 @@ public class LiftPIDTuner extends LinearOpMode {
 
 ---
 
-<br>
-
 ## WARNING: Dashboard changes are temporary.
 Once you find values that work, copy them back into your code in Android Studio - they **will not be saved** when the robot restarts.
-
-<br>
 
 ### Tip
 Use `MultipleTelemetry` (shown above) instead of calling `FtcDashboard.getInstance().getTelemetry()` directly. It logs to both the Driver Station and the Dashboard graph simultaneously, with one line of code.

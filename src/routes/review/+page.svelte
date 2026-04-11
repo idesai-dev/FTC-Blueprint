@@ -13,9 +13,9 @@
 	});
 
 	const tabs = [
-		{ id: 'portfolio', label: 'Portfolio Review',  tag: 'Outreach',  tagClass: 'tag--green'  },
+		{ id: 'portfolio', label: 'Portfolio Review',  tag: 'Outreach',  tagClass: 'tag--cyan'  },
 		{ id: 'code',      label: 'Code Review',      tag: 'Software',  tagClass: 'tag--cyan'   },
-		{ id: 'cad',       label: 'CAD Review',        tag: 'Hardware',  tagClass: 'tag--orange' },
+		{ id: 'cad',       label: 'CAD Review',        tag: 'Hardware',  tagClass: 'tag--cyan' },
 	] as const;
 </script>
 
@@ -30,7 +30,7 @@
 		<div class="hero-inner animate-fade-up">
 			<div class="hero-text">
 				<span class="tag tag--green">Free Review</span>
-				<h1>Get Blueprint Feedback.</h1>
+				<h1>Get Feedback!</h1>
 				<p class="sub">
 					Submit your code, CAD, or engineering portfolio and our team will give you detailed,
 					actionable feedback — free for all FTC teams.
@@ -38,9 +38,9 @@
 			</div>
 			<div class="hero-badges">
 				{#each tabs as tab}
-					<div class="hero-badge">
+					<button class="hero-badge" onclick={() => (activeTab = tab.id)}>
 						<span class="badge-label">{tab.label}</span>
-					</div>
+					</button>
 				{/each}
 			</div>
 		</div>
@@ -139,6 +139,16 @@
 		font-weight: 400;
 		color: var(--text-primary);
 		min-width: 220px;
+		cursor: pointer;
+		transition: all var(--transition-fast);
+		text-align: left;
+		font-family: var(--font-body);
+	}
+
+	.hero-badge:hover {
+		transform: translateX(5px);
+		border-color: var(--accent-cyan);
+		background: var(--bg-secondary);
 	}
 
 	/* ── Tab bar ── */
@@ -200,7 +210,7 @@
 		font-size: 0.6rem;
 		padding: 0.1em 0.5em;
 		border-radius: var(--radius-pill);
-		font-weight: 700;
+		font-weight: 400;
 		letter-spacing: 0.04em;
 	}
 

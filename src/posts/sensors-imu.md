@@ -14,11 +14,7 @@ The Inertial Measurement Unit (IMU) is one of the most important sensors on your
 
 In modern FTC (SDK 8.0+), we use the universal `IMU` interface, which works across all REV Control Hub and Expansion Hub versions.
 
-<br>
-
 ---
-
-<br>
 
 ## 1. Defining Orientation
 
@@ -43,8 +39,6 @@ IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
 imu.initialize(parameters);
 ```
 
-<br>
-
 ## 2. Reading Angles (Yaw, Pitch, Roll)
 
 The IMU provides three primary angles:
@@ -65,8 +59,6 @@ double roll = angles.getRoll(AngleUnit.DEGREES);
 telemetry.addData("Yaw (Heading)", "%.2f", yaw);
 ```
 
-<br>
-
 ## 3. Resetting the Heading
 
 When your OpMode starts, the IMU's Yaw is set to 0 based on the robot's current position. If you want to "re-zero" the robot (e.g., in a field-centric drive system), use:
@@ -75,11 +67,7 @@ When your OpMode starts, the IMU's Yaw is set to 0 based on the robot's current 
 imu.resetYaw();
 ```
 
-<br>
-
 ---
-
-<br>
 
 ## Full Example: Field-Centric Heading
 
@@ -135,11 +123,7 @@ public class IMUExample extends LinearOpMode {
 }
 ```
 
-<br>
-
 ---
-
-<br>
 
 > [!CAUTION]
 > **Initialization Time:** It is best to initialize the IMU in the `init` section of your OpMode (before `waitForStart`). Moving the robot during IMU initialization can cause drift or incorrect readings. Ensure the robot is stationary while the code is initializing!
