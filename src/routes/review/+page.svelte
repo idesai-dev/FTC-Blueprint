@@ -33,7 +33,7 @@
 				<h1>Get Feedback!</h1>
 				<p class="sub">
 					Submit your code, CAD, or engineering portfolio and our team will give you detailed,
-					actionable feedback — free for all FTC teams.
+					actionable feedback - free for all FTC teams.
 				</p>
 			</div>
 			<div class="hero-badges">
