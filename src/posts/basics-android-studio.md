@@ -3,9 +3,9 @@ title: Android Studio Setup
 panelCategory: "Basics"
 date: 2026-03-28
 description: Complete set up guide for Android Studio on both Windows and Mac.
-tags: ["completed", "software", "beginner", "completed", "rookie", "video"]
+tags: ["completed", "software", "beginner", "rookie", "video"]
 author: Ishaan Desai
-published: false
+published: true
 ---
 
 ![image.png](/images/posts/basics-android-studio/1775352929725_image.png)
