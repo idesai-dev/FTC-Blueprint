@@ -95,10 +95,12 @@
 		width: 5px;
 		height: 5px;
 		margin: -2.5px 0 0 -2.5px;
-		background: var(--accent-cyan);
-		border-radius: 50%;
-		box-shadow: 0 0 6px var(--accent-cyan);
-		z-index: 5;
+		.btn-primary {
+		background: var(--text-primary);
+		color: var(--bg);
+		border-color: var(--text-primary);
+		font-weight: 700;
+	}	z-index: 5;
 		transition: transform 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 	}
 
@@ -147,12 +149,21 @@
 
 	.hovering .circle-1 { opacity: 0.6; border-color: var(--accent-cyan); }
 
+	.bot-pulse {
+		position: absolute;
+		inset: -8px;
+		border: 2px solid var(--accent-cyan);
+		border-radius: 50%;
+		opacity: 0;
+		animation: pulse-ring 2s infinite;
+	}
+
 	/* Subtle glow */
 	.custom-cursor::after {
 		content: '';
 		position: absolute;
-		inset: -15px;
-		background: radial-gradient(circle, rgba(116, 215, 237, 0.15) 0%, transparent 70%);
+		inset: -20px;
+		background: radial-gradient(circle, rgba(104, 157, 135, 0.25) 0%, transparent 70%);
 		opacity: 0;
 		transition: opacity 0.3s ease;
 		border-radius: 50%;

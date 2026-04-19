@@ -375,7 +375,7 @@
 		top: 0;
 		z-index: 100;
 		height: var(--header-height);
-		background: rgba(21, 21, 21, 0.75);
+		background: var(--bg-header);
 		backdrop-filter: blur(8px);
 		-webkit-backdrop-filter: blur(8px);
 		border-bottom: 1px solid var(--border-subtle);
@@ -386,7 +386,7 @@
 	}
 
 	:global(html.light) .header {
-		background: rgba(240, 246, 248, 0.88);
+		background: var(--bg-header);
 	}
 
 	.inner {

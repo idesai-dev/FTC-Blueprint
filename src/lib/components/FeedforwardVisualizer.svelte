@@ -807,9 +807,10 @@
 	}
 
 	.btn-primary {
-		background: var(--accent-cyan);
-		color: var(--bg-primary, #0d1117);
-		border-color: var(--accent-cyan);
+		background: var(--text-primary);
+		color: var(--bg);
+		border-color: var(--text-primary);
+		font-weight: 700;
 	}
 
 	.btn-primary:hover {

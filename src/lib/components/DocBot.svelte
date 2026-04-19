@@ -506,9 +506,9 @@ ${contextText}
 		max-height: 76vh;
 		background: var(--bg-card);
 		backdrop-filter: blur(20px);
-		border: 1px solid var(--border);
+		border: 1.5px solid var(--border-subtle);
 		border-radius: var(--radius-lg);
-		box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+		box-shadow: 0 12px 48px rgba(0, 0, 0, 0.5);
 		display: flex;
 		flex-direction: column;
 		overflow: hidden;
@@ -597,9 +597,10 @@ ${contextText}
 
 	.assistant .bubble {
 		background: var(--bg-secondary);
-		color: var(--text-body);
+		color: var(--text-primary);
 		border-bottom-left-radius: 2px;
-		border: 1px solid var(--border-subtle);
+		border: 1px solid var(--border);
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 	}
 
 	.user .bubble {
