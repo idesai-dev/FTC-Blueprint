@@ -3,7 +3,7 @@
 </script>
 
 <svelte:head>
-	<title>Pedro Path Visualizer — Blueprint</title>
+	<title>Pedro Path Visualizer | Blueprint</title>
 	<meta
 		name="description"
 		content="Visualize, plan, and export Pedro Pathing autonomous paths for your FTC robot."

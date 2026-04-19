@@ -68,7 +68,7 @@
 </script>
 
 <svelte:head>
-	<title>Prints — Blueprint</title>
+	<title>Prints | Blueprint</title>
 	<meta name="description" content="All Prints and posts published on Blueprint." />
 </svelte:head>
 <div class="directory-container">

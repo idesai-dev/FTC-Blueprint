@@ -15,7 +15,7 @@
 </script>
 
 <svelte:head>
-	<title>{data.meta.title} — Blueprint</title>
+	<title>{data.meta.title} | Blueprint</title>
 	<meta name="description" content={data.meta.description || data.meta.title} />
 	<meta property="og:title" content={data.meta.title} />
 	<meta property="og:description" content={data.meta.description || ''} />

@@ -12,7 +12,6 @@ published: true
 
 Distance sensors (like the REV 2m Distance Sensor) use "Time of Flight" (TOF) technology to measure how far away an object is by bouncing an infrared beam off it.
 
-> [!IMPORTANT]
 > **Accuracy:** TOF sensors are extremely precise (within millimeters) but have a limited range (usually up to 2 meters). They are much faster and more reliable than older ultrasonic sensors.
 
 ---

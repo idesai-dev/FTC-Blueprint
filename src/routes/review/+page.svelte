@@ -20,7 +20,7 @@
 </script>
 
 <svelte:head>
-	<title>Review — Blueprint</title>
+	<title>Review | Blueprint</title>
 	<meta name="description" content="Get expert feedback on your code, CAD, or engineering portfolio from the Blueprint team." />
 </svelte:head>
 

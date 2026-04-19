@@ -51,5 +51,4 @@ DcMotor leftDrive = hardwareMap.get(DcMotor.class, "leftDrive");
 
 ---
 
-> [!IMPORTANT]
 > **Secure Connections:** Ensure every connector is fully seated and won't vibrate loose during a match.

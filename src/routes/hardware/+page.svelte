@@ -66,7 +66,7 @@
 </script>
 
 <svelte:head>
-	<title>Hardware — Blueprint</title>
+	<title>Hardware | Blueprint</title>
 	<meta name="description" content="All Hardware guides and prints published on Blueprint." />
 </svelte:head>
 

@@ -4,7 +4,7 @@
 </script>
 
 <svelte:head>
-	<title>Motion Profiling — Blueprint</title>
+	<title>Motion Profiling | Blueprint</title>
 	<meta
 		name="description"
 		content="An interactive tool for understanding and tuning trapezoidal motion profiles for FTC robots."

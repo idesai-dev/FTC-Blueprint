@@ -49,5 +49,4 @@ Once you have the code, you'll need to go through a series of tuning OpModes to 
 
 ---
 
-> [!IMPORTANT]
 > **Tuning is everything.** A poorly tuned Road Runner will perform worse than a simple timer-based autonomous. Dedicate several hours to your initial tuning process.

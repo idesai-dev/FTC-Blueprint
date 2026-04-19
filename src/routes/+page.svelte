@@ -96,7 +96,7 @@
 </script>
 
 <svelte:head>
-	<title>Blueprint — FTC Made Easy</title>
+	<title>Blueprint | FTC Made Easy</title>
 	<meta name="description" content="Blueprint is an FTC guide made easy" />
 </svelte:head>
 

@@ -4,7 +4,7 @@
 </script>
 
 <svelte:head>
-	<title>Feedforward Tuning — Blueprint</title>
+	<title>Feedforward Tuning | Blueprint</title>
 	<meta
 		name="description"
 		content="An interactive tool for understanding and tuning feedforward control constants for FTC robots."

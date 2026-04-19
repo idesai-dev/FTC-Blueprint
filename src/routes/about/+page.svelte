@@ -2,7 +2,7 @@
 </script>
 
 <svelte:head>
-	<title>About — Blueprint</title>
+	<title>About | Blueprint</title>
 	<meta
 		name="description"
 		content="Learn more about Blueprint, the writer, and the ideas behind the blog."

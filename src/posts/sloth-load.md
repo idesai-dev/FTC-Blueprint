@@ -38,5 +38,4 @@ plugins {
 
 Once installed, you can use the `sloth` command or the Android Studio integration to push your changes instantly.
 
-> [!IMPORTANT]
-> Ensure your robot is connected via ADB (Wi-Fi or USB) for the fastest results.
+> **Ensure your robot is connected via ADB (Wi-Fi or USB) for the fastest results.**

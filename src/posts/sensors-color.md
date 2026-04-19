@@ -129,6 +129,5 @@ public class ColorSensorExample extends LinearOpMode {
 
 ---
 
-> [!IMPORTANT]
 > **Lighting:** The REV Color Sensor has a built-in LED. You can turn it on or off using `colorSensor.enableLed(true)`. This is helpful for surface detection but might interfere with detecting distant objects.
 

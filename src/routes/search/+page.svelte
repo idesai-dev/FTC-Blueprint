@@ -107,7 +107,7 @@
 </script>
 
 <svelte:head>
-	<title>Search — Blueprint</title>
+	<title>Search | Blueprint</title>
 </svelte:head>
 
 <section class="search-page">

@@ -356,7 +356,7 @@
 </script>
 
 <svelte:head>
-	<title>Model Converter — Blueprint</title>
+	<title>Model Converter | Blueprint</title>
 	<meta name="description" content="Convert STL, OBJ, PLY, FBX, GLTF, Collada, 3MF, and STEP files to optimised GLB models for Blueprint." />
 </svelte:head>
 

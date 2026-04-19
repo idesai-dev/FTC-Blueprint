@@ -3,7 +3,7 @@
 </script>
 
 <svelte:head>
-	<title>Suggest — Blueprint</title>
+	<title>Suggest | Blueprint</title>
 	<meta
 		name="description"
 		content="Submit a request or suggestion for the Blueprint FTC software site."

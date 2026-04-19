@@ -65,7 +65,7 @@
 </script>
 
 <svelte:head>
-	<title>Outreach — Blueprint</title>
+	<title>Outreach | Blueprint</title>
 	<meta name="description" content="All Outreach guides and prints published on Blueprint." />
 </svelte:head>
 

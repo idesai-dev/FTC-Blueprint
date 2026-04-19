@@ -295,7 +295,7 @@
 </script>
 
 <svelte:head>
-	<title>PID Learning Game — Blueprint</title>
+	<title>PID Learning Game | Blueprint</title>
 	<meta
 		name="description"
 		content="An interactive game for learning to tune PIDF control constants by dragging a robot and watching it return home."

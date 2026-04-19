@@ -4,7 +4,7 @@
 </script>
 
 <svelte:head>
-	<title>PID Tuner — Blueprint</title>
+	<title>PID Tuner | Blueprint</title>
 	<meta
 		name="description"
 		content="An interactive tool for tuning PID control algorithms for FTC robots."
