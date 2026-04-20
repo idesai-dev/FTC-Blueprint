@@ -76,18 +76,18 @@ html.dark {
 	--text-body: #a3bfca;
 
 	--accent-green: #689d87;
-	--accent-green-dim: #0f2e46;
+	--accent-green-dim: rgba(104, 157, 135, 0.15);
 	--accent-yellow: #fbbf24;
 	--accent-yellow-dim: #78350f;
-	--accent-cyan: #b0c4cf;
-	--accent-cyan-dim: rgba(176, 196, 207, 0.15);
+	--accent-cyan: #689d87;
+	--accent-cyan-dim: rgba(104, 157, 135, 0.15);
 
 	--gradient-hero: var(--bg-banner);
-	--gradient-accent: #b0c4cf;
+	--gradient-accent: #689d87;
 	--gradient-card: var(--bg-card);
 
-	--glow-cyan: 0 0 15px rgba(176, 196, 207, 0.1);
-	--glow-green: 0 0 15px rgba(104, 157, 135, 0.1);
+	--glow-cyan: 0 0 20px rgba(104, 157, 135, 0.2);
+	--glow-green: 0 0 20px rgba(104, 157, 135, 0.2);
 	--glow-yellow: none;
 }
 

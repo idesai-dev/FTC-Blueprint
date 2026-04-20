@@ -807,9 +807,9 @@
 	}
 
 	.btn-primary {
-		background: var(--text-primary);
-		color: var(--bg);
-		border-color: var(--text-primary);
+		background: var(--accent-green);
+		color: #102a43;
+		border-color: var(--accent-green);
 		font-weight: 700;
 	}
 

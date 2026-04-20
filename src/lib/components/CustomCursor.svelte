@@ -64,6 +64,7 @@
 		aria-hidden="true"
 	>
 		<div class="cursor-inner"></div>
+		<div class="cursor-dot"></div>
 		<div class="cursor-outer"></div>
 		<div class="cursor-circle circle-1"></div>
 	</div>
@@ -92,16 +93,28 @@
 		position: absolute;
 		top: 50%;
 		left: 50%;
-		width: 5px;
-		height: 5px;
-		margin: -2.5px 0 0 -2.5px;
-		.btn-primary {
-		background: var(--text-primary);
-		color: var(--bg);
-		border-color: var(--text-primary);
-		font-weight: 700;
-	}	z-index: 5;
+		width: 6px;
+		height: 6px;
+		margin: -3px 0 0 -3px;
+		background: var(--accent-green);
+		border-radius: 50%;
+		box-shadow: 0 0 8px var(--accent-green);
+		z-index: 5;
 		transition: transform 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+		opacity: 0.8;
+	}
+
+	.cursor-dot {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		width: 2px;
+		height: 2px;
+		margin: -1px 0 0 -1px;
+		background: #ffffff;
+		border-radius: 50%;
+		z-index: 6;
+		pointer-events: none;
 	}
 
 	.cursor-outer {
@@ -112,7 +125,7 @@
 		height: 100%;
 		border: 1.2px solid var(--accent-green);
 		border-radius: 50%;
-		opacity: 0.5;
+		opacity: 0.6;
 		z-index: 4;
 		transition: all 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 	}
@@ -149,14 +162,6 @@
 
 	.hovering .circle-1 { opacity: 0.6; border-color: var(--accent-cyan); }
 
-	.bot-pulse {
-		position: absolute;
-		inset: -8px;
-		border: 2px solid var(--accent-cyan);
-		border-radius: 50%;
-		opacity: 0;
-		animation: pulse-ring 2s infinite;
-	}
 
 	/* Subtle glow */
 	.custom-cursor::after {
