@@ -112,8 +112,8 @@
 			<svg class="hex-svg" viewBox="0 0 760 760" xmlns="http://www.w3.org/2000/svg">
 				<defs>
 					<linearGradient id="hex-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-						<stop offset="0%" stop-color="#1d4d63" />
-						<stop offset="100%" stop-color="#4f6d7a" />
+						<stop offset="0%" stop-color="#74D7ED" />
+						<stop offset="100%" stop-color="#7EFFA0" />
 					</linearGradient>
 					<!-- Soft glow filter -->
 					<filter id="hex-glow" x="-20%" y="-20%" width="140%" height="140%">
