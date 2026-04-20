@@ -517,7 +517,7 @@ ${contextText}
 
 	.chat-header {
 		padding: 1rem 1.25rem;
-		background: rgba(116, 215, 237, 0.05);
+		background: color-mix(in srgb, var(--accent-cyan) 8%, transparent);
 		border-bottom: 1px solid var(--border-subtle);
 		display: flex;
 		align-items: center;
@@ -596,18 +596,27 @@ ${contextText}
 	}
 
 	.assistant .bubble {
-		background: #243b53;
+		background: var(--bg-secondary);
 		color: var(--text-primary);
 		border-bottom-left-radius: 2px;
-		border: 1px solid var(--border);
-		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+		border: 1px solid var(--border-subtle);
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+	}
+
+	:global(html.dark) .assistant .bubble {
+		background: #243b53;
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 	}
 
 	.user .bubble {
 		background: var(--accent-cyan);
-		color: #151515;
+		color: white;
 		font-weight: 500;
 		border-bottom-right-radius: 2px;
+	}
+
+	:global(html.light) .user .bubble {
+		color: #151515;
 	}
 
 	.links {
@@ -621,14 +630,14 @@ ${contextText}
 		font-size: 0.82rem;
 		color: var(--text-primary);
 		text-decoration: none;
-		background: rgba(116, 215, 237, 0.1);
+		background: color-mix(in srgb, var(--accent-cyan) 10%, transparent);
 		padding: 0.4rem 0.6rem;
 		border-radius: 6px;
 		transition: background 0.2s;
 	}
 
 	.doc-link:hover {
-		background: rgba(116, 215, 237, 0.2);
+		background: color-mix(in srgb, var(--accent-cyan) 20%, transparent);
 	}
 
 	.thinking {
