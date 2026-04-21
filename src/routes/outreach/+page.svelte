@@ -76,7 +76,7 @@
 			<section class="blog-header">
 				<div class="blog-header-inner animate-fade-up">
 					<div class="header-text">
-						<span class="tag tag--cyan">All Prints</span>
+	
 						<h1>The Outreach Guide</h1>
 						<p class="sub">
 							{completedCount} article{completedCount !== 1 ? 's' : ''}
@@ -179,9 +179,7 @@
 		min-width: 300px;
 	}
 
-	.tag {
-		width: fit-content;
-	}
+
 
 	h1 {
 		font-size: clamp(2.5rem, 5vw, 4rem);

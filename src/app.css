@@ -37,10 +37,12 @@
 	--glow-green: 0 0 20px rgba(42, 122, 69, 0.08);
 	--glow-yellow: 0 0 20px rgba(181, 133, 0, 0.08);
 
-	--radius-sm: 6px;
-	--radius-md: 12px;
-	--radius-lg: 18px;
-	--radius-xl: 24px;
+	/* Corner radius */
+	--radius-sm: 4px;
+	--radius-md: 9px;
+	/*prints box rounding*/
+	--radius-lg: 13px;
+	--radius-xl: 16px;
 	--radius-pill: 9999px;
 
 	--font-sans: 'Space Grotesk', 'Inter', system-ui, sans-serif;

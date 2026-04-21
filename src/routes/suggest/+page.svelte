@@ -13,7 +13,7 @@
 <section class="suggest-header">
 	<div class="container">
 		<div class="animate-fade-up" style="display:inline-block">
-			<span class="tag tag--cyan">Feedback</span>
+	
 		</div>
 		<h1 class="animate-fade-up" style="animation-delay:60ms">Make a Request.</h1>
 		<p class="sub animate-fade-up" style="animation-delay:120ms">

@@ -13,9 +13,9 @@
 	});
 
 	const tabs = [
-		{ id: 'portfolio', label: 'Portfolio Review',  tag: 'Outreach',  tagClass: 'tag--cyan'  },
-		{ id: 'code',      label: 'Code Review',      tag: 'Software',  tagClass: 'tag--cyan'   },
-		{ id: 'cad',       label: 'CAD Review',        tag: 'Hardware',  tagClass: 'tag--cyan' },
+		{ id: 'portfolio', label: 'Portfolio Review' },
+		{ id: 'code',      label: 'Code Review'      },
+		{ id: 'cad',       label: 'CAD Review'       },
 	] as const;
 </script>
 
@@ -29,7 +29,6 @@
 	<div class="container">
 		<div class="hero-inner animate-fade-up">
 			<div class="hero-text">
-				<span class="tag tag--green">Free Review</span>
 				<h1>Get Feedback!</h1>
 				<p class="sub">
 					Submit your code, CAD, or engineering portfolio and our team will give you detailed,
@@ -59,7 +58,6 @@
 					id="review-tab-{tab.id}"
 				>
 					{tab.label}
-					<span class="tab-tag tag {tab.tagClass}">{tab.tag}</span>
 				</button>
 			{/each}
 		</nav>
@@ -202,17 +200,9 @@
 		font-weight: 400;
 	}
 
-	.tab-icon {
-		font-size: 1rem;
-	}
 
-	.tab-tag {
-		font-size: 0.6rem;
-		padding: 0.1em 0.5em;
-		border-radius: var(--radius-pill);
-		font-weight: 400;
-		letter-spacing: 0.04em;
-	}
+
+
 
 	/* ── Panel ── */
 	.review-panel {
@@ -228,6 +218,5 @@
 	@media (max-width: 700px) {
 		.hero-badges { display: none; }
 		.tab-btn { padding: 0.85rem 1rem; font-size: 0.8rem; }
-		.tab-tag { display: none; }
 	}
 </style>
