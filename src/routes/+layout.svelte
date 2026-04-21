@@ -23,10 +23,35 @@
 		window.addEventListener('click', handleClick);
 		return () => window.removeEventListener('click', handleClick);
 	});
+
+	// SEO Meta helpers
+	const siteName = 'Blueprint';
+	const baseUrl = 'https://ftcblueprint.com';
+	const canonicalUrl = $derived(`${baseUrl}${$page.url.pathname}`);
+	
+	// Default meta values - these can be overridden in sub-pages
+	const defaultDescription = 'Blueprint — the complete guide for FTC teams. Coding, hardware, and strategy made simple.';
+	const defaultImage = `${baseUrl}/favicon.png`; // Fallback image
 </script>
 
 <svelte:head>
-	<meta name="description" content="Blueprint — a modern blog for ideas, articles, and more." />
+	<!-- Primary Meta Tags -->
+	<link rel="canonical" href={canonicalUrl} />
+	<meta name="description" content={defaultDescription} />
+
+	<!-- Open Graph / Facebook -->
+	<meta property="og:type" content="website" />
+	<meta property="og:url" content={canonicalUrl} />
+	<meta property="og:title" content={siteName} />
+	<meta property="og:description" content={defaultDescription} />
+	<meta property="og:image" content={defaultImage} />
+
+	<!-- Twitter -->
+	<meta property="twitter:card" content="summary_large_image" />
+	<meta property="twitter:url" content={canonicalUrl} />
+	<meta property="twitter:title" content={siteName} />
+	<meta property="twitter:description" content={defaultDescription} />
+	<meta property="twitter:image" content={defaultImage} />
 </svelte:head>
 
 <CustomCursor />
