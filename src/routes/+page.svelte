@@ -60,35 +60,40 @@
 		typeSequence();
 
 		// --- Cursor glow effect ---
-		// A large soft radial-gradient div that lazily follows the cursor.
-		// The lag creates the "trail" — no dots, just a smooth wash of color.
+		// Delayed for performance on load
 		const glow = document.getElementById('cursor-glow') as HTMLElement;
 		if (!glow) return;
-
+		
+		let raf: number;
 		let targetX = -600;
 		let targetY = -600;
 		let currentX = -600;
 		let currentY = -600;
-		const EASE = 0.07; // lower = more lag = longer visible trail
+		const EASE = 0.07;
 
 		const onMouseMove = (e: MouseEvent) => {
 			targetX = e.clientX;
 			targetY = e.clientY;
 		};
-		window.addEventListener('mousemove', onMouseMove);
 
-		let raf: number;
 		const render = () => {
-			// Lerp toward target — this is what makes the trail smooth
 			currentX += (targetX - currentX) * EASE;
 			currentY += (targetY - currentY) * EASE;
-
 			glow.style.transform = `translate(${currentX}px, ${currentY}px)`;
 			raf = requestAnimationFrame(render);
 		};
-		render();
+
+		const initGlow = () => {
+			window.addEventListener('mousemove', onMouseMove, { passive: true });
+			render();
+			// Fade in once active
+			glow.style.opacity = '1';
+		};
+
+		const delayTimeout = setTimeout(initGlow, 1000);
 
 		return () => {
+			clearTimeout(delayTimeout);
 			window.removeEventListener('mousemove', onMouseMove);
 			cancelAnimationFrame(raf);
 		};
@@ -109,7 +114,7 @@
 
 		<!-- Hexagon decoration: left half peeks from right edge -->
 		<div class="hex-wrap" aria-hidden="true">
-			<svg class="hex-svg" viewBox="0 0 760 760" xmlns="http://www.w3.org/2000/svg">
+			<svg class="hex-svg" viewBox="0 0 760 760" xmlns="http://www.w3.org/2000/svg" shape-rendering="geometricPrecision">
 				<defs>
 					<linearGradient id="hex-grad" x1="0%" y1="0%" x2="100%" y2="100%">
 						<stop offset="0%" stop-color="#74D7ED" />
@@ -156,7 +161,7 @@
 			{typedText}{#if showCursor}<span class="cursor"></span>{/if}
 		</h1>
 		<p class="hero-desc">
-			The complete blueprint for FTC — coding, hardware, and strategy, all made simple.
+			The complete blueprint for FTC — coding, hardware, and outreach, all made simple.
 		</p>
 		<div class="hero-cta">
 			<a href="/software" class="btn btn-primary" id="hero-read-btn">Read the prints</a>
@@ -210,7 +215,9 @@
 			rgba(126, 255, 160, 0.02) 45%,
 			transparent 70%
 		);
-		will-change: transform;
+		will-change: transform, opacity;
+		opacity: 0;
+		transition: opacity 2s ease;
 	}
 
 	/* Hero */
@@ -261,11 +268,18 @@
 		/* Subtle paint-on entrance */
 		stroke-dasharray: 2200;
 		stroke-dashoffset: 2200;
-		animation: hex-draw 1.8s cubic-bezier(0.4, 0, 0.2, 1) 0.4s forwards;
+		opacity: 0;
+		/* 2 seconds is the time it takes before hexagon starts drawing */
+		animation: hex-draw 2s cubic-bezier(0.4, 0, 0.2, 1) 2s forwards;
 	}
 
 	@keyframes hex-draw {
+		from {
+			opacity: 0;
+			stroke-dashoffset: 2200;
+		}
 		to {
+			opacity: 1;
 			stroke-dashoffset: 0;
 		}
 	}

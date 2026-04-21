@@ -13,8 +13,30 @@
 
 
 
+	let initialized = $state(false);
+	let visible = $state(false);
+
 	$effect(() => {
 		if (active) {
+			// Start the switchover sequence
+			const timer = setTimeout(() => {
+				initialized = true;
+				// Small additional delay to ensure body class is applied before showing custom one
+				setTimeout(() => { visible = true; }, 50);
+			}, 500);
+			return () => {
+				clearTimeout(timer);
+				initialized = false;
+				visible = false;
+			};
+		} else {
+			initialized = false;
+			visible = false;
+		}
+	});
+
+	$effect(() => {
+		if (active && initialized) {
 			document.body.classList.add('custom-cursor-active');
 		} else {
 			document.body.classList.remove('custom-cursor-active');
@@ -60,7 +82,7 @@
 		bind:this={cursorEl}
 		class="custom-cursor"
 		class:hovering
-		style="transform: translate3d(var(--x), var(--y), 0);"
+		style="transform: translate3d(var(--x), var(--y), 0); opacity: {visible ? 1 : 0}; transition: opacity 0.5s ease;"
 		aria-hidden="true"
 	>
 		<div class="cursor-inner"></div>

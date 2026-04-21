@@ -116,7 +116,7 @@
 	.device-frame {
 		background: var(--bg);
 		border: 8px solid var(--border-subtle);
-		border-radius: 32px;
+		border-radius: var(--radius-xl);
 		box-shadow: 0 30px 60px rgba(0,0,0,0.3);
 		overflow: hidden;
 		transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
@@ -134,7 +134,7 @@
 		width: 390px;
 		height: 844px;
 		max-height: 90vh;
-		border-radius: 40px;
+		border-radius: 20px;
 	}
 
 	.device-frame iframe {
