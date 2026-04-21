@@ -30,7 +30,8 @@
 	const canonicalUrl = $derived(`${baseUrl}${$page.url.pathname}`);
 	
 	// Default meta values - these can be overridden in sub-pages
-	const defaultDescription = 'Blueprint — the complete guide for FTC teams. Coding, hardware, and strategy made simple.';
+	const defaultDescription = 'Blueprint - the complete guide for FTC teams. Coding, hardware, and strategy made simple. Learn ftcblueprint, blueprint ftc, and more.';
+	const defaultKeywords = 'ftcblueprint, ftc blueprint, blueprint ftc, blueprint, blueprintftc, FIRST Tech Challenge, robotics guide';
 	const defaultImage = `${baseUrl}/favicon.png`; // Fallback image
 </script>
 
@@ -38,6 +39,7 @@
 	<!-- Primary Meta Tags -->
 	<link rel="canonical" href={canonicalUrl} />
 	<meta name="description" content={defaultDescription} />
+	<meta name="keywords" content={defaultKeywords} />
 
 	<!-- Open Graph / Facebook -->
 	<meta property="og:type" content="website" />

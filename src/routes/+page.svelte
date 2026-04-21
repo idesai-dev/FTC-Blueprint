@@ -96,8 +96,8 @@
 </script>
 
 <svelte:head>
-	<title>Blueprint</title>
-	<meta name="description" content="Blueprint is an FTC guide made easy" />
+	<title>FTC Blueprint | The Ultimate Guide for FIRST Tech Challenge</title>
+	<meta name="description" content="FTC Blueprint (ftcblueprint) is the complete guide for FIRST Tech Challenge. Learn about coding, hardware, and strategy with blueprintftc." />
 </svelte:head>
 
 <!-- Cursor glow — fixed, pointer-events: none, lazily follows cursor -->
