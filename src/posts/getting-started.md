@@ -16,7 +16,7 @@ Welcome to the world of FIRST Tech Challenge (FTC)! Whether you are a rookie tea
 
 ## What is FTC?
 
-FIRST Tech Challenge is a global robotics competition where teams of middle and high school students design, build, and program robots to compete in an alliance format. It's more than just robots—it's about teamwork, innovation, and "Gracious Professionalism."
+FIRST Tech Challenge is a global robotics competition where teams of middle and high school students design, build, and program robots to compete in an alliance format. It's more than just robots-it's about teamwork, innovation, and "Gracious Professionalism."
 
 ---
 

@@ -2,7 +2,7 @@
 title: Writing in Markdown - A Quick Reference
 panelCategory: 'Developer'
 date: 2026-03-20
-description: A practical guide to markdown syntax — headings, code blocks, tables, blockquotes, and more.
+description: A practical guide to markdown syntax - headings, code blocks, tables, blockquotes, and more.
 tags: [software, beginner, completed]
 author: Blueprint
 published: true

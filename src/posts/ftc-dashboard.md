@@ -1,7 +1,7 @@
 ---
 title: FTC Dashboard & Live PID Tuning
 date: 2026-04-05
-panelCategory: ""Miscellaneous""
+panelCategory: "Miscellaneous"
 description: Tune your robot's PID controller in real time using FTC Dashboard - No rebuilding required
 tags: ["intermediate", "pid", "dashboard", "completed", "software"]
 author: Ishaan Desai
@@ -10,7 +10,7 @@ published: true
 
 # FTC Dashboard & PID Live Tuning
 
-> Dial in your robot's motion without touching Android Studio — change constants live, graph your error in real time, and lock in values that actually work.
+> Dial in your robot's motion without touching Android Studio - change constants live, graph your error in real time, and lock in values that actually work.
 
 ---
 
@@ -78,11 +78,11 @@ public class LiftConstants {
 
 ### Why `public static`?
 
-Static variables live on the **class itself**, not on any object instance. When Dashboard updates a value, it writes directly to that memory location — and since your running code reads from the same place, the change takes effect **instantly** with no restart needed.
+Static variables live on the **class itself**, not on any object instance. When Dashboard updates a value, it writes directly to that memory location - and since your running code reads from the same place, the change takes effect **instantly** with no restart needed.
 
 ### Why `PIDFCoefficients`?
 
-Instead of four separate `double` fields, the FTC SDK provides `PIDFCoefficients` — a single object with `.p`, `.i`, `.d`, and `.f` fields built in. Dashboard knows how to display and edit each field individually, so you get a clean set of sliders with no extra boilerplate.
+Instead of four separate `double` fields, the FTC SDK provides `PIDFCoefficients` - a single object with `.p`, `.i`, `.d`, and `.f` fields built in. Dashboard knows how to display and edit each field individually, so you get a clean set of sliders with no extra boilerplate.
 
 ---
 
@@ -112,14 +112,14 @@ Access coefficients anywhere with `RobotConstants.Lift.PIDF.p`, `.d`, etc.
 
 ## Understanding PD Control
 
-For most FTC mechanisms, **P and D are all you need.** The integral term (I) sounds useful in theory but causes more problems than it solves in practice — windup, instability, and oscillation that's hard to debug. Leave it at zero.
+For most FTC mechanisms, **P and D are all you need.** The integral term (I) sounds useful in theory but causes more problems than it solves in practice - windup, instability, and oscillation that's hard to debug. Leave it at zero.
 
 | Term | What It Does | Too High → | Too Low → |
 |------|-------------|-----------|----------|
 | **P** (Proportional) | Pushes toward target based on current error | Oscillates, overshoots | Slow, never fully reaches target |
 | **D** (Derivative) | Dampens motion as error shrinks | Jerky, erratic | Overshoots, takes long to settle |
 
-**F** (feedforward) is for counteracting a constant force like gravity — useful on lifts and arms, but tune P and D first.
+**F** (feedforward) is for counteracting a constant force like gravity. This is useful on lifts and arms, but tune P and D first.
 
 ---
 
@@ -173,14 +173,14 @@ public class LiftPIDTuner extends LinearOpMode {
             int currentPos = lift.getCurrentPosition();
             double error = LiftConstants.TARGET_TICKS - currentPos;
 
-            // Integral — clamped, but leave kI = 0 unless you have a specific reason
+            // Integral - clamped, but leave kI = 0 unless you have a specific reason
             integralSum = Math.max(-1, Math.min(1, integralSum + error * dt));
 
             // Derivative
             double derivative = (error - lastError) / dt;
             lastError = error;
 
-            // PIDF output — read live from Dashboard each loop
+            // PIDF output - read live from Dashboard each loop
             PIDFCoefficients c = LiftConstants.PIDF;
             double power = (c.p * error)
                          + (c.i * integralSum)
