@@ -54,9 +54,6 @@
 <section class="review-section animate-fade-up" class:is-header={isHeader} class:form-open={showForm}>
 	<div class="review-content">
 		<div class="text-side">
-			{#if !isHeader}
-				<span class="tag tag--cyan">Rookie Teams</span>
-			{/if}
 			<h2>Code Review</h2>
 			<p>
 				Share your code with us! We'll provide detailed feedback to help you with your <strong>code, errors, and logic!</strong>

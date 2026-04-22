@@ -29,8 +29,8 @@
 			displayQuery = '';
 			actualQuery = '';
 		});
-		if (typeof navigator !== 'undefined' && /Win|Linux/.test(navigator.userAgent)) {
-			isMac = false;
+		if (typeof navigator !== 'undefined') {
+			isMac = /Mac|iPhone|iPad|iPod/.test(navigator.platform) || /Mac|iPhone|iPad|iPod/.test(navigator.userAgent);
 		}
 	});
 

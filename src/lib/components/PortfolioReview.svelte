@@ -54,9 +54,6 @@
 <section class="portfolio-section animate-fade-up" class:is-header={isHeader} class:form-open={showForm}>
 	<div class="portfolio-content">
 		<div class="text-side">
-			{#if !isHeader}
-				<span class="tag tag--cyan">Rookie Teams</span>
-			{/if}
 			<h2>Engineering Portfolio Review</h2>
 			<p>
 				Share your portfolio with us! We'll provide detailed feedback to help you <strong>excel and get an award!</strong>

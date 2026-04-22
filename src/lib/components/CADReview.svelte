@@ -54,9 +54,6 @@
 <section class="review-section animate-fade-up" class:is-header={isHeader} class:form-open={showForm}>
 	<div class="review-content">
 		<div class="text-side">
-			{#if !isHeader}
-				<span class="tag tag--cyan">Hardware</span>
-			{/if}
 			<h2>CAD Review</h2>
 			<p>
 				Share your CAD models with us! We'll provide detailed feedback to help you <strong>perfect your robot design!</strong>

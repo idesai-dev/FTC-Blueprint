@@ -8,7 +8,7 @@
 	/* Light Mode (default) */
 	--bg: #fdfaf0;
 	--bg-secondary: #f5f0db;
-	--bg-card: #fdfaf0;
+	--bg-card: #f8f4e3; /* Slightly darker than --bg */
 	--bg-card-hover: #eaddb6;
 	--bg-header: rgba(240, 246, 248, 0.88);
 	--border: #dcd6c5;
@@ -31,7 +31,7 @@
 
 	--gradient-hero: linear-gradient(135deg, #fdfaf0 0%, #f5f0db 50%, #fdfaf0 100%);
 	--gradient-accent: linear-gradient(90deg, #1a7a95, #2a7a45);
-	--gradient-card: linear-gradient(135deg, #fdfaf0 0%, #f5f0db 100%);
+	--gradient-card: var(--bg-card); /* Using solid slightly-darker background */
 
 	--glow-cyan: 0 0 20px rgba(26, 122, 149, 0.08);
 	--glow-green: 0 0 20px rgba(42, 122, 69, 0.08);
@@ -61,8 +61,8 @@
 /* Dark Mode — Matte Slate-Teal Palette */
 html.dark {
 	--bg: #0e111b;
-	--bg-secondary: #131f2d;
-	--bg-card: #222e39;
+	--bg-secondary: #0a0c14;
+	--bg-card: #080a12; /* Slightly darker than --bg for recessed look */
 	--bg-header: #14171f;
 	--bg-card-hover: #222222;
 	--bg-banner:var(--bg-secondary);
@@ -77,20 +77,20 @@ html.dark {
 	--text-muted: #4d758a;
 	--text-body: #b0ccd6;
 
-	--accent-green: #7effa0;
-	--accent-green-dim: #3a7a50;
-	--accent-yellow: #fff58a;
-	--accent-yellow-dim: #7a720e;
-	--accent-cyan: #74d7ed;
+	--accent-green: #78b392;
+	--accent-green-dim: #2d5a41;
+	--accent-yellow: #d4b872;
+	--accent-yellow-dim: #6b5a2e;
+	--accent-cyan: #74bed0;
 	--accent-cyan-dim: #1a4d5c;
 
 	--gradient-hero: var(--bg-secondary);
 	--gradient-accent: linear-gradient(90deg, var(--accent-cyan), var(--accent-green));
 	--gradient-card: var(--bg-card);
 
-	--glow-cyan: 0 0 12px rgba(116, 215, 237, 0.12);
-	--glow-green: 0 0 12px rgba(126, 255, 160, 0.1);
-	--glow-yellow: 0 0 12px rgba(245, 230, 66, 0.1);
+	--glow-cyan: 0 0 12px rgba(116, 190, 208, 0.12);
+	--glow-green: 0 0 12px rgba(120, 179, 146, 0.1);
+	--glow-yellow: 0 0 12px rgba(212, 184, 114, 0.1);
 }
 
 /* Add hardware acceleration hints */
@@ -461,14 +461,27 @@ html.light .code-line:hover {
 	font-weight: 400;
 	letter-spacing: 0.05em;
 	text-transform: uppercase;
-	border-radius: var(--radius-pill);
+	/* MANUALLY CHANGE TAG ROUNDING HERE: Use 0px for square, 4px for subtle, var(--radius-pill) for round */
+	border-radius: 4px;
 	border: 1px solid;
 	transition: all var(--transition-fast);
 }
 
-.tag--cyan { color: #38bdf8; border-color: var(--accent-cyan-dim); background: rgba(56, 189, 248, 0.15); }
-.tag--green { color: #34d399; border-color: var(--accent-green-dim); background: rgba(52, 211, 153, 0.15); }
-.tag--yellow { color: #fbbf24; border-color: var(--accent-yellow-dim); background: rgba(251, 191, 36, 0.15); }
+.tag--cyan { 
+	color: var(--accent-cyan); 
+	border-color: color-mix(in srgb, var(--accent-cyan) 30%, transparent); 
+	background: color-mix(in srgb, var(--accent-cyan) 8%, transparent); 
+}
+.tag--green { 
+	color: var(--accent-green); 
+	border-color: color-mix(in srgb, var(--accent-green) 30%, transparent); 
+	background: color-mix(in srgb, var(--accent-green) 8%, transparent); 
+}
+.tag--yellow { 
+	color: var(--accent-yellow); 
+	border-color: color-mix(in srgb, var(--accent-yellow) 30%, transparent); 
+	background: color-mix(in srgb, var(--accent-yellow) 8%, transparent); 
+}
 
 /* ---------- Scrollbar ---------- */
 ::-webkit-scrollbar { width: 6px; height: 6px; }
