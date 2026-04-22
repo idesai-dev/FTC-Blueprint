@@ -22,6 +22,8 @@
 		if (!hasSeenOnboarding && isDesktop) {
 			setTimeout(() => {
 				showCursorOnboarding = true;
+				// Auto-hide after 40 seconds
+				setTimeout(dismissOnboarding, 40000);
 			}, 1000);
 		}
 
@@ -334,9 +336,10 @@
 				</button>
 
 				{#if showCursorOnboarding}
-					<div class="cursor-onboarding" transition:fade>
+					<!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+					<div class="cursor-onboarding" transition:fade onclick={dismissOnboarding}>
 						<p>Toggle custom cursor here for less lag</p>
-						<button class="dismiss-btn" onclick={dismissOnboarding}>✕</button>
+						<button class="dismiss-btn" onclick={(e) => { e.stopPropagation(); dismissOnboarding(); }}>✕</button>
 						<div class="arrow"></div>
 					</div>
 				{/if}
